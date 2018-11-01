@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         DOCKER_USERNAME = 'sivaprasadreddy'
-        APPLICATION_NAME = 'spring-boot-2-sample'
+        APPLICATION_NAME = 'spring-boot-kotlin-sample'
     }
 
     parameters {

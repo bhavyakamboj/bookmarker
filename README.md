@@ -1,4 +1,4 @@
-# spring-boot-2-sample
+# spring-boot-kotlin-sample
 
 ## Run tests
 
