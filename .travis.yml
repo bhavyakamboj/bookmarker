@@ -16,7 +16,4 @@ script:
   - ./mvnw clean verify
   - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.sources=./src
 
-cache:
-  directories:
-    - '$HOME/.m2/repository'
 
