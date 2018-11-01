@@ -8,8 +8,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @EnableCircuitBreaker
-class KartApplication
+class SpringBootKotlinApplication
 
 fun main(args: Array<String>) {
-    runApplication<KartApplication>(*args)
+    runApplication<SpringBootKotlinApplication>(*args)
 }

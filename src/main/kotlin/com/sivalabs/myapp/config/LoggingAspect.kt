@@ -1,23 +1,20 @@
 package com.sivalabs.myapp.config
 
+import com.sivalabs.myapp.utils.logger
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-
-import java.util.Arrays
-import java.util.stream.Collectors
 
 @Aspect
 @Component
 class LoggingAspect {
 
-    private val log = LoggerFactory.getLogger(LoggingAspect::class.java)
+    private val log = logger()
 
     @Around("@within(com.sivalabs.myapp.config.Loggable) || @annotation(com.sivalabs.myapp.config.Loggable)")
     @Throws(Throwable::class)
-    fun logMethodEntryExit(pjp: ProceedingJoinPoint): Any {
+    fun logMethodEntryExit(pjp: ProceedingJoinPoint): Any? {
 
         val start = System.currentTimeMillis()
 
@@ -30,21 +27,16 @@ class LoggingAspect {
             val args = pjp.args
             var argumentsToString = ""
             if (args != null) {
-                argumentsToString = Arrays.stream(args)
-                        .map<String> { arg -> arg?.toString() }
-                        .collect(Collectors.joining(","))
+                argumentsToString = args.map { arg -> arg?.toString() }.joinToString(",")
             }
-            log.trace(
-                    String.format("Entering method %s.%s(%s)", className, methodName, argumentsToString))
+            log.trace("Entering method $className.$methodName($argumentsToString)")
         }
 
         val result = pjp.proceed()
 
         if (log.isTraceEnabled) {
             val elapsedTime = System.currentTimeMillis() - start
-            log.trace(
-                    String.format(
-                            "Exiting method %s.%s; Execution time (ms): %s", className, methodName, elapsedTime))
+            log.trace("Exiting method $className.$methodName; Execution time: $elapsedTime ms")
         }
 
         return result

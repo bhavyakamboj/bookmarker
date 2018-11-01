@@ -12,34 +12,20 @@ class User {
     @Id
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "user_id_generator")
-    var id: Long? = null
+    var id: Long = 0
 
     @Column(nullable = false)
-    var name: String? = null
+    var name: String = ""
 
     @Column(nullable = false, unique = true)
-    var email: String? = null
+    var email: String = ""
 
     @Column(name = "gh_username")
-    var githubUsername: String? = null
+    var githubUsername: String = ""
 
     @JsonProperty("created_at")
-    var createdAt: LocalDateTime? = null
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @JsonProperty("updated_at")
-    var updatedAt: LocalDateTime? = null
-
-    @PrePersist
-    internal fun preSave() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now()
-        }
-    }
-
-    @PreUpdate
-    internal fun preUpdate() {
-        if (updatedAt == null) {
-            updatedAt = LocalDateTime.now()
-        }
-    }
+    var updatedAt: LocalDateTime? = LocalDateTime.now()
 }

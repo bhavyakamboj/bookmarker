@@ -1,44 +1,41 @@
 package com.sivalabs.myapp.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.sivalabs.myapp.model.GitHubRepoDTO
 import com.sivalabs.myapp.model.GitHubUserDTO
 import com.sivalabs.myapp.model.UserDTO
 import com.sivalabs.myapp.model.UserProfile
 import com.sivalabs.myapp.service.UserService
 import com.sivalabs.myapp.utils.TestHelper
+import org.hamcrest.Matchers.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.BDDMockito.given
+import org.mockito.BDDMockito.willDoNothing
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
-
-import java.util.Optional
-
-import java.util.Arrays.asList
-import org.hamcrest.Matchers.*
-import org.mockito.BDDMockito.given
-import org.mockito.BDDMockito.willDoNothing
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.util.*
+import java.util.Arrays.asList
 
 @RunWith(SpringRunner::class)
 @WebMvcTest(controllers = [UserController::class])
 class UserControllerTests {
 
     @MockBean
-    private val userService: UserService? = null
+    private lateinit var userService: UserService
 
     @Autowired
-    private val mockMvc: MockMvc? = null
+    private lateinit var mockMvc: MockMvc
 
     @Autowired
-    internal var objectMapper: ObjectMapper? = null
+    private lateinit var objectMapper: ObjectMapper
 
     lateinit var existingUser: UserDTO
     lateinit var newUser: UserDTO
@@ -52,34 +49,25 @@ class UserControllerTests {
     }
 
     @Test
-    @Throws(Exception::class)
     fun should_get_all_users() {
-        given(userService!!.getAllUsers())
+        given(userService.getAllUsers())
                 .willReturn(asList(existingUser, updateUser))
 
-        this.mockMvc!!
+        this.mockMvc
                 .perform(get("/api/users"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$", hasSize<Any>(2)))
     }
 
     @Test
-    @Throws(Exception::class)
     fun should_get_user_by_id() {
-        val gitHubUserDTO = GitHubUserDTO()
-        gitHubUserDTO.id = existingUser.id
-        gitHubUserDTO.repos = asList()
+        val gitHubUserDTO = GitHubUserDTO(existingUser.id, existingUser.name, "", 0, asList())
+        val profile = UserProfile(existingUser.id, existingUser.name, existingUser.email, gitHubUserDTO)
 
-        val profile = UserProfile()
-        profile.githubProfile = gitHubUserDTO
-        profile.id = existingUser.id
-        profile.name = existingUser.name
-        profile.email = existingUser.email
+        given(userService.getUserProfile(existingUser.id)).willReturn(Optional.of(profile))
 
-        given(userService!!.getUserProfile(existingUser.id)).willReturn(Optional.of(profile))
-
-        this.mockMvc!!
-                .perform(get("/api/users/" + existingUser.id!!))
+        this.mockMvc
+                .perform(get("/api/users/" + existingUser.id))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.id", `is`<Long>(existingUser.id)))
                 .andExpect(jsonPath("$.name", `is`<String>(existingUser.name)))
@@ -87,15 +75,14 @@ class UserControllerTests {
     }
 
     @Test
-    @Throws(Exception::class)
     fun should_create_user() {
-        given(userService!!.createUser(newUser)).willReturn(newUser)
+        given(userService.createUser(newUser)).willReturn(newUser)
 
-        this.mockMvc!!
+        this.mockMvc
                 .perform(
                         post("/api/users/")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper!!.writeValueAsString(newUser)))
+                                .content(objectMapper.writeValueAsString(newUser)))
                 .andExpect(status().isCreated)
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.name", `is`<String>(newUser.name)))
@@ -103,15 +90,14 @@ class UserControllerTests {
     }
 
     @Test
-    @Throws(Exception::class)
     fun should_update_user() {
-        given(userService!!.updateUser(existingUser)).willReturn(existingUser)
+        given(userService.updateUser(existingUser)).willReturn(existingUser)
 
-        this.mockMvc!!
+        this.mockMvc
                 .perform(
-                        put("/api/users/" + existingUser.id!!)
+                        put("/api/users/" + existingUser.id)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper!!.writeValueAsString(existingUser)))
+                                .content(objectMapper.writeValueAsString(existingUser)))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.id", `is`<Long>(existingUser.id)))
                 .andExpect(jsonPath("$.name", `is`<String>(existingUser.name)))
@@ -119,13 +105,10 @@ class UserControllerTests {
     }
 
     @Test
-    @Throws(Exception::class)
     fun should_delete_user() {
-        willDoNothing().given<UserService>(userService).deleteUser(existingUser.id!!)
+        willDoNothing().given<UserService>(userService).deleteUser(existingUser.id)
 
-        this.mockMvc!!.perform(
-                delete("/api/users/" + existingUser.id!!)
-        )
+        this.mockMvc.perform(delete("/api/users/" + existingUser.id))
                 .andExpect(status().isOk)
     }
 }

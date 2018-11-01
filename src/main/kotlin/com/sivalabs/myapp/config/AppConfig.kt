@@ -11,9 +11,7 @@ import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.web.client.RestTemplate
-
 import java.io.IOException
-import java.util.ArrayList
 
 @Configuration
 internal class AppConfig {
@@ -28,18 +26,22 @@ internal class AppConfig {
 
     @Bean
     fun restTemplate(builder: RestTemplateBuilder): RestTemplate {
-        val interceptors = ArrayList<ClientHttpRequestInterceptor>()
-        interceptors.add(HeaderRequestInterceptor("Authorization", "token " + githubAuthToken!!))
+        val interceptors = listOf(HeaderRequestInterceptor("Authorization", "token $githubAuthToken"))
         builder.additionalInterceptors(interceptors)
         return builder.build()
     }
 }
 
-internal class HeaderRequestInterceptor(private val headerName: String, private val headerValue: String) : ClientHttpRequestInterceptor {
+internal class HeaderRequestInterceptor(
+        private val headerName: String,
+        private val headerValue: String)
+    : ClientHttpRequestInterceptor {
 
     @Throws(IOException::class)
     override fun intercept(
-            request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution): ClientHttpResponse {
+            request: HttpRequest,
+            body: ByteArray,
+            execution: ClientHttpRequestExecution): ClientHttpResponse {
         request.headers.add(headerName, headerValue)
         return execution.execute(request, body)
     }

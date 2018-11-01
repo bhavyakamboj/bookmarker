@@ -11,18 +11,16 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
-
 @Service
 @Transactional
 @Loggable
-class UserService @Autowired
-constructor(private val userRepository: UserRepository, private val githubClient: GithubClient) {
+class UserService(private val userRepository: UserRepository, private val githubClient: GithubClient) {
 
     fun getAllUsers() : List<UserDTO> = userRepository.findAll().map { UserDTO.fromEntity(it) }
 
 
-    fun getUserById(id: Long?): Optional<User> {
-        return userRepository.findById(id!!)
+    fun getUserById(id: Long): Optional<User> {
+        return userRepository.findById(id)
     }
 
     fun createUser(user: UserDTO): UserDTO {
@@ -37,23 +35,16 @@ constructor(private val userRepository: UserRepository, private val githubClient
         userRepository.findById(userId).map { userRepository.delete(it) }
     }
 
-    fun getUserProfile(id: Long?): Optional<UserProfile> {
+    fun getUserProfile(id: Long): Optional<UserProfile> {
         val userOptional = this.getUserById(id)
         if (!userOptional.isPresent) {
             return Optional.empty()
         }
         val user = userOptional.get()
-        val profile = UserProfile()
-        profile.id = (user.id)
-        profile.name = (user.name)
-        profile.email = (user.email)
-        if (user.githubUsername != null) {
-            val ghUserDTO = githubClient.getUser(user.githubUsername!!)
-            if (ghUserDTO?.repos != null) {
-                ghUserDTO.repos!!.sortedByDescending { repo: GitHubRepoDTO -> repo.stars  }
-            }
-            profile.githubProfile = (ghUserDTO)
+        val ghUserDTO = githubClient.getUser(user.githubUsername)
+        ghUserDTO?.let {
+            it.repos.sortedByDescending { repo: GitHubRepoDTO -> repo.stars  }
         }
-        return Optional.of(profile)
+        return Optional.of(UserProfile(user.id, user.name, user.email, ghUserDTO))
     }
 }

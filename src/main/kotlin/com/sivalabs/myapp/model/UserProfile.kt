@@ -1,9 +1,8 @@
 package com.sivalabs.myapp.model
 
-class UserProfile {
-
-    var id: Long? = null
-    var name: String? = null
-    var email: String? = null
-    var githubProfile: GitHubUserDTO? = null
-}
+data class UserProfile (
+    var id: Long,
+    var name: String,
+    var email: String,
+    var githubProfile: GitHubUserDTO?
+)

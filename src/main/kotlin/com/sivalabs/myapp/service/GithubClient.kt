@@ -7,7 +7,6 @@ import com.sivalabs.myapp.model.GitHubRepoDTO
 import com.sivalabs.myapp.model.GitHubUserDTO
 import io.micrometer.core.annotation.Timed
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -16,29 +15,30 @@ import java.util.Arrays
 
 @Service
 @Loggable
-class GithubClient @Autowired
-constructor(private val restTemplate: RestTemplate) {
+class GithubClient(private val restTemplate: RestTemplate) {
 
     private val log = LoggerFactory.getLogger(GithubClient::class.java)
 
     @Value("\${github.host}")
-    internal var githubApiBasePath: String? = null
+    private lateinit var githubApiBasePath: String
 
-    @HystrixCommand(fallbackMethod = "getDefaultUser", commandProperties = arrayOf(HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")))
     @Timed("sb2s.githubclient.getuser")
+    @HystrixCommand(fallbackMethod = "getDefaultUser",
+                    commandProperties = [
+                        HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")
+                    ])
     fun getUser(username: String): GitHubUserDTO? {
         log.info("process=get-github-user, username=$username")
         val userInfo = getUserInfo(username)
-        userInfo?.repos = (getUserRepos(username))
+        userInfo?.let {
+            it.repos = getUserRepos(username)
+        }
         return userInfo
     }
 
-    internal fun getDefaultUser(username: String): GitHubUserDTO {
+    fun getDefaultUser(username: String): GitHubUserDTO {
         log.info("process=get-github-default-user, username=$username")
-        val dto = GitHubUserDTO()
-        dto.name = username
-        dto.repos = listOf()
-        return dto
+        return GitHubUserDTO(0,username,"",0, listOf())
     }
 
     private fun getUserInfo(username: String): GitHubUserDTO? {

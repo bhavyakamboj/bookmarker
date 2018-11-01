@@ -21,10 +21,10 @@ import org.springframework.http.HttpStatus.OK
 class UserControllerIT : AbstractIntegrationTest() {
 
     @Autowired
-    internal var userRepository: UserRepository? = null
+    lateinit var userRepository: UserRepository
 
     @Autowired
-    internal var restTemplate: TestRestTemplate? = null
+    lateinit var restTemplate: TestRestTemplate
 
     lateinit var existingUser: UserDTO
     lateinit var newUser: UserDTO
@@ -36,64 +36,63 @@ class UserControllerIT : AbstractIntegrationTest() {
         newUser = TestHelper.buildUser()
 
         existingUser = TestHelper.buildUser()
-        existingUser = UserDTO.fromEntity(userRepository!!.save(existingUser.toEntity()))
+        existingUser = UserDTO.fromEntity(userRepository.save(existingUser.toEntity()))
 
         updateUser = TestHelper.buildUser()
-        updateUser = UserDTO.fromEntity(userRepository!!.save(updateUser.toEntity()))
+        updateUser = UserDTO.fromEntity(userRepository.save(updateUser.toEntity()))
     }
 
     @After
     override fun tearDown() {
         super.tearDown()
-        if (newUser.id != null) {
-            userRepository!!.deleteById(newUser.id!!)
+        if(userRepository.existsById(newUser.id)) {
+            userRepository.deleteById(newUser.id)
         }
-        userRepository!!.deleteAll(
-                userRepository!!.findAllById(asList<Long>(existingUser.id, updateUser.id)))
+        userRepository.deleteAll(userRepository.findAllById(asList<Long>(existingUser.id, updateUser.id)))
     }
 
     @Test
     fun should_get_all_users() {
-        val responseEntity = restTemplate!!.getForEntity("/api/users", Array<UserDTO>::class.java)
+        val responseEntity = restTemplate.getForEntity("/api/users", Array<UserDTO>::class.java)
         val users = asList(*responseEntity.body!!)
         assertThat(users).isNotEmpty
     }
 
     @Test
     fun should_get_user_by_id() {
-        mockEngine.mockGetGithubUser(existingUser.githubUsername!!)
-        mockEngine.mockGetGithubUserRepos(existingUser.githubUsername!!)
+        mockEngine.mockGetGithubUser(existingUser.githubUsername)
+        mockEngine.mockGetGithubUserRepos(existingUser.githubUsername)
 
-        val responseEntity = restTemplate!!.getForEntity("/api/users/" + existingUser.id!!, UserProfile::class.java)
+        val responseEntity = restTemplate.getForEntity("/api/users/" + existingUser.id, UserProfile::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(HttpStatus.OK)
         val user = responseEntity.body
-        assertThat(user).isNotNull()
+        assertThat(user).isNotNull
     }
 
     @Test
     fun should_create_user() {
         val request = HttpEntity(newUser)
-        val responseEntity = restTemplate!!.postForEntity("/api/users", request, UserDTO::class.java)
-        val savedUser = responseEntity.body
-        assertThat(savedUser!!.id).isNotNull()
+        val responseEntity = restTemplate.postForEntity("/api/users", request, UserDTO::class.java)
+        val savedUser = responseEntity.body!!
+        assertThat(savedUser.id).isNotNull()
     }
 
     @Test
     fun should_update_user() {
         val request = HttpEntity(updateUser)
-        restTemplate!!.put("/api/users/" + updateUser.id!!, request, UserDTO::class.java)
-        val responseEntity = restTemplate!!.getForEntity("/api/users/" + updateUser.id!!, UserDTO::class.java)
-        val updatedUser = responseEntity.body
-        assertThat(updatedUser!!.id).isEqualTo(updateUser.id!!)
+        restTemplate.put("/api/users/" + updateUser.id, request, UserDTO::class.java)
+        val responseEntity = restTemplate.getForEntity("/api/users/" + updateUser.id, UserProfile::class.java)
+        val updatedUser = responseEntity.body!!
+        assertThat(updatedUser.id).isEqualTo(updateUser.id)
         assertThat(updatedUser.email).isEqualTo(updateUser.email)
     }
 
     @Test
     fun should_delete_user() {
-        var responseEntity = restTemplate!!.getForEntity("/api/users/" + existingUser.id!!, UserDTO::class.java)
+        var responseEntity = restTemplate.getForEntity("/api/users/" + existingUser.id, UserProfile::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(OK)
-        restTemplate!!.delete("/api/users/" + existingUser.id!!)
-        responseEntity = restTemplate!!.getForEntity("/api/users/" + existingUser.id!!, UserDTO::class.java)
+        restTemplate.delete("/api/users/" + existingUser.id)
+        responseEntity = restTemplate.getForEntity("/api/users/" + existingUser.id, UserProfile::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(NOT_FOUND)
     }
 }
