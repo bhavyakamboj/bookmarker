@@ -14,7 +14,7 @@ addons:
 
 script:
   - ./mvnw clean verify
-  - ./mvnw sonar:sonar
+  - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.sources=./src
 
 cache:
   directories:
