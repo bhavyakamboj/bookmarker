@@ -23,3 +23,8 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+.DS_Store
+.vscode
+performance-tests/.gradle
+performance-tests/build
