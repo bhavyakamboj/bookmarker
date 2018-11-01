@@ -49,7 +49,7 @@ class UserControllerTests {
     }
 
     @Test
-    fun should_get_all_users() {
+    fun `should get all users`() {
         given(userService.getAllUsers())
                 .willReturn(asList(existingUser, updateUser))
 
@@ -60,7 +60,7 @@ class UserControllerTests {
     }
 
     @Test
-    fun should_get_user_by_id() {
+    fun `should get user by id`() {
         val gitHubUserDTO = GitHubUserDTO(existingUser.id, existingUser.name, "", 0, asList())
         val profile = UserProfile(existingUser.id, existingUser.name, existingUser.email, gitHubUserDTO)
 
@@ -75,7 +75,7 @@ class UserControllerTests {
     }
 
     @Test
-    fun should_create_user() {
+    fun `should create user`() {
         given(userService.createUser(newUser)).willReturn(newUser)
 
         this.mockMvc
@@ -90,7 +90,7 @@ class UserControllerTests {
     }
 
     @Test
-    fun should_update_user() {
+    fun `should update user`() {
         given(userService.updateUser(existingUser)).willReturn(existingUser)
 
         this.mockMvc
@@ -105,7 +105,7 @@ class UserControllerTests {
     }
 
     @Test
-    fun should_delete_user() {
+    fun `should delete user`() {
         willDoNothing().given<UserService>(userService).deleteUser(existingUser.id)
 
         this.mockMvc.perform(delete("/api/users/" + existingUser.id))

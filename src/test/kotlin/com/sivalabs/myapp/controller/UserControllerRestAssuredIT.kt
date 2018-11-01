@@ -50,7 +50,7 @@ class UserControllerRestAssuredIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun should_get_all_users() {
+    fun `should get all users`() {
         val response = given()
                 .`when`().get("/api/users")
                 .then().statusCode(200)
@@ -60,13 +60,13 @@ class UserControllerRestAssuredIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun should_get_user_by_id() {
+    fun `should get user by id`() {
         mockEngine.mockGetGithubUser(existingUser.githubUsername)
         mockEngine.mockGetGithubUserRepos(existingUser.githubUsername)
 
         val user = given()
                 .`when`()
-                .get("/api/users/" + existingUser.id)
+                .get("/api/users/${existingUser.id}")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -76,7 +76,7 @@ class UserControllerRestAssuredIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun should_create_user() {
+    fun `should create user`() {
         val savedUser = given()
                 .contentType("application/json")
                 .body(newUser)
@@ -90,12 +90,12 @@ class UserControllerRestAssuredIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun should_update_user() {
+    fun `should update user`() {
         val updatedUser = given()
                 .contentType("application/json")
                 .body(updateUser)
                 .`when`()
-                .put("/api/users/" + updateUser.id)
+                .put("/api/users/${updateUser.id}")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -107,11 +107,9 @@ class UserControllerRestAssuredIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun should_delete_user() {
-
-        given().`when`().get("/api/users/" + existingUser.id).then().statusCode(200)
-
-        given().`when`().delete("/api/users/" + existingUser.id).then().statusCode(200)
-        given().`when`().get("/api/users/" + existingUser.id).then().statusCode(404)
+    fun `should delete user`() {
+        given().`when`().get("/api/users/${existingUser.id}").then().statusCode(200)
+        given().`when`().delete("/api/users/${existingUser.id}").then().statusCode(200)
+        given().`when`().get("/api/users/${existingUser.id}").then().statusCode(404)
     }
 }

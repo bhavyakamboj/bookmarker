@@ -52,25 +52,25 @@ class UserControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun should_get_all_users() {
+    fun `should get all users`() {
         val responseEntity = restTemplate.getForEntity("/api/users", Array<UserDTO>::class.java)
         val users = asList(*responseEntity.body!!)
         assertThat(users).isNotEmpty
     }
 
     @Test
-    fun should_get_user_by_id() {
+    fun `should get user by id`() {
         mockEngine.mockGetGithubUser(existingUser.githubUsername)
         mockEngine.mockGetGithubUserRepos(existingUser.githubUsername)
 
-        val responseEntity = restTemplate.getForEntity("/api/users/" + existingUser.id, UserProfile::class.java)
+        val responseEntity = restTemplate.getForEntity("/api/users/${existingUser.id}", UserProfile::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(HttpStatus.OK)
         val user = responseEntity.body
         assertThat(user).isNotNull
     }
 
     @Test
-    fun should_create_user() {
+    fun `should create user`() {
         val request = HttpEntity(newUser)
         val responseEntity = restTemplate.postForEntity("/api/users", request, UserDTO::class.java)
         val savedUser = responseEntity.body!!
@@ -78,21 +78,21 @@ class UserControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun should_update_user() {
+    fun `should update user`() {
         val request = HttpEntity(updateUser)
-        restTemplate.put("/api/users/" + updateUser.id, request, UserDTO::class.java)
-        val responseEntity = restTemplate.getForEntity("/api/users/" + updateUser.id, UserProfile::class.java)
+        restTemplate.put("/api/users/${updateUser.id}", request, UserDTO::class.java)
+        val responseEntity = restTemplate.getForEntity("/api/users/${updateUser.id}", UserProfile::class.java)
         val updatedUser = responseEntity.body!!
         assertThat(updatedUser.id).isEqualTo(updateUser.id)
         assertThat(updatedUser.email).isEqualTo(updateUser.email)
     }
 
     @Test
-    fun should_delete_user() {
-        var responseEntity = restTemplate.getForEntity("/api/users/" + existingUser.id, UserProfile::class.java)
+    fun `should delete user`() {
+        var responseEntity = restTemplate.getForEntity("/api/users/${existingUser.id}", UserProfile::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(OK)
-        restTemplate.delete("/api/users/" + existingUser.id)
-        responseEntity = restTemplate.getForEntity("/api/users/" + existingUser.id, UserProfile::class.java)
+        restTemplate.delete("/api/users/${existingUser.id}")
+        responseEntity = restTemplate.getForEntity("/api/users/${existingUser.id}", UserProfile::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(NOT_FOUND)
     }
 }
