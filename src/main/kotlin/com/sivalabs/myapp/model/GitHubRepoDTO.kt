@@ -8,7 +8,7 @@ data class GitHubRepoDTO(
     var description: String?,
     @JsonProperty("html_url")
     var url: String,
-    var language: String,
+    var language: String?,
     var forks: Int = 0,
     @JsonProperty("stargazers_count")
     var stars: Int = 0
