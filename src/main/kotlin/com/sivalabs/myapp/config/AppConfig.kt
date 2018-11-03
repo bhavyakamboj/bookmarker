@@ -33,15 +33,16 @@ internal class AppConfig {
 }
 
 internal class HeaderRequestInterceptor(
-        private val headerName: String,
-        private val headerValue: String)
-    : ClientHttpRequestInterceptor {
+    private val headerName: String,
+    private val headerValue: String
+) : ClientHttpRequestInterceptor {
 
     @Throws(IOException::class)
     override fun intercept(
-            request: HttpRequest,
-            body: ByteArray,
-            execution: ClientHttpRequestExecution): ClientHttpResponse {
+        request: HttpRequest,
+        body: ByteArray,
+        execution: ClientHttpRequestExecution
+    ): ClientHttpResponse {
         request.headers.add(headerName, headerValue)
         return execution.execute(request, body)
     }

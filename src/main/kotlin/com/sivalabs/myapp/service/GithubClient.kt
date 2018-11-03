@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-
 import java.util.Arrays
 
 @Service
@@ -24,9 +23,9 @@ class GithubClient(private val restTemplate: RestTemplate) {
 
     @Timed("sb2s.githubclient.getuser")
     @HystrixCommand(fallbackMethod = "getDefaultUser",
-                    commandProperties = [
-                        HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")
-                    ])
+            commandProperties = [
+                HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")
+            ])
     fun getUser(username: String): GitHubUserDTO? {
         log.info("process=get-github-user, username=$username")
         val userInfo = getUserInfo(username)
@@ -38,7 +37,7 @@ class GithubClient(private val restTemplate: RestTemplate) {
 
     fun getDefaultUser(username: String): GitHubUserDTO {
         log.info("process=get-github-default-user, username=$username")
-        return GitHubUserDTO(0,username,"",0, listOf())
+        return GitHubUserDTO(0, username, "", 0, listOf())
     }
 
     private fun getUserInfo(username: String): GitHubUserDTO? {

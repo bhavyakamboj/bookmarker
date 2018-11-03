@@ -1,11 +1,13 @@
 package com.sivalabs.myapp.controller
 
 import com.sivalabs.myapp.utils.MockEngine
-import org.junit.*
+import org.junit.After
+import org.junit.AfterClass
+import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.runner.RunWith
 import org.mockserver.client.server.MockServerClient
 import org.mockserver.integration.ClientAndServer
-import org.mockserver.junit.MockServerRule
 import org.mockserver.socket.PortFactory
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -34,7 +36,6 @@ abstract class AbstractIntegrationTest {
             mockServerClient.close()
         }
     }
-
 
     @Before
     fun setUp() {

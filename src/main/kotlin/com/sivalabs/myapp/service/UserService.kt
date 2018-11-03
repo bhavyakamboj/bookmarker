@@ -6,18 +6,16 @@ import com.sivalabs.myapp.model.GitHubRepoDTO
 import com.sivalabs.myapp.model.UserDTO
 import com.sivalabs.myapp.model.UserProfile
 import com.sivalabs.myapp.repo.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.Optional
 
 @Service
 @Transactional
 @Loggable
 class UserService(private val userRepository: UserRepository, private val githubClient: GithubClient) {
 
-    fun getAllUsers() : List<UserDTO> = userRepository.findAll().map { UserDTO.fromEntity(it) }
-
+    fun getAllUsers(): List<UserDTO> = userRepository.findAll().map { UserDTO.fromEntity(it) }
 
     fun getUserById(id: Long): Optional<User> {
         return userRepository.findById(id)
@@ -43,7 +41,7 @@ class UserService(private val userRepository: UserRepository, private val github
         val user = userOptional.get()
         val ghUserDTO = githubClient.getUser(user.githubUsername)
         ghUserDTO?.let {
-            it.repos.sortedByDescending { repo: GitHubRepoDTO -> repo.stars  }
+            it.repos.sortedByDescending { repo: GitHubRepoDTO -> repo.stars }
         }
         return Optional.of(UserProfile(user.id, user.name, user.email, ghUserDTO))
     }

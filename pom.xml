@@ -6,7 +6,7 @@
 
     <groupId>com.sivalabs</groupId>
     <artifactId>spring-boot-kotlin-sample</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <name>spring-boot-kotlin-sample</name>
@@ -26,16 +26,13 @@
         <kotlin.version>1.2.70</kotlin.version>
         <spring-cloud.version>Greenwich.M1</spring-cloud.version>
 
-        <chaos-monkey-spring-boot.version>2.0.0</chaos-monkey-spring-boot.version>
-        <testcontainers.version>1.8.3</testcontainers.version>
         <swagger2.version>2.9.2</swagger2.version>
         <logstash-logback.version>4.9</logstash-logback.version>
-        <karate.version>0.8.0</karate.version>
         <rest-assured.version>3.1.1</rest-assured.version>
 
         <flyway.url>jdbc:postgresql://localhost:5432/postgres</flyway.url>
         <flyway.user>postgres</flyway.user>
-        <flyway.password></flyway.password>
+        <flyway.password>secret</flyway.password>
     </properties>
 
     <dependencies>
@@ -150,18 +147,6 @@
             <version>${swagger2.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mockserver</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mock-server</groupId>
             <artifactId>mockserver-netty</artifactId>
             <version>3.12</version>
@@ -178,52 +163,6 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>json-path</artifactId>
             <version>${rest-assured.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>chaos-monkey-spring-boot</artifactId>
-            <version>${chaos-monkey-spring-boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.intuit.karate</groupId>
-            <artifactId>karate-junit4</artifactId>
-            <version>${karate.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.intuit.karate</groupId>
-            <artifactId>karate-apache</artifactId>
-            <version>${karate.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.intuit.karate</groupId>
-            <artifactId>karate-netty</artifactId>
-            <version>${karate.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.intuit.karate</groupId>
-            <artifactId>karate-gatling</artifactId>
-            <version>${karate.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <!-- spring boot tomcat doesn't like these -->
-                <exclusion>
-                    <groupId>org.bouncycastle</groupId>
-                    <artifactId>bcprov-jdk15on</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bouncycastle</groupId>
-                    <artifactId>bcpkix-jdk15on</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>net.masterthought</groupId>
-            <artifactId>cucumber-reporting</artifactId>
-            <version>3.8.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -521,6 +460,69 @@
                         <location>classpath:/db/migration/postgresql</location>
                     </locations>
                 </configuration>
+            </plugin>
+            <!--<plugin>
+                <groupId>com.github.gantsign.maven</groupId>
+                <artifactId>ktlint-maven-plugin</artifactId>
+                <version>0.9.15</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <id>format-and-check</id>
+                        <goals>
+                            <goal>format</goal>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>ktlint</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
+                                  classpathref="maven.plugin.classpath" classname="com.github.shyiko.ktlint.Main">
+                                    <arg value="src/**/*.kt"/>
+                                    <!-- to generate report in checkstyle format prepend following args: -->
+
+                                    <arg value="--reporter=plain"/>
+                                    <arg value="--reporter=checkstyle,output=${project.build.directory}/ktlint.xml"/>
+
+                                    <!-- see https://github.com/shyiko/ktlint#usage for more -->
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals><goal>run</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>ktlint-format</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
+                                  classpathref="maven.plugin.classpath" classname="com.github.shyiko.ktlint.Main">
+                                    <arg value="-F"/>
+                                    <arg value="src/**/*.kt"/>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals><goal>run</goal></goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.shyiko</groupId>
+                        <artifactId>ktlint</artifactId>
+                        <version>0.29.0</version>
+                    </dependency>
+                    <!-- additional 3rd party ruleset(s) can be specified here -->
+                </dependencies>
             </plugin>
         </plugins>
 

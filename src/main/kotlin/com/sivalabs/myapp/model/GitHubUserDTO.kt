@@ -2,7 +2,7 @@ package com.sivalabs.myapp.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class GitHubUserDTO (
+data class GitHubUserDTO(
     var id: Long,
     var name: String,
     var url: String,

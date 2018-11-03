@@ -1,19 +1,15 @@
 package com.sivalabs.myapp.utils
 
 import com.sivalabs.myapp.model.UserDTO
-import java.util.*
+import java.util.Random
+import java.util.UUID
 
 object TestHelper {
 
-    fun buildUser(): UserDTO {
+    fun buildUser(withUserId: Boolean = false): UserDTO {
+        val userId = if (withUserId) Random().nextLong() else 0
         val uuid = UUID.randomUUID().toString()
-        return UserDTO(0, "name-$uuid", "someone-$uuid@gmail.com", "ghuser-$uuid")
-    }
-
-    fun buildUserWithId(): UserDTO {
-        val random = Random()
-        val uuid = UUID.randomUUID().toString()
-        return UserDTO(random.nextLong(), "name-$uuid", "someone-$uuid@gmail.com", "ghuser-$uuid")
+        return UserDTO(userId, "name-$uuid", "someone-$uuid@gmail.com", "ghuser-$uuid")
     }
 
     fun getClasspathResourceContent(filepath: String) =

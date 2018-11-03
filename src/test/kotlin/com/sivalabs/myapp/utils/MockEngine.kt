@@ -23,21 +23,20 @@ class MockEngine(private val mockServerClient: MockServerClient) {
     fun mockGetGithubUser(username: String) {
         val request = request("/users/$username")
         mockServerClient
-            .`when`(request)
-            .respond(
-                response()
-                .withHeader(Header.header("Content-Type", "application/json"))
-                .withBody(json(GET_GITHUB_USER_RESPONSE)))
+                .`when`(request)
+                .respond(
+                        response()
+                                .withHeader(Header.header("Content-Type", "application/json"))
+                                .withBody(json(GET_GITHUB_USER_RESPONSE)))
     }
 
     fun mockGetGithubUserRepos(username: String) {
         val request = request("/users/$username/repos")
         mockServerClient
-            .`when`(request)
-            .respond(
-                response()
-                .withHeader(Header.header("Content-Type", "application/json"))
-                .withBody(json(GET_GITHUB_USER_REPOS_RESPONSE)))
+                .`when`(request)
+                .respond(
+                        response()
+                                .withHeader(Header.header("Content-Type", "application/json"))
+                                .withBody(json(GET_GITHUB_USER_REPOS_RESPONSE)))
     }
-
 }

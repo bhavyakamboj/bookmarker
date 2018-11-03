@@ -1,9 +1,13 @@
 package com.sivalabs.myapp.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
-
-import javax.persistence.*
 import java.time.LocalDateTime
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.SequenceGenerator
+import javax.persistence.Table
 
 @Entity
 @Table(name = "users")

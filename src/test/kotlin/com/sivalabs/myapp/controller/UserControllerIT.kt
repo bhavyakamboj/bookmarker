@@ -4,6 +4,7 @@ import com.sivalabs.myapp.model.UserDTO
 import com.sivalabs.myapp.model.UserProfile
 import com.sivalabs.myapp.repo.UserRepository
 import com.sivalabs.myapp.utils.TestHelper
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -11,12 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-
-import java.util.Arrays.asList
-import org.assertj.core.api.Assertions.assertThat
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
+import java.util.Arrays.asList
 
 class UserControllerIT : AbstractIntegrationTest() {
 
@@ -45,7 +43,7 @@ class UserControllerIT : AbstractIntegrationTest() {
     @After
     override fun tearDown() {
         super.tearDown()
-        if(userRepository.existsById(newUser.id)) {
+        if (userRepository.existsById(newUser.id)) {
             userRepository.deleteById(newUser.id)
         }
         userRepository.deleteAll(userRepository.findAllById(asList<Long>(existingUser.id, updateUser.id)))

@@ -9,18 +9,18 @@ services:
       - "18787:8787"
     restart: always
     depends_on:
-      - sb2s-postgresdb
+      - sbks-postgresdb
 
-  sb2s-postgresdb:
+  sbks-postgresdb:
     image: postgres
-    container_name: sb2s-postgresdb
+    container_name: sbks-postgresdb
     environment:
       - POSTGRES_USER=siva
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=appdb
       - PGDATA=/data/postgres
     volumes:
-      - ~/data/sb2s-postgres:/data/postgres
+      - ~/data/sbks-postgres:/data/postgres
     ports:
       - "5432:5432"
     restart: unless-stopped

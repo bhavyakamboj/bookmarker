@@ -6,7 +6,9 @@ import com.sivalabs.myapp.model.UserDTO
 import com.sivalabs.myapp.model.UserProfile
 import com.sivalabs.myapp.service.UserService
 import com.sivalabs.myapp.utils.TestHelper
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,10 +20,13 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.util.*
+import java.util.Optional
 import java.util.Arrays.asList
 
 @RunWith(SpringRunner::class)
@@ -43,15 +48,14 @@ class UserControllerTests {
 
     @Before
     fun setUp() {
-        newUser = TestHelper.buildUserWithId()
-        existingUser = TestHelper.buildUserWithId()
-        updateUser = TestHelper.buildUserWithId()
+        newUser = TestHelper.buildUser(withUserId = true)
+        existingUser = TestHelper.buildUser(withUserId = true)
+        updateUser = TestHelper.buildUser(withUserId = true)
     }
 
     @Test
     fun `should get all users`() {
-        given(userService.getAllUsers())
-                .willReturn(asList(existingUser, updateUser))
+        given(userService.getAllUsers()).willReturn(asList(existingUser, updateUser))
 
         this.mockMvc
                 .perform(get("/api/users"))
@@ -79,10 +83,9 @@ class UserControllerTests {
         given(userService.createUser(newUser)).willReturn(newUser)
 
         this.mockMvc
-                .perform(
-                        post("/api/users/")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(newUser)))
+                .perform(post("/api/users/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newUser)))
                 .andExpect(status().isCreated)
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.name", `is`<String>(newUser.name)))
@@ -94,10 +97,9 @@ class UserControllerTests {
         given(userService.updateUser(existingUser)).willReturn(existingUser)
 
         this.mockMvc
-                .perform(
-                        put("/api/users/" + existingUser.id)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(existingUser)))
+                .perform(put("/api/users/" + existingUser.id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(existingUser)))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.id", `is`<Long>(existingUser.id)))
                 .andExpect(jsonPath("$.name", `is`<String>(existingUser.name)))

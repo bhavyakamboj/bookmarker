@@ -4,7 +4,7 @@ import com.sivalabs.myapp.entity.User
 
 import java.time.LocalDateTime
 
-data class UserDTO (
+data class UserDTO(
     var id: Long,
     var name: String,
     var email: String,
@@ -27,7 +27,7 @@ data class UserDTO (
     companion object {
 
         fun fromEntity(user: User): UserDTO {
-            return UserDTO(user.id,user.name,user.email,user.githubUsername,user.createdAt,user.updatedAt)
+            return UserDTO(user.id, user.name, user.email, user.githubUsername, user.createdAt, user.updatedAt)
         }
     }
 }
