@@ -22,7 +22,7 @@
                         {
                         <!-- we can add some custom fields to be sent with all the log entries.-->
                         <!--make filtering easier in Logstash-->
-                        "app-name": "spring-boot-kotlin-sample",
+                        "app-name": "bookmarker",
                         "app-version": "1.0"
                         }
                     </pattern>

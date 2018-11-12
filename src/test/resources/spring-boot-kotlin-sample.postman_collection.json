@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "5b43bda3-6093-4deb-9db4-9ac83079a783",
-    "name": "spring-boot-kotlin-sample",
+    "name": "bookmarker",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [

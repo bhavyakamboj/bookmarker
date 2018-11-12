@@ -1,4 +1,4 @@
-# spring-boot-kotlin-sample
+# bookmarker
 
 ## Run tests
 

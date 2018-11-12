@@ -6,13 +6,13 @@
     <link rel="stylesheet" href="/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css"/>
     <script defer src="/webjars/font-awesome/5.0.6/svg-with-js/js/fontawesome-all.min.js"></script>
     <link rel="stylesheet" href="/css/styles.css"/>
-    <title>SivaLabs : SpringBoot 2 Sample</title>
+    <title>SivaLabs : BookMarker</title>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="/">SpringBoot 2 Sample</a>
+        <a class="navbar-brand" href="/">BookMarker</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -63,31 +63,6 @@
                                 <input type="text" readonly class="form-control-plaintext" v-model="user.name">
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h3>GitHub Repositories</h3>
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Stars</th>
-                                        <th scope="col">Forks</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(repo, index) in user.githubProfile.repos">
-                                        <th scope="row">{{index + 1}}</th>
-                                        <td>{{repo.name}}</td>
-                                        <td>{{repo.stargazers_count}}</td>
-                                        <td>{{repo.forks}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                     </form>
                 </div>
             </div>

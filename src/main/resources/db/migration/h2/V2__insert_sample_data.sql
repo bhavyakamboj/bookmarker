@@ -1,5 +1,5 @@
 
-INSERT INTO users (email, name, gh_username, created_at) VALUES
-('admin@gmail.com', 'Admin', 'sivalabs', CURRENT_TIMESTAMP()),
-('siva@gmail.com', 'Siva', 'sivaprasadreddy', CURRENT_TIMESTAMP())
+INSERT INTO users (email, password, name, created_at) VALUES
+('admin@gmail.com', 'admin', 'Admin', CURRENT_TIMESTAMP()),
+('siva@gmail.com', 'siva', 'Siva',  CURRENT_TIMESTAMP())
 ;

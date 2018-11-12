@@ -2,9 +2,7 @@ new Vue({
     el: '#app',
     data: {
         users: [],
-        user: {
-            githubProfile: {}
-        },
+        user: {},
         userLoaded: false
     },
     created: function () {

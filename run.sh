@@ -3,25 +3,25 @@
 declare project_dir=$(dirname $0)
 declare docker_compose_file=${project_dir}/docker-compose.yml
 declare docker_compose_platform_file=${project_dir}/docker-compose-platform.yml
-declare spring_boot_kotlin_sample="spring-boot-kotlin-sample"
+declare bookmarker="bookmarker"
 declare sonarqube="sonarqube"
 
 function start() {
-    echo 'Starting spring_boot_kotlin_sample....'
+    echo 'Starting bookmarker....'
     build_api
-    docker-compose -f ${docker_compose_file} up --build --force-recreate -d ${spring_boot_kotlin_sample}
+    docker-compose -f ${docker_compose_file} up --build --force-recreate -d ${bookmarker}
     docker-compose -f ${docker_compose_file} logs -f
 }
 
 function start_all() {
-    echo 'Starting spring_boot_kotlin_sample and dependencies....'
+    echo 'Starting bookmarker and dependencies....'
     build_api
     docker-compose -f ${docker_compose_file} up --build --force-recreate -d
     docker-compose -f ${docker_compose_file} logs -f
 }
 
 function stop() {
-    echo 'Stopping spring_boot_kotlin_sample....'
+    echo 'Stopping bookmarker....'
     docker-compose -f ${docker_compose_file} stop
     docker-compose -f ${docker_compose_file} rm -f
 }

@@ -1,26 +1,26 @@
 version: '3.1'
 services:
 
-  spring-boot-kotlin-sample:
+  bookmarker:
     build: .
-    container_name: spring-boot-kotlin-sample
+    container_name: bookmarker
     ports:
       - "18080:8080"
       - "18787:8787"
     restart: always
     depends_on:
-      - sbks-postgresdb
+      - bm-postgresdb
 
-  sbks-postgresdb:
+  bm-postgresdb:
     image: postgres
-    container_name: sbks-postgresdb
+    container_name: bm-postgresdb
     environment:
       - POSTGRES_USER=siva
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=appdb
       - PGDATA=/data/postgres
     volumes:
-      - ~/data/sbks-postgres:/data/postgres
+      - ~/data/bm-postgres:/data/postgres
     ports:
       - "5432:5432"
     restart: unless-stopped
