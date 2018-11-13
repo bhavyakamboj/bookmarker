@@ -33,7 +33,7 @@
         <flyway.url>jdbc:postgresql://localhost:5432/postgres</flyway.url>
         <flyway.user>postgres</flyway.user>
         <flyway.password>secret</flyway.password>
-        <sonar.jacoco.itReportPaths>${project.build.directory}/coverage-reports/aggregate.exec/</sonar.jacoco.itReportPaths>
+        <sonar.jacoco.itReportPaths>${project.build.directory}/coverage-reports/aggregate.exec</sonar.jacoco.itReportPaths>
     </properties>
 
     <dependencies>
