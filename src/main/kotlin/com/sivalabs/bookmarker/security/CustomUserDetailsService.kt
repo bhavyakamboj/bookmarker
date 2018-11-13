@@ -43,8 +43,9 @@ class CustomUserDetailsService : UserDetailsService {
 
         // log.debug("Changing password for user '"+ username + "'");
 
-        val user = userRepository.findByEmail(email)!!
-        user.password = passwordEncoder.encode(newPassword)
-        userRepository.save(user)
+        userRepository.findByEmail(email)?.also { user ->
+            user.password = passwordEncoder.encode(newPassword)
+            userRepository.save(user)
+        }
     }
 }

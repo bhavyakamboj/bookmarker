@@ -6,31 +6,26 @@ import com.sivalabs.bookmarker.model.ChangePassword
 import com.sivalabs.bookmarker.model.UserTokenState
 import com.sivalabs.bookmarker.security.CustomUserDetailsService
 import com.sivalabs.bookmarker.security.SecurityUser
+import com.sivalabs.bookmarker.security.SecurityUtils
 import com.sivalabs.bookmarker.security.TokenHelper
-import com.sivalabs.bookmarker.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 import javax.servlet.http.HttpServletRequest
-import java.security.Principal
-import java.util.HashMap
 
 @RestController
 @RequestMapping(value = ["/api"])
 class AuthenticationController {
 
     @Autowired
-    internal lateinit var tokenHelper: TokenHelper
+    private lateinit var tokenHelper: TokenHelper
 
     @Autowired
     private lateinit var authenticationManager: AuthenticationManager
@@ -39,55 +34,53 @@ class AuthenticationController {
     private lateinit var userDetailsService: CustomUserDetailsService
 
     @Autowired
-    private lateinit var userService: UserService
+    private lateinit var securityUtils: SecurityUtils
 
     @Value("\${jwt.expires_in}")
-    private var expiredIn: Long = 0
+    private var expiresIn: Long = 0
 
     @PostMapping(value = ["/auth/login"])
-    @Throws(AuthenticationException::class)
-    fun createAuthenticationToken(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<*> {
-
+    fun createAuthenticationToken(@RequestBody credentials: AuthenticationRequest): UserTokenState {
         val authentication = authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                authenticationRequest.username,
-                authenticationRequest.password
-            )
+            UsernamePasswordAuthenticationToken(credentials.username, credentials.password)
         )
 
         SecurityContextHolder.getContext().authentication = authentication
 
         val user = authentication.principal as SecurityUser
         val jws = tokenHelper.generateToken(user.username)
-        return ResponseEntity.ok(UserTokenState(jws, expiredIn))
+        return UserTokenState(jws, expiresIn)
     }
 
     @PostMapping(value = ["/auth/refresh"])
-    fun refreshAuthenticationToken(request: HttpServletRequest, principal: Principal?): ResponseEntity<*> {
-
+    @PreAuthorize("isAuthenticated()")
+    fun refreshAuthenticationToken(request: HttpServletRequest): ResponseEntity<UserTokenState> {
         val authToken = tokenHelper.getToken(request)
-
-        return if (authToken != null && principal != null) {
-            val refreshedToken = tokenHelper.refreshToken(authToken)
-            ResponseEntity.ok(UserTokenState(refreshedToken, expiredIn))
+        return if (authToken != null) {
+            val email = tokenHelper.getUsernameFromToken(authToken)
+            val userDetails = userDetailsService.loadUserByUsername(email)
+            val validToken = tokenHelper.validateToken(authToken, userDetails)
+            if (validToken) {
+                val refreshedToken = tokenHelper.refreshToken(authToken)
+                ResponseEntity.ok(UserTokenState(refreshedToken, expiresIn))
+            } else {
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<UserTokenState>()
+            }
         } else {
-            val userTokenState = UserTokenState()
-            ResponseEntity.accepted().body(userTokenState)
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<UserTokenState>()
         }
     }
 
-    @RequestMapping("/me")
+    @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    fun user(user: Principal): User? {
-        return this.userService.findByEmail(user.name)
+    fun me(): ResponseEntity<User> {
+        return securityUtils.loginUser()?.let { ResponseEntity.ok(it) }
+                ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 
     @PostMapping(value = ["/change-password"])
     @PreAuthorize("isAuthenticated()")
-    fun changePassword(@RequestBody changePassword: ChangePassword): ResponseEntity<*> {
+    fun changePassword(@RequestBody changePassword: ChangePassword) {
         userDetailsService.changePassword(changePassword.oldPassword, changePassword.newPassword)
-        val result = HashMap<String, String>()
-        result["result"] = "success"
-        return ResponseEntity.accepted().body<Map<String, String>>(result)
     }
 }
