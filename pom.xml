@@ -33,6 +33,7 @@
         <flyway.url>jdbc:postgresql://localhost:5432/postgres</flyway.url>
         <flyway.user>postgres</flyway.user>
         <flyway.password>secret</flyway.password>
+        <jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
         <sonar.jacoco.reportPaths>${project.build.directory}/coverage-reports/aggregate.exec</sonar.jacoco.reportPaths>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
