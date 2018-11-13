@@ -2,7 +2,6 @@ package com.sivalabs.bookmarker.service
 
 import com.sivalabs.bookmarker.config.Loggable
 import com.sivalabs.bookmarker.entity.User
-import com.sivalabs.bookmarker.model.UserDTO
 import com.sivalabs.bookmarker.model.UserProfile
 import com.sivalabs.bookmarker.repo.UserRepository
 import org.springframework.stereotype.Service
@@ -14,18 +13,18 @@ import java.util.Optional
 @Loggable
 class UserService(private val userRepository: UserRepository) {
 
-    fun getAllUsers(): List<UserDTO> = userRepository.findAll().map { UserDTO.fromEntity(it) }
+    fun getAllUsers(): List<UserProfile> = userRepository.findAll().map { UserProfile.fromEntity(it) }
 
     fun getUserById(id: Long): Optional<User> {
         return userRepository.findById(id)
     }
 
-    fun createUser(user: UserDTO): UserDTO {
-        return UserDTO.fromEntity(userRepository.save(user.toEntity()))
+    fun createUser(user: User): UserProfile {
+        return UserProfile.fromEntity(userRepository.save(user))
     }
 
-    fun updateUser(user: UserDTO): UserDTO {
-        return UserDTO.fromEntity(userRepository.save(user.toEntity()))
+    fun updateUser(user: User): UserProfile {
+        return UserProfile.fromEntity(userRepository.save(user))
     }
 
     fun deleteUser(userId: Long) {
@@ -33,12 +32,7 @@ class UserService(private val userRepository: UserRepository) {
     }
 
     fun getUserProfile(id: Long): Optional<UserProfile> {
-        val userOptional = this.getUserById(id)
-        if (!userOptional.isPresent) {
-            return Optional.empty()
-        }
-        val user = userOptional.get()
-        return Optional.of(UserProfile(user.id, user.name, user.email))
+        return this.getUserById(id).map { UserProfile.fromEntity(it) }
     }
 
     fun findByEmail(email: String): User? {

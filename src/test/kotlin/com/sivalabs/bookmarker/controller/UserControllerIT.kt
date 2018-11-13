@@ -1,6 +1,6 @@
 package com.sivalabs.bookmarker.controller
 
-import com.sivalabs.bookmarker.model.UserDTO
+import com.sivalabs.bookmarker.entity.User
 import com.sivalabs.bookmarker.model.UserProfile
 import com.sivalabs.bookmarker.repo.UserRepository
 import com.sivalabs.bookmarker.utils.TestHelper
@@ -24,19 +24,19 @@ class UserControllerIT : AbstractIntegrationTest() {
     @Autowired
     lateinit var restTemplate: TestRestTemplate
 
-    lateinit var existingUser: UserDTO
-    lateinit var newUser: UserDTO
-    lateinit var updateUser: UserDTO
+    lateinit var existingUser: User
+    lateinit var newUser: User
+    lateinit var updateUser: User
 
     @Before
     fun setUp() {
         newUser = TestHelper.buildUser()
 
         existingUser = TestHelper.buildUser()
-        existingUser = UserDTO.fromEntity(userRepository.save(existingUser.toEntity()))
+        existingUser = userRepository.save(existingUser)
 
         updateUser = TestHelper.buildUser()
-        updateUser = UserDTO.fromEntity(userRepository.save(updateUser.toEntity()))
+        updateUser = userRepository.save(updateUser)
     }
 
     @After
@@ -49,7 +49,7 @@ class UserControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should get all users`() {
-        val responseEntity = restTemplate.getForEntity("/api/users", Array<UserDTO>::class.java)
+        val responseEntity = restTemplate.getForEntity("/api/users", Array<UserProfile>::class.java)
         val users = asList(*responseEntity.body!!)
         assertThat(users).isNotEmpty
     }
@@ -65,7 +65,7 @@ class UserControllerIT : AbstractIntegrationTest() {
     @Test
     fun `should create user`() {
         val request = HttpEntity(newUser)
-        val responseEntity = restTemplate.postForEntity("/api/users", request, UserDTO::class.java)
+        val responseEntity = restTemplate.postForEntity("/api/users", request, UserProfile::class.java)
         val savedUser = responseEntity.body!!
         assertThat(savedUser.id).isNotNull()
     }
@@ -73,7 +73,7 @@ class UserControllerIT : AbstractIntegrationTest() {
     @Test
     fun `should update user`() {
         val request = HttpEntity(updateUser)
-        restTemplate.put("/api/users/${updateUser.id}", request, UserDTO::class.java)
+        restTemplate.put("/api/users/${updateUser.id}", request, UserProfile::class.java)
         val responseEntity = restTemplate.getForEntity("/api/users/${updateUser.id}", UserProfile::class.java)
         val updatedUser = responseEntity.body!!
         assertThat(updatedUser.id).isEqualTo(updateUser.id)

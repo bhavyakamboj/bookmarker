@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.controller
 
 import com.sivalabs.bookmarker.config.Loggable
-import com.sivalabs.bookmarker.model.UserDTO
+import com.sivalabs.bookmarker.entity.User
 import com.sivalabs.bookmarker.model.UserProfile
 import com.sivalabs.bookmarker.service.UserService
 import com.sivalabs.bookmarker.utils.logger
@@ -25,7 +25,7 @@ class UserController(private val userService: UserService) {
     private val log = logger()
 
     @GetMapping("")
-    fun getAllUsers(): List<UserDTO> {
+    fun getAllUsers(): List<UserProfile> {
         log.info("process=get-users")
         return userService.getAllUsers()
     }
@@ -40,13 +40,13 @@ class UserController(private val userService: UserService) {
 
     @PostMapping("")
     @ResponseStatus(CREATED)
-    fun createUser(@RequestBody user: UserDTO): UserDTO {
+    fun createUser(@RequestBody user: User): UserProfile {
         log.info("process=create-user, user_email={}", user.email)
         return userService.createUser(user)
     }
 
     @PutMapping("/{id}")
-    fun updateUser(@PathVariable id: Long, @RequestBody user: UserDTO): UserDTO {
+    fun updateUser(@PathVariable id: Long, @RequestBody user: User): UserProfile {
         log.info("process=update-user, user_id={}", id)
         user.id = id
         return userService.updateUser(user)

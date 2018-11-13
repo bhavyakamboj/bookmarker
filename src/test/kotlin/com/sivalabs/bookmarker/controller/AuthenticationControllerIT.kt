@@ -2,7 +2,6 @@ package com.sivalabs.bookmarker.controller
 
 import com.sivalabs.bookmarker.entity.User
 import com.sivalabs.bookmarker.model.AuthenticationRequest
-import com.sivalabs.bookmarker.model.UserDTO
 import com.sivalabs.bookmarker.model.UserTokenState
 import com.sivalabs.bookmarker.repo.UserRepository
 import com.sivalabs.bookmarker.utils.TestHelper
@@ -21,12 +20,12 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
     @Autowired
     lateinit var restTemplate: TestRestTemplate
 
-    lateinit var existingUser: UserDTO
+    lateinit var existingUser: User
 
     @Before
     fun setUp() {
         existingUser = TestHelper.buildUser()
-        existingUser = UserDTO.fromEntity(userRepository.save(existingUser.toEntity()))
+        existingUser = userRepository.save(existingUser)
     }
 
     @After
