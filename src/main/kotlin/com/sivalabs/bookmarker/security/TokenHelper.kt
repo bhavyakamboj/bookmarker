@@ -85,5 +85,4 @@ class TokenHelper {
     fun getAuthHeaderFromHeader(request: HttpServletRequest): String? {
         return request.getHeader(authHeader)
     }
-
 }

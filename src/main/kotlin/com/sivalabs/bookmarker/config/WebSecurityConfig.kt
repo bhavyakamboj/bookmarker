@@ -57,8 +57,8 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
             .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
             .authorizeRequests()
             .antMatchers("/api/auth/**").permitAll()
-            //.antMatchers(HttpMethod.POST,"/users").hasAnyRole("USER", "ADMIN")
-            //.anyRequest().authenticated()
+            // .antMatchers(HttpMethod.POST,"/users").hasAnyRole("USER", "ADMIN")
+            // .anyRequest().authenticated()
             .and()
             .addFilterBefore(TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService), BasicAuthenticationFilter::class.java)
 

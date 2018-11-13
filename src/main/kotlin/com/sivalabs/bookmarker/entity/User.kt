@@ -2,7 +2,14 @@ package com.sivalabs.bookmarker.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.Table
+import javax.persistence.Id
+import javax.persistence.SequenceGenerator
+import javax.persistence.GeneratedValue
+import javax.persistence.Column
+import javax.persistence.Enumerated
+import javax.persistence.EnumType
 
 @Entity
 @Table(name = "users")

@@ -46,8 +46,7 @@ class AuthenticationController {
 
     @PostMapping(value = ["/auth/login"])
     @Throws(AuthenticationException::class)
-    fun createAuthenticationToken(@RequestBody authenticationRequest: AuthenticationRequest)
-            : ResponseEntity<*> {
+    fun createAuthenticationToken(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<*> {
 
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
@@ -64,8 +63,7 @@ class AuthenticationController {
     }
 
     @PostMapping(value = ["/auth/refresh"])
-    fun refreshAuthenticationToken(request: HttpServletRequest, principal: Principal?)
-            : ResponseEntity<*> {
+    fun refreshAuthenticationToken(request: HttpServletRequest, principal: Principal?): ResponseEntity<*> {
 
         val authToken = tokenHelper.getToken(request)
 

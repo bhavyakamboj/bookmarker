@@ -12,15 +12,16 @@ import javax.servlet.http.HttpServletResponse
 import java.io.IOException
 
 class TokenAuthenticationFilter(
-        private val tokenHelper: TokenHelper,
-        private val userDetailsService: UserDetailsService)
+    private val tokenHelper: TokenHelper,
+    private val userDetailsService: UserDetailsService
+)
     : OncePerRequestFilter() {
 
     @Throws(IOException::class, ServletException::class)
     public override fun doFilterInternal(
-            request: HttpServletRequest,
-            response: HttpServletResponse,
-            chain: FilterChain
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        chain: FilterChain
     ) {
         val authToken = tokenHelper.getToken(request)
 
@@ -34,5 +35,4 @@ class TokenAuthenticationFilter(
         }
         chain.doFilter(request, response)
     }
-
 }

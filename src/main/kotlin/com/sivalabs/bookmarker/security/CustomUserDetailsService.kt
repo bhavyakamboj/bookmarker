@@ -38,10 +38,10 @@ class CustomUserDetailsService : UserDetailsService {
         val currentUser = SecurityContextHolder.getContext().authentication
         val email = currentUser.name
 
-        //log.debug("Re-authenticating user '"+ username + "' for password change request.");
+        // log.debug("Re-authenticating user '"+ username + "' for password change request.");
         authenticationManager.authenticate(UsernamePasswordAuthenticationToken(email, oldPassword))
 
-        //log.debug("Changing password for user '"+ username + "'");
+        // log.debug("Changing password for user '"+ username + "'");
 
         val user = userRepository.findByEmail(email)!!
         user.password = passwordEncoder.encode(newPassword)
