@@ -40,4 +40,8 @@ class UserService(private val userRepository: UserRepository) {
         val user = userOptional.get()
         return Optional.of(UserProfile(user.id, user.name, user.email))
     }
+
+    fun findByEmail(email: String): User? {
+        return userRepository.findByEmail(email)
+    }
 }

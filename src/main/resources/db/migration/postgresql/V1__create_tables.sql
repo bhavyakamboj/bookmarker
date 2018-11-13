@@ -5,6 +5,7 @@ create table users (
     email varchar(255) not null CONSTRAINT user_email_unique UNIQUE,
     password varchar(255) not null,
     name varchar(255) not null,
+    role varchar(255) not null,
     created_at timestamp,
     updated_at timestamp,
     primary key (id)

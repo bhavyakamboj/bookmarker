@@ -6,8 +6,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
-class SpringBootKotlinApplication
+class BookmarkerApplication
 
 fun main(args: Array<String>) {
-    runApplication<SpringBootKotlinApplication>(*args)
+    runApplication<BookmarkerApplication>(*args)
 }
