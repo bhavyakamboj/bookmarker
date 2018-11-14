@@ -17,6 +17,9 @@ class Bookmark {
     var url: String = ""
 
     @Column(nullable = false)
+    var title: String = ""
+
+    @Column(nullable = false)
     var description: String = ""
 
     @ManyToOne

@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 data class BookmarkDTO(
     var id: Long = 0,
     var url: String = "",
+    var title: String = "",
     var description: String = "",
     @JsonProperty("created_by")
     var createdBy: Long = 0,
@@ -19,6 +20,7 @@ data class BookmarkDTO(
         fun fromEntity(bm: Bookmark) = BookmarkDTO(
                 bm.id,
                 bm.url,
+                bm.title,
                 bm.description,
                 bm.createdBy.id,
                 bm.createdAt,

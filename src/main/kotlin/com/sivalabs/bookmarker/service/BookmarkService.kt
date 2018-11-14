@@ -6,6 +6,7 @@ import com.sivalabs.bookmarker.repo.BookmarkRepository
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.jsoup.Jsoup
 
 @Service
 @Transactional
@@ -23,6 +24,11 @@ class BookmarkService(private val bookmarkRepository: BookmarkRepository) {
     }
 
     fun createBookmark(bookmark: Bookmark) {
+        if(bookmark.title.isEmpty() || bookmark.description.isEmpty()){
+            val doc = Jsoup.connect(bookmark.url).get()
+            bookmark.title = doc.title()
+            bookmark.description = doc.body().text().take(200).plus("...")
+        }
         bookmarkRepository.save(bookmark)
     }
 
