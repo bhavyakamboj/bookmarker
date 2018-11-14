@@ -3,7 +3,7 @@ package com.sivalabs.bookmarker.controller
 import com.sivalabs.bookmarker.entity.User
 import com.sivalabs.bookmarker.model.AuthenticationRequest
 import com.sivalabs.bookmarker.model.ChangePassword
-import com.sivalabs.bookmarker.model.UserTokenState
+import com.sivalabs.bookmarker.model.AuthenticationResponse
 import com.sivalabs.bookmarker.security.CustomUserDetailsService
 import com.sivalabs.bookmarker.security.SecurityUser
 import com.sivalabs.bookmarker.security.SecurityUtils
@@ -40,7 +40,7 @@ class AuthenticationController {
     private var expiresIn: Long = 0
 
     @PostMapping(value = ["/auth/login"])
-    fun createAuthenticationToken(@RequestBody credentials: AuthenticationRequest): UserTokenState {
+    fun createAuthenticationToken(@RequestBody credentials: AuthenticationRequest): AuthenticationResponse {
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(credentials.username, credentials.password)
         )
@@ -49,12 +49,12 @@ class AuthenticationController {
 
         val user = authentication.principal as SecurityUser
         val jws = tokenHelper.generateToken(user.username)
-        return UserTokenState(jws, expiresIn)
+        return AuthenticationResponse(jws, expiresIn)
     }
 
     @PostMapping(value = ["/auth/refresh"])
     @PreAuthorize("isAuthenticated()")
-    fun refreshAuthenticationToken(request: HttpServletRequest): ResponseEntity<UserTokenState> {
+    fun refreshAuthenticationToken(request: HttpServletRequest): ResponseEntity<AuthenticationResponse> {
         val authToken = tokenHelper.getToken(request)
         return if (authToken != null) {
             val email = tokenHelper.getUsernameFromToken(authToken)
@@ -62,12 +62,12 @@ class AuthenticationController {
             val validToken = tokenHelper.validateToken(authToken, userDetails)
             if (validToken) {
                 val refreshedToken = tokenHelper.refreshToken(authToken)
-                ResponseEntity.ok(UserTokenState(refreshedToken, expiresIn))
+                ResponseEntity.ok(AuthenticationResponse(refreshedToken, expiresIn))
             } else {
-                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<UserTokenState>()
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<AuthenticationResponse>()
             }
         } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<UserTokenState>()
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<AuthenticationResponse>()
         }
     }
 

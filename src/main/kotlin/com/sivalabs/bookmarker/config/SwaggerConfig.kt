@@ -26,8 +26,8 @@ class SwaggerConfig {
 
     private fun apiInfo(): ApiInfo {
         return ApiInfo(
-                "MyApp REST API",
-                "MyApp REST API",
+                "Bookmarks REST API",
+                "Bookmarks REST API",
                 "1.0",
                 "Terms of service",
                 Contact("Siva", "http://sivalabs.in", "sivaprasadreddy.k@gmail.com"),

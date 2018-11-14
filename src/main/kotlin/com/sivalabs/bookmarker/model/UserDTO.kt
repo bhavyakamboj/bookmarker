@@ -2,7 +2,7 @@ package com.sivalabs.bookmarker.model
 
 import com.sivalabs.bookmarker.entity.User
 
-data class UserProfile(
+data class UserDTO(
     var id: Long,
     var name: String,
     var email: String,
@@ -10,8 +10,8 @@ data class UserProfile(
 ) {
     companion object {
 
-        fun fromEntity(user: User): UserProfile {
-            return UserProfile(user.id, user.name, user.email, user.role.name)
+        fun fromEntity(user: User): UserDTO {
+            return UserDTO(user.id, user.name, user.email, user.role.name)
         }
     }
 }

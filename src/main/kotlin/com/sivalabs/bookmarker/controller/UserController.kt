@@ -2,7 +2,7 @@ package com.sivalabs.bookmarker.controller
 
 import com.sivalabs.bookmarker.config.Loggable
 import com.sivalabs.bookmarker.entity.User
-import com.sivalabs.bookmarker.model.UserProfile
+import com.sivalabs.bookmarker.model.UserDTO
 import com.sivalabs.bookmarker.service.UserService
 import com.sivalabs.bookmarker.utils.logger
 import org.springframework.http.HttpStatus.CREATED
@@ -25,28 +25,28 @@ class UserController(private val userService: UserService) {
     private val log = logger()
 
     @GetMapping("")
-    fun getAllUsers(): List<UserProfile> {
+    fun getAllUsers(): List<UserDTO> {
         log.info("process=get-users")
         return userService.getAllUsers()
     }
 
     @GetMapping("/{id}")
-    fun getUser(@PathVariable id: Long): ResponseEntity<UserProfile> {
+    fun getUser(@PathVariable id: Long): ResponseEntity<UserDTO> {
         log.info("process=get-user, user_id={}", id)
-        return userService.getUserProfile(id)
+        return userService.getUserById(id)
                 .map { ResponseEntity.ok(it) }
                 .orElse(ResponseEntity.notFound().build())
     }
 
     @PostMapping("")
     @ResponseStatus(CREATED)
-    fun createUser(@RequestBody user: User): UserProfile {
+    fun createUser(@RequestBody user: User): UserDTO {
         log.info("process=create-user, user_email={}", user.email)
         return userService.createUser(user)
     }
 
     @PutMapping("/{id}")
-    fun updateUser(@PathVariable id: Long, @RequestBody user: User): UserProfile {
+    fun updateUser(@PathVariable id: Long, @RequestBody user: User): UserDTO {
         log.info("process=update-user, user_id={}", id)
         user.id = id
         return userService.updateUser(user)

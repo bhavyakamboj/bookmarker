@@ -2,7 +2,7 @@ package com.sivalabs.bookmarker.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class UserTokenState(
+data class AuthenticationResponse(
     @JsonProperty("access_token")
     var accessToken: String = "",
 

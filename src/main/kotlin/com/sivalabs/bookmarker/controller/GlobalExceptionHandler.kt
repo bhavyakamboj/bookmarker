@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [EmptyResultDataAccessException::class])
-    internal fun handleEmptyResultDataAccessException(exception: Exception): ResponseEntity<*> {
-        return ResponseEntity(exception, HttpStatus.NOT_FOUND)
+    fun handleEmptyResultDataAccessException(exception: Exception): ResponseEntity<*> {
+        return ResponseEntity(exception.localizedMessage, HttpStatus.NOT_FOUND)
     }
 }
