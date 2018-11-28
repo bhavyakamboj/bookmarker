@@ -46,8 +46,9 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `should get all bookmarks`() {
-        val responseEntity = restTemplate.getForEntity("/api/bookmarks", Array<BookmarkDTO>::class.java)
+    fun `should get all user bookmarks`() {
+        val request = HttpEntity(null, getAuthHeaders())
+        val responseEntity = restTemplate.exchange("/api/bookmarks", HttpMethod.GET, request, Array<BookmarkDTO>::class.java)
         val bookmarks = asList(*responseEntity.body!!)
         assertThat(bookmarks).isNotEmpty
     }
@@ -61,11 +62,11 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should delete bookmark`() {
-        val request = HttpEntity(newBookmark, getAuthHeaders())
-        var responseEntity = restTemplate.getForEntity("/api/bookmarks/${existingBookmark.id}", BookmarkDTO::class.java)
+        val request = HttpEntity(null, getAuthHeaders())
+        var responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(OK)
         restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.DELETE, request, Void::class.java)
-        responseEntity = restTemplate.getForEntity("/api/bookmarks/${existingBookmark.id}", BookmarkDTO::class.java)
+        responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(NOT_FOUND)
     }
 }
