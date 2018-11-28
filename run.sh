@@ -6,6 +6,11 @@ declare docker_compose_platform_file=${project_dir}/docker-compose-platform.yml
 declare bookmarker="bookmarker"
 declare sonarqube="sonarqube"
 
+function restart() {
+    stop
+    start
+}
+
 function start() {
     echo 'Starting bookmarker....'
     build_api
@@ -38,7 +43,7 @@ function sonar() {
 
 action="start"
 
-if [ "$#" != "0"  ]
+if [[ "$#" != "0"  ]]
 then
     action=$@
 fi
