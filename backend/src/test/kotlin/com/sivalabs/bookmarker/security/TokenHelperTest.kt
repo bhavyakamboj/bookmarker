@@ -1,5 +1,6 @@
 package com.sivalabs.bookmarker.security
 
+import com.sivalabs.bookmarker.config.BookmarkerProperties
 import com.sivalabs.bookmarker.config.TimeProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -12,10 +13,11 @@ class TokenHelperTest {
     @Before
     fun setUp() {
         tokenHelper = TokenHelper()
-        ReflectionTestUtils.setField(tokenHelper, "appName", "Bookmarker")
-        ReflectionTestUtils.setField(tokenHelper, "secret", "secret")
-        ReflectionTestUtils.setField(tokenHelper, "expiredIn", 604800)
-        ReflectionTestUtils.setField(tokenHelper, "authHeader", "Authorization")
+        val bookmarkerProperties = BookmarkerProperties()
+        bookmarkerProperties.jwt.secret = "secret"
+        bookmarkerProperties.jwt.expiresIn = 604800
+        bookmarkerProperties.jwt.header = "Authorization"
+        ReflectionTestUtils.setField(tokenHelper, "bookmarkerProperties", bookmarkerProperties)
         ReflectionTestUtils.setField(tokenHelper, "timeProvider", TimeProvider())
     }
 

@@ -1,11 +1,11 @@
 package com.sivalabs.bookmarker.security
 
+import com.sivalabs.bookmarker.config.BookmarkerProperties
 import com.sivalabs.bookmarker.config.TimeProvider
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 
@@ -15,17 +15,8 @@ import java.util.Date
 @Component
 class TokenHelper {
 
-    @Value("\${spring.application.name}")
-    private lateinit var appName: String
-
-    @Value("\${jwt.secret}")
-    private lateinit var secret: String
-
-    @Value("\${jwt.expires_in}")
-    private var expiredIn: Long = 0
-
-    @Value("\${jwt.header}")
-    private lateinit var authHeader: String
+    @Autowired
+    private lateinit var bookmarkerProperties: BookmarkerProperties
 
     @Autowired
     private lateinit var timeProvider: TimeProvider
@@ -44,30 +35,30 @@ class TokenHelper {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
-                .signWith(signatureAlgorithm, secret)
+                .signWith(signatureAlgorithm, bookmarkerProperties.jwt.secret)
                 .compact()
     }
 
     fun generateToken(username: String): String {
         return Jwts.builder()
-                .setIssuer(appName)
+                .setIssuer(bookmarkerProperties.jwt.issuer)
                 .setSubject(username)
                 .setAudience(audienceWeb)
                 .setIssuedAt(timeProvider.now())
                 .setExpiration(generateExpirationDate())
-                .signWith(signatureAlgorithm, secret)
+                .signWith(signatureAlgorithm, bookmarkerProperties.jwt.secret)
                 .compact()
     }
 
     private fun getAllClaimsFromToken(token: String): Claims {
         return Jwts.parser()
-                .setSigningKey(secret)
+                .setSigningKey(bookmarkerProperties.jwt.secret)
                 .parseClaimsJws(token)
                 .body
     }
 
     private fun generateExpirationDate(): Date {
-        return Date(timeProvider.now().time + expiredIn * 1000)
+        return Date(timeProvider.now().time + bookmarkerProperties.jwt.expiresIn * 1000)
     }
 
     fun validateToken(token: String, userDetails: UserDetails): Boolean {
@@ -83,6 +74,6 @@ class TokenHelper {
     }
 
     fun getAuthHeaderFromHeader(request: HttpServletRequest): String? {
-        return request.getHeader(authHeader)
+        return request.getHeader(bookmarkerProperties.jwt.header)
     }
 }
