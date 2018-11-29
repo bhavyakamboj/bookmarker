@@ -1,6 +1,6 @@
 // For authoring Nightwatch tests, see
 // http://nightwatchjs.org/guide#usage
-
+/*
 module.exports = {
   'default e2e tests': browser => {
     browser
@@ -12,3 +12,4 @@ module.exports = {
       .end()
   }
 }
+*/
