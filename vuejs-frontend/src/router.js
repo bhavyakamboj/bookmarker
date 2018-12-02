@@ -9,19 +9,27 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Home',
-      component: Home
-    },
-    {
       path: '/login',
       name: 'Login',
       component: Login
     },
     {
-      path: '/newBookmark',
+      path: '/bookmarks/',
+      redirect: '/bookmarks/all'
+    },
+    {
+      path: '/bookmarks/:filter',
+      name: 'HomeFiltered',
+      component: Home
+    },
+    {
+      path: '/new-bookmark',
       name: 'NewBookmark',
       component: NewBookmark
+    },
+    {
+      path: '*',
+      redirect: '/bookmarks/all'
     }
   ]
 })

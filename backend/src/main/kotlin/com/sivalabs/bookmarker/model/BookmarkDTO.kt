@@ -8,7 +8,8 @@ data class BookmarkDTO(
     var id: Long = 0,
     var url: String = "",
     var title: String = "",
-    var description: String = "",
+    var like: Boolean = false,
+    var archived: Boolean = false,
     @JsonProperty("created_by")
     var createdBy: Long = 0,
     @JsonProperty("created_at")
@@ -21,7 +22,8 @@ data class BookmarkDTO(
                 bm.id,
                 bm.url,
                 bm.title,
-                bm.description,
+                bm.liked,
+                bm.archived,
                 bm.createdBy.id,
                 bm.createdAt,
                 bm.updatedAt

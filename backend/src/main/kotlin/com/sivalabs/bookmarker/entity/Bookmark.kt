@@ -20,7 +20,10 @@ class Bookmark {
     var title: String = ""
 
     @Column(nullable = false)
-    var description: String = ""
+    var liked: Boolean = false
+
+    @Column(nullable = false)
+    var archived: Boolean = false
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)

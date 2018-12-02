@@ -25,7 +25,6 @@ object TestHelper {
         bookmark.id = id
         bookmark.url = "http://$uuid.com"
         bookmark.title = "title-$uuid"
-        bookmark.description = "description-$uuid"
         return bookmark
     }
 }
