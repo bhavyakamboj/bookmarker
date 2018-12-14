@@ -15,58 +15,51 @@ pipeline {
     }
 
     stages {
-
         stage('Test') {
-            dir("backend") {
-                steps {
-                    sh './mvnw clean verify'
-                }
-                post {
-                    always {
-                        junit 'target/surefire-reports/*.xml'
-                        junit 'target/failsafe-reports/*.xml'
-                    }
+            steps {
+                sh './mvnw clean verify'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                    junit 'target/failsafe-reports/*.xml'
                 }
             }
         }
 
         stage('OWASP Dependency Check') {
-            dir("backend") {
-                steps {
-                    sh './mvnw dependency-check:check'
-                }
-                post {
-                    always {
-                        publishHTML(target:[
-                             allowMissing: true,
-                             alwaysLinkToLastBuild: true,
-                             keepAll: true,
-                             reportDir: 'target',
-                             reportFiles: 'dependency-check-report.html',
-                             reportName: "OWASP Dependency Check Report"
-                        ])
+            steps {
+                sh './mvnw dependency-check:check'
+            }
+            post {
+                always {
+                    publishHTML(target:[
+                         allowMissing: true,
+                         alwaysLinkToLastBuild: true,
+                         keepAll: true,
+                         reportDir: 'target',
+                         reportFiles: 'dependency-check-report.html',
+                         reportName: "OWASP Dependency Check Report"
+                    ])
 
-                    }
                 }
             }
         }
 
         stage("Publish to DockerHub") {
-            dir("backend") {
-                when {
-                    expression { params.PUBLISH_TO_DOCKERHUB == true }
-                }
-                steps {
-                  sh "docker build -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER} -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest ."
+            when {
+                expression { params.PUBLISH_TO_DOCKERHUB == true }
+            }
+            steps {
+              sh "docker build -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER} -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest ."
 
-                  withCredentials([[$class: 'UsernamePasswordMultiBinding',
-                                    credentialsId: 'docker-hub-credentials',
-                                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                      sh "docker login --username $USERNAME --password $PASSWORD"
-                  }
-                  sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest"
-                  sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER}"
-                }
+              withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                                credentialsId: 'docker-hub-credentials',
+                                usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                  sh "docker login --username $USERNAME --password $PASSWORD"
+              }
+              sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest"
+              sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER}"
             }
         }
     }
