@@ -1,10 +1,10 @@
 @Library('jenkins-java-shared-library@master') _
 import com.sivalabs.JenkinsJavaLib
 
-def library = new JenkinsJavaLib()
+def library = new JenkinsJavaLib(steps, env, scm, currentBuild)
 
 node {
-    stage('Test') {
-        library.runMavenTests()
-    }
+
+    library.runMavenTests()
+
 }
