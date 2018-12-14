@@ -1,8 +1,3 @@
-@Library('jenkins-java-shared-library@master') _
-import com.sivalabs.JenkinsJavaLib
-
-def library = new JenkinsJavaLib()
-
 pipeline {
     agent any
 
@@ -22,7 +17,13 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                library.runMavenTests()
+                sh './mvnw clean verify'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                    junit 'target/failsafe-reports/*.xml'
+                }
             }
         }
 
