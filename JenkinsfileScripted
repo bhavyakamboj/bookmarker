@@ -1,5 +1,10 @@
+@Library('jenkins-java-shared-library@master') _
+import com.sivalabs.JenkinsJavaLib
+
+def library = new JenkinsJavaLib()
+
 node {
     stage('Test') {
-        sh './mvnw clean verify'
+        library.runMavenTests()
     }
 }
