@@ -5,6 +5,7 @@ def library = new JenkinsJavaLib(steps, env, scm, currentBuild)
 
 node {
 
+    library.checkout()
     library.runMavenTests()
 
 }
