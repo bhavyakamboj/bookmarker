@@ -15,8 +15,9 @@ pipeline {
     }
 
     stages {
-        dir("backend") {
-            stage('Test') {
+
+        stage('Test') {
+            dir("backend") {
                 steps {
                     sh './mvnw clean verify'
                 }
@@ -27,8 +28,10 @@ pipeline {
                     }
                 }
             }
+        }
 
-            stage('OWASP Dependency Check') {
+        stage('OWASP Dependency Check') {
+            dir("backend") {
                 steps {
                     sh './mvnw dependency-check:check'
                 }
@@ -46,8 +49,10 @@ pipeline {
                     }
                 }
             }
+        }
 
-            stage("Publish to DockerHub") {
+        stage("Publish to DockerHub") {
+            dir("backend") {
                 when {
                     expression { params.PUBLISH_TO_DOCKERHUB == true }
                 }
