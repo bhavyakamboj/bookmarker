@@ -14,8 +14,8 @@ pipeline {
         booleanParam(name: 'PUBLISH_TO_DOCKERHUB', defaultValue: false, description: 'Publish Docker Image to DockerHub?')
     }
 
-    dir("backend") {
-        stages {
+    stages {
+        dir("backend") {
             stage('Test') {
                 steps {
                     sh './mvnw clean verify'
@@ -63,7 +63,6 @@ pipeline {
                   sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER}"
                 }
             }
-
         }
     }
 }

@@ -37,7 +37,7 @@ export default {
       this.$store.dispatch('login', this.credentials).then(response => {
         console.log('Login successful')
         window.eventBus.$emit('loggedin')
-        this.$router.push('/')
+        this.$router.push('/bookmarks')
       }, error => {
         console.error('Login failed', error)
         this.error = 'Login failed'

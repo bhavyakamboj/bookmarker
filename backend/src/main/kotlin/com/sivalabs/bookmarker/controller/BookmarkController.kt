@@ -2,6 +2,7 @@ package com.sivalabs.bookmarker.controller
 
 import com.sivalabs.bookmarker.entity.Bookmark
 import com.sivalabs.bookmarker.model.BookmarkDTO
+import com.sivalabs.bookmarker.model.BookmarkFilterType
 import com.sivalabs.bookmarker.security.SecurityUtils
 import com.sivalabs.bookmarker.service.BookmarkService
 import org.springframework.http.HttpStatus
@@ -18,8 +19,9 @@ class BookmarkController(
 ) {
 
     @GetMapping
-    fun allUserBookmarks(): List<BookmarkDTO> {
-        return bookmarkService.getUserBookmarks(securityUtils.loginUser()!!.id)
+    fun allUserBookmarks(@RequestParam(name = "filter", defaultValue = "") filter: String): List<BookmarkDTO> {
+        return bookmarkService.getUserBookmarks(securityUtils.loginUser()!!.id,
+                BookmarkFilterType.fromString(filter))
     }
 
     @GetMapping("/{id}")

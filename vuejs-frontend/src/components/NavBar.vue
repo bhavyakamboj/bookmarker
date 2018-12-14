@@ -1,8 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container">
-      <router-link class="navbar-brand" to="/">BookMarker</router-link>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <router-link class="navbar-brand" to="/bookmarks/">BookMarker</router-link>
+      <button class="navbar-toggler" type="button" data-toggle="collapse"
+              data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -15,7 +16,7 @@
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item" v-if="isUserLoggedIn">
-            <router-link class="nav-link" to="/newBookmark">Add Bookmark</router-link>
+            <router-link class="nav-link" to="/new-bookmark">Add Bookmark</router-link>
           </li>
           <li class="nav-item" v-if="!isUserLoggedIn">
             <router-link class="nav-link" to="/login">Login</router-link>
