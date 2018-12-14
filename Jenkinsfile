@@ -1,4 +1,4 @@
-@Library('jenkins-java-shared-library')
+@Library('jenkins-java-shared-library@master') _
 import com.sivalabs.JenkinsJavaLib
 
 def library = new JenkinsJavaLib()
