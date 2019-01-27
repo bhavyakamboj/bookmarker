@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'Home',
   data () {
@@ -23,7 +23,7 @@ export default {
     this.fetchBookmarks()
   },
   computed: {
-    ...mapGetters([ 'bookmarks' ])
+    ...mapState([ 'bookmarks' ])
   },
   methods: {
     ...mapActions([ 'fetchBookmarks' ])

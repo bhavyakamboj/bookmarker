@@ -51,9 +51,6 @@ const actions = {
 }
 
 const getters = {
-  bookmarks: state => {
-    return state.bookmarks
-  }
 }
 
 export default new Vuex.Store({
