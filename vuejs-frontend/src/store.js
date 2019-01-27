@@ -30,51 +30,37 @@ const mutations = {
 }
 
 const actions = {
-  fetchBookmarks ({ commit }) {
-    HTTP.get('bookmarks')
-      .then((response) => {
-        commit('loadBookmarks', response.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  async fetchBookmarks ({ commit }) {
+    let bookmarks = (await HTTP.get('bookmarks')).data
+    commit('loadBookmarks', bookmarks)
   },
 
-  createBookmark ({ commit, state }, bookmark) {
-    return new Promise((resolve, reject) => {
-      console.log(bookmark)
-      HTTP.post('bookmarks', bookmark)
-        .then(response => {
-          // commit('setAuth', response.data)
-          resolve(response)
-        }, error => {
-          reject(error)
-        })
-    })
+  async createBookmark ({ commit, state }, bookmark) {
+    return HTTP.post('bookmarks', bookmark)
   },
 
-  login ({ commit, state }, credentials) {
-    return new Promise((resolve, reject) => {
-      HTTP.post('auth/login', credentials, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          commit('setAuth', response.data)
-          resolve(response)
-        }, error => {
-          reject(error)
-        })
-    })
+  async login ({ commit, state }, credentials) {
+    let response = await HTTP.post('auth/login', credentials)
+    if (response.status === 200) {
+      commit('setAuth', response.data)
+    }
   },
+
   logout ({ commit }) {
     commit('clearAuth')
+  }
+
+}
+
+const getters = {
+  bookmarks: state => {
+    return state.bookmarks
   }
 }
 
 export default new Vuex.Store({
   state: state,
   mutations: mutations,
-  actions: actions
+  actions: actions,
+  getters: getters
 })

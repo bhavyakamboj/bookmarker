@@ -5,9 +5,7 @@ import io.gatling.http.Predef._
 import scala.concurrent.duration._
 import scala.util.Random
 
-
-class BrowseUserProfilesSimulation extends Simulation {
-
+class BookmarksAPISimulation extends Simulation {
 
   val httpConf = http
     .baseURL("http://localhost:18080")
@@ -24,8 +22,6 @@ class BrowseUserProfilesSimulation extends Simulation {
 
   var randomString = Iterator.continually(Map("randstring" -> ( Random.alphanumeric.take(20).mkString )))
   var randomInt = Iterator.continually(Map("randinteger" -> ( Random.nextInt(1000))))
-
-  val getAllUsers = exec(http("AllUsers").get("/api/users")).pause(1)
 
   val getUserById = feed(randomInt)
                .exec(http("UserById").get("/api/users/${randinteger}"))
@@ -49,7 +45,6 @@ class BrowseUserProfilesSimulation extends Simulation {
     .pause(1)
 
   // Now, we can write the scenario as a composition
-  val scnGetAllUsers = scenario("Get All Users").exec(getAllUsers).pause(2)
   val scnGetUserById = scenario("Get User Profile By Id").exec(getUserById).pause(2)
   val scnCreateUser = scenario("Create New User").exec(createUser).pause(2)
   val scnDeleteUser = scenario("Delete User By Id").exec(deleteUserById).pause(2)
@@ -57,7 +52,6 @@ class BrowseUserProfilesSimulation extends Simulation {
   //setUp(scn.inject(atOnceUsers(10)).protocols(httpConf))
 
   setUp(
-      scnGetAllUsers.inject(rampUsers(50) over (10 seconds)),
       scnGetUserById.inject(rampUsers(50) over (10 seconds)),
       scnCreateUser.inject(rampUsers(50) over (10 seconds)),
       scnDeleteUser.inject(rampUsers(5) over (10 seconds))

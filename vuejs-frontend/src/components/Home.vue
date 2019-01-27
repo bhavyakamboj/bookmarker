@@ -10,8 +10,8 @@
 
   </div>
 </template>
-
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Home',
   data () {
@@ -20,17 +20,13 @@ export default {
     }
   },
   mounted () {
-    this.loadBookmarks()
+    this.fetchBookmarks()
   },
   computed: {
-    bookmarks () {
-      return this.$store.state.bookmarks
-    }
+    ...mapGetters([ 'bookmarks' ])
   },
   methods: {
-    loadBookmarks () {
-      this.$store.dispatch('fetchBookmarks')
-    }
+    ...mapActions([ 'fetchBookmarks' ])
   }
 }
 </script>

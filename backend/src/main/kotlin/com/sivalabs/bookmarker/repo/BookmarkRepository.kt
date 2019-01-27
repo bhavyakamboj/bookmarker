@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository
 interface BookmarkRepository : JpaRepository<Bookmark, Long> {
 
     fun findByCreatedById(userId: Long, sort: Sort): List<Bookmark>
-
 }
