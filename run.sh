@@ -3,7 +3,7 @@
 declare project_dir=$(dirname $0)
 declare docker_compose_file=${project_dir}/docker-compose.yml
 declare docker_compose_platform_file=${project_dir}/docker-compose-platform.yml
-declare bookmarker="bookmarker"
+declare spring_boot_bookmarker_api="spring-boot-bookmarker-api"
 declare sonarqube="sonarqube"
 
 function restart() {
@@ -14,7 +14,7 @@ function restart() {
 function start() {
     echo 'Starting bookmarker....'
     build_api
-    docker-compose -f ${docker_compose_file} up --build --force-recreate -d ${bookmarker}
+    docker-compose -f ${docker_compose_file} up --build --force-recreate -d ${spring_boot_bookmarker_api}
     docker-compose -f ${docker_compose_file} logs -f
 }
 

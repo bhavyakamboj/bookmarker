@@ -1,7 +1,7 @@
 
-INSERT INTO ROLES (id, name) VALUES
-(1, 'ROLE_ADMIN'),
-(2, 'ROLE_USER')
+INSERT INTO ROLES (id, name, created_at) VALUES
+(1, 'ROLE_ADMIN', CURRENT_TIMESTAMP()),
+(2, 'ROLE_USER', CURRENT_TIMESTAMP())
 ;
 
 INSERT INTO USERS (email, password, name, created_at) VALUES

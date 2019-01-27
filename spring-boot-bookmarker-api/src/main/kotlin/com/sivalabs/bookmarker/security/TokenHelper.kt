@@ -62,8 +62,7 @@ class TokenHelper {
     }
 
     fun validateToken(token: String, userDetails: UserDetails): Boolean {
-        val username = getUsernameFromToken(token)
-        return username == userDetails.username
+        return getUsernameFromToken(token) == userDetails.username
     }
 
     fun getToken(request: HttpServletRequest): String? {

@@ -2,11 +2,11 @@ version: '3.1'
 services:
 
   bookmarker:
-    build: backend
-    container_name: bookmarker
+    build: spring-boot-bookmarker-api
+    container_name: spring-boot-bookmarker-api
     ports:
-      - "18080:8080"
-      - "18787:8787"
+      - "8080:8080"
+      - "8787:8787"
     restart: always
     depends_on:
       - bm-postgresdb
@@ -43,7 +43,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./backend/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./spring-boot-bookmarker-api/config/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
@@ -71,7 +71,7 @@ services:
     container_name: logstash
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:
-      - ./backend/config:/etc/logstash/conf.d
+      - ./spring-boot-bookmarker-api/config:/etc/logstash/conf.d
     ports:
       - "5000:5000"
     links:

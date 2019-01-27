@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         DOCKER_USERNAME = 'sivaprasadreddy'
-        APPLICATION_NAME = 'bookmarker'
+        APPLICATION_NAME = 'spring-boot-bookmarker-api'
     }
 
     parameters {

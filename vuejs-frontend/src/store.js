@@ -4,14 +4,12 @@ import { HTTP } from './http-utils'
 
 Vue.use(Vuex)
 
-// initialize state
 const state = {
   user: {},
   auth_token: {},
   bookmarks: []
 }
 
-// initialize mutations
 const mutations = {
   createBookmark (state, bookmark) {
     state.bookmarks.push(bookmark)

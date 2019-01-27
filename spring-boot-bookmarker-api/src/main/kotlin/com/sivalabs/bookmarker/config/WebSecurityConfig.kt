@@ -61,7 +61,12 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
             .and()
             .addFilterBefore(TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService), BasicAuthenticationFilter::class.java)
 
-        http.csrf().disable()
+        http
+            .csrf()
+                // .ignoringAntMatchers("/h2-console/**")//don't apply CSRF protection to /h2-console
+                .disable()
+            .headers()
+                .frameOptions().sameOrigin() // allow use of frame to same origin urls
     }
 
     override fun configure(web: WebSecurity) {

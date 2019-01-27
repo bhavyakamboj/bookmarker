@@ -14,7 +14,7 @@
 
     <modules>
         <module>vuejs-frontend</module>
-        <module>backend</module>
+        <module>spring-boot-bookmarker-api</module>
     </modules>
 
 </project>

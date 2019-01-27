@@ -34,9 +34,6 @@ class AuthenticationController {
     private lateinit var userDetailsService: CustomUserDetailsService
 
     @Autowired
-    private lateinit var securityUtils: SecurityUtils
-
-    @Autowired
     private lateinit var bookmarkerProperties: BookmarkerProperties
 
     @PostMapping(value = ["/auth/login"])
@@ -74,7 +71,7 @@ class AuthenticationController {
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     fun me(): ResponseEntity<User> {
-        return securityUtils.loginUser()?.let { ResponseEntity.ok(it) }
+        return SecurityUtils.loginUser()?.let { ResponseEntity.ok(it) }
                 ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 

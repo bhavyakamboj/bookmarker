@@ -9,12 +9,16 @@ create table users (
     name varchar(255) not null,
     created_at timestamp,
     updated_at timestamp,
+    version bigint default 0 not null,
     primary key (id)
 );
 
 create table roles (
     id bigint DEFAULT nextval('role_id_seq') not null,
     name varchar2(255) not null CONSTRAINT role_name_unique UNIQUE,
+    created_at timestamp,
+    updated_at timestamp,
+    version bigint default 0 not null,
     primary key (id)
 );
 
@@ -30,5 +34,6 @@ create table bookmarks (
     created_by bigint not null references users(id),
     created_at timestamp,
     updated_at timestamp,
+    version bigint default 0 not null,
     primary key (id)
 );

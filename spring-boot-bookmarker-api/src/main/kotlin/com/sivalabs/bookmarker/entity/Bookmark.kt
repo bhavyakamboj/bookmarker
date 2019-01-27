@@ -1,12 +1,10 @@
 package com.sivalabs.bookmarker.entity
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "bookmarks")
-class Bookmark {
+class Bookmark : BaseEntity() {
 
     @Id
     @SequenceGenerator(name = "bm_id_generator", sequenceName = "bm_id_seq", allocationSize = 1)
@@ -22,10 +20,4 @@ class Bookmark {
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
     var createdBy: User = User()
-
-    @JsonProperty("created_at")
-    var createdAt: LocalDateTime = LocalDateTime.now()
-
-    @JsonProperty("updated_at")
-    var updatedAt: LocalDateTime? = LocalDateTime.now()
 }

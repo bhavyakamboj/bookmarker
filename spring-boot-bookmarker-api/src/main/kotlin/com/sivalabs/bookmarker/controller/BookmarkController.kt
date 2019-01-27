@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/bookmarks")
 @PreAuthorize("isAuthenticated()")
 class BookmarkController(
-    private val securityUtils: SecurityUtils,
     private val bookmarkService: BookmarkService
 ) {
 
     @GetMapping
     fun allUserBookmarks(): List<BookmarkDTO> {
-        return bookmarkService.getBookmarksByUser(securityUtils.loginUser()!!.id)
+        return bookmarkService.getBookmarksByUser(SecurityUtils.loginUser()!!.id)
     }
 
     @GetMapping("/{id}")
@@ -31,7 +30,7 @@ class BookmarkController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createBookmark(@RequestBody bookmark: Bookmark) {
-        bookmark.createdBy = securityUtils.loginUser()!!
+        bookmark.createdBy = SecurityUtils.loginUser()!!
         bookmarkService.createBookmark(bookmark)
     }
 

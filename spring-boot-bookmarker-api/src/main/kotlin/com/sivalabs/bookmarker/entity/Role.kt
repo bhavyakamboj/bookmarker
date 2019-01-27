@@ -11,7 +11,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "roles")
-class Role {
+class Role : BaseEntity() {
 
     @Id
     @SequenceGenerator(name = "role_id_generator", sequenceName = "role_id_seq", allocationSize = 1)
