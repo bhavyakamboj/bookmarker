@@ -3,6 +3,10 @@ package com.sivalabs.bookmarker.entity
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 import javax.persistence.*
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.FetchType
+import javax.persistence.ManyToMany
 
 @Entity
 @Table(name = "users")
@@ -22,9 +26,10 @@ class User {
     @Column(name = "password", nullable = false)
     var password: String = ""
 
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
-    var role: Role = Role.ROLE_USER
+    @ManyToMany(cascade = [CascadeType.MERGE, CascadeType.PERSIST], fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+            inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")])
+    var roles: MutableList<Role> = mutableListOf()
 
     @JsonProperty("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now()

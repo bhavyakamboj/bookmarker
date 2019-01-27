@@ -13,8 +13,6 @@ import java.util.Optional
 @Loggable
 class UserService(private val userRepository: UserRepository) {
 
-    fun getAllUsers(): List<UserDTO> = userRepository.findAll().map { UserDTO.fromEntity(it) }
-
     fun getUserById(id: Long): Optional<UserDTO> {
         return userRepository.findById(id).map { UserDTO.fromEntity(it) }
     }

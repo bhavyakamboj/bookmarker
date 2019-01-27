@@ -44,13 +44,6 @@ class UserControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `should get all users`() {
-        val responseEntity = restTemplate.getForEntity("/api/users", Array<UserDTO>::class.java)
-        val users = asList(*responseEntity.body!!)
-        assertThat(users).isNotEmpty
-    }
-
-    @Test
     fun `should get user by id`() {
         val responseEntity = restTemplate.getForEntity("/api/users/${existingUser.id}", UserDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(HttpStatus.OK)

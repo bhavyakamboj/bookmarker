@@ -24,12 +24,6 @@ class UserController(private val userService: UserService) {
 
     private val log = logger()
 
-    @GetMapping("")
-    fun getAllUsers(): List<UserDTO> {
-        log.info("process=get-users")
-        return userService.getAllUsers()
-    }
-
     @GetMapping("/{id}")
     fun getUser(@PathVariable id: Long): ResponseEntity<UserDTO> {
         log.info("process=get-user, user_id={}", id)

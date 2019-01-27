@@ -6,12 +6,12 @@ data class UserDTO(
     var id: Long,
     var name: String,
     var email: String,
-    var role: String
+    var roles: List<String>
 ) {
     companion object {
 
         fun fromEntity(user: User): UserDTO {
-            return UserDTO(user.id, user.name, user.email, user.role.name)
+            return UserDTO(user.id, user.name, user.email, user.roles.map { it.name })
         }
     }
 }

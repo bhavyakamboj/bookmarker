@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BookmarkRepository : JpaRepository<Bookmark, Long> {
+
     fun findByCreatedById(userId: Long, sort: Sort): List<Bookmark>
-    fun findByCreatedByIdAndLikedTrue(userId: Long, sort: Sort): List<Bookmark>
-    fun findByCreatedByIdAndArchivedTrue(userId: Long, sort: Sort): List<Bookmark>
+
 }

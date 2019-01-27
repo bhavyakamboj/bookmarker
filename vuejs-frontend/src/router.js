@@ -14,12 +14,8 @@ export default new Router({
       component: Login
     },
     {
-      path: '/bookmarks/',
-      redirect: '/bookmarks/all'
-    },
-    {
-      path: '/bookmarks/:filter',
-      name: 'HomeFiltered',
+      path: '/bookmarks',
+      name: 'Home',
       component: Home
     },
     {
@@ -29,7 +25,7 @@ export default new Router({
     },
     {
       path: '*',
-      redirect: '/bookmarks/all'
+      redirect: '/bookmarks'
     }
   ]
 })

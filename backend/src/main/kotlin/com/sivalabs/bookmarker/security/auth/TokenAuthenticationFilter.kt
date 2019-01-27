@@ -25,14 +25,18 @@ class TokenAuthenticationFilter(
     ) {
         val authToken = tokenHelper.getToken(request)
 
-        if (authToken != null) {
-            val username = tokenHelper.getUsernameFromToken(authToken)
-            val userDetails = userDetailsService.loadUserByUsername(username)
-            if (tokenHelper.validateToken(authToken, userDetails)) {
-                val authentication = TokenBasedAuthentication(authToken, userDetails)
-                SecurityContextHolder.getContext().authentication = authentication
+        try {
+            if (authToken != null) {
+                val username = tokenHelper.getUsernameFromToken(authToken)
+                val userDetails = userDetailsService.loadUserByUsername(username)
+                if (tokenHelper.validateToken(authToken, userDetails)) {
+                    val authentication = TokenBasedAuthentication(authToken, userDetails)
+                    SecurityContextHolder.getContext().authentication = authentication
+                }
             }
+            chain.doFilter(request, response)
+        } catch (e: Exception) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
         }
-        chain.doFilter(request, response)
     }
 }

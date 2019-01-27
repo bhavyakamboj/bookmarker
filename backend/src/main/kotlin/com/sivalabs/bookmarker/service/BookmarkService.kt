@@ -2,7 +2,6 @@ package com.sivalabs.bookmarker.service
 
 import com.sivalabs.bookmarker.entity.Bookmark
 import com.sivalabs.bookmarker.model.BookmarkDTO
-import com.sivalabs.bookmarker.model.BookmarkFilterType
 import com.sivalabs.bookmarker.repo.BookmarkRepository
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -13,13 +12,9 @@ import org.jsoup.Jsoup
 @Transactional
 class BookmarkService(private val bookmarkRepository: BookmarkRepository) {
 
-    fun getUserBookmarks(userId: Long, filter: BookmarkFilterType): List<BookmarkDTO> {
+    fun getBookmarksByUser(userId: Long): List<BookmarkDTO> {
         val sort = Sort.by(Sort.Direction.DESC, "createdAt")
-        return when(filter) {
-            BookmarkFilterType.LIKED -> bookmarkRepository.findByCreatedByIdAndLikedTrue(userId, sort)
-            BookmarkFilterType.ARCHIVED -> bookmarkRepository.findByCreatedByIdAndArchivedTrue(userId, sort)
-            else  -> bookmarkRepository.findByCreatedById(userId, sort)
-        }.map { BookmarkDTO.fromEntity(it) }
+        return bookmarkRepository.findByCreatedById(userId, sort).map { BookmarkDTO.fromEntity(it) }
     }
 
     fun getBookmarkById(id: Long): BookmarkDTO? {

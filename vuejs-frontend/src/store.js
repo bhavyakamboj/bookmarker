@@ -30,8 +30,8 @@ const mutations = {
 }
 
 const actions = {
-  fetchBookmarks ({ commit }, filter) {
-    HTTP.get('bookmarks?filter=' + filter)
+  fetchBookmarks ({ commit }) {
+    HTTP.get('bookmarks')
       .then((response) => {
         commit('loadBookmarks', response.data)
       })
