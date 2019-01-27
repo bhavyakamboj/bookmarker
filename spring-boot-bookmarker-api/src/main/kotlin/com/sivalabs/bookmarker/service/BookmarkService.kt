@@ -12,6 +12,11 @@ import org.jsoup.Jsoup
 @Transactional
 class BookmarkService(private val bookmarkRepository: BookmarkRepository) {
 
+    fun getAllBookmarks(): List<BookmarkDTO> {
+        val sort = Sort.by(Sort.Direction.DESC, "createdAt")
+        return bookmarkRepository.findAll(sort).map { BookmarkDTO.fromEntity(it) }
+    }
+
     fun getBookmarksByUser(userId: Long): List<BookmarkDTO> {
         val sort = Sort.by(Sort.Direction.DESC, "createdAt")
         return bookmarkRepository.findByCreatedById(userId, sort).map { BookmarkDTO.fromEntity(it) }

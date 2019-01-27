@@ -11,14 +11,17 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/bookmarks")
-@PreAuthorize("isAuthenticated()")
 class BookmarkController(
     private val bookmarkService: BookmarkService
 ) {
 
     @GetMapping
-    fun allUserBookmarks(): List<BookmarkDTO> {
-        return bookmarkService.getBookmarksByUser(SecurityUtils.loginUser()!!.id)
+    fun getAllBookmarks(@RequestParam(name = "userId", required = false) userId: Long?): List<BookmarkDTO> {
+        return if (userId == null) {
+            bookmarkService.getAllBookmarks()
+        } else {
+            bookmarkService.getBookmarksByUser(userId)
+        }
     }
 
     @GetMapping("/{id}")
@@ -29,12 +32,14 @@ class BookmarkController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_USER')")
     fun createBookmark(@RequestBody bookmark: Bookmark) {
         bookmark.createdBy = SecurityUtils.loginUser()!!
         bookmarkService.createBookmark(bookmark)
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     fun deleteBookmark(@PathVariable id: Long) {
         bookmarkService.deleteBookmark(id)
     }

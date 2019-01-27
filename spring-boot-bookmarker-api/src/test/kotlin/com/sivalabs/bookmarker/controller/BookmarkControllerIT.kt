@@ -46,7 +46,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `should get all user bookmarks`() {
+    fun `should get all bookmarks`() {
         val request = HttpEntity(null, getAuthHeaders())
         val responseEntity = restTemplate.exchange("/api/bookmarks", HttpMethod.GET, request, Array<BookmarkDTO>::class.java)
         val bookmarks = asList(*responseEntity.body!!)

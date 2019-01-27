@@ -50,7 +50,7 @@ class AuthenticationController {
     }
 
     @PostMapping(value = ["/auth/refresh"])
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_USER')")
     fun refreshAuthenticationToken(request: HttpServletRequest): ResponseEntity<AuthenticationResponse> {
         val authToken = tokenHelper.getToken(request)
         return if (authToken != null) {
@@ -69,14 +69,14 @@ class AuthenticationController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_USER')")
     fun me(): ResponseEntity<User> {
         return SecurityUtils.loginUser()?.let { ResponseEntity.ok(it) }
                 ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 
     @PostMapping(value = ["/change-password"])
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_USER')")
     fun changePassword(@RequestBody changePassword: ChangePassword) {
         userDetailsService.changePassword(changePassword.oldPassword, changePassword.newPassword)
     }
