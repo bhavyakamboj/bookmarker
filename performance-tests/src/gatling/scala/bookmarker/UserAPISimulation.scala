@@ -17,14 +17,34 @@ class UserAPISimulation extends Simulation {
 
   val userIdFeeder = csv("userIds.csv").random
   val newUsersFeeder = csv("newUsers.csv").random
+  val credentialsFeeder = csv("credentials.csv").random
 
   var randomString = Iterator.continually(Map("randstring" -> ( Random.alphanumeric.take(20).mkString )))
   var randomInt = Iterator.continually(Map("randinteger" -> ( Random.nextInt(1000))))
 
   val getUserById = feed(userIdFeeder)
-               //.exec(http("UserById").get("/api/users/${randinteger}"))
                .exec(http("UserById").get("/api/users/${userId}"))
                .pause(1)
+
+  var token = ""
+  val login = feed(credentialsFeeder)
+                .exec(http("Login")
+                .post("/api/auth/login")
+                .body(StringBody(
+                  """
+                    {
+                      "username":"${username}",
+                      "password":"${password}"
+                    }
+                  """)).asJSON
+                .check(status.is(200),jsonPath("$..access_token").saveAs("token"))
+              )
+              .exec(session => {
+                  token = session("token").as[String].trim
+                  session
+                }
+              )
+              .pause(1)
 
   val createUser = feed(randomString)
                     .exec(http("Create User")
@@ -45,6 +65,7 @@ class UserAPISimulation extends Simulation {
 
   // Now, we can write the scenario as a composition
   val scnGetUserById = scenario("Get User Profile By Id").exec(getUserById).pause(2)
+  val scnLogin = scenario("Login").exec(login).pause(2)
   val scnCreateUser = scenario("Create New User").exec(createUser).pause(2)
   //val scnDeleteUser = scenario("Delete User By Id").exec(deleteUserById).pause(2)
 
@@ -52,6 +73,7 @@ class UserAPISimulation extends Simulation {
 
   setUp(
       scnGetUserById.inject(rampUsers(2) over (10 seconds)),
+      scnLogin.inject(rampUsers(2) over (10 seconds)),
       scnCreateUser.inject(rampUsers(2) over (10 seconds))
       //scnDeleteUser.inject(rampUsers(5) over (10 seconds))
   ).protocols(httpConf)

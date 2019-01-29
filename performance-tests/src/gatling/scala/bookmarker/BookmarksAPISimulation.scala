@@ -34,28 +34,21 @@ class BookmarksAPISimulation extends Simulation {
                .exec(http("BookmarkById").get("/api/bookmarks/${id}"))
                .pause(1)
 
-  var accessToken = ""
-
-  val login = exec(http("Create Bookmark")
-                .post("/api/auth/login")
-                .body(StringBody(
-                  """
-                    {
-                      "username":"siva@gmail.com",
-                      "password":"siva"
-                    }
-                  """)).asJSON
-                .check(status.is(200),jsonPath("$..access_token").saveAs("accessToken"))
-                )
-                .exec(session => {
-                    accessToken = session("accessToken").as[String].trim
-                    session
-                  }
-                )
-                .pause(1)
+  var token = ""
 
   val createBookmark = feed(bookmarkUrlFeeder)
-                    .exec(_.set("accessToken", accessToken))
+                    //.exec(_.set("accessToken", accessToken))
+                    .exec(http("Login")
+                      .post("/api/auth/login")
+                      .body(StringBody(
+                        """
+                          {
+                            "username":"siva@gmail.com",
+                            "password":"siva"
+                          }
+                        """)).asJSON
+                      .check(status.is(200),jsonPath("$..access_token").saveAs("accessToken"))
+                    )
                     .exec(http("Create Bookmark")
                         .post("/api/bookmarks")
                         .header("Authorization", "Bearer ${accessToken}")
@@ -72,17 +65,15 @@ class BookmarksAPISimulation extends Simulation {
   val scnGetAllBookmarks = scenario("Get All Bookmarks").exec(getAllBookmarks).pause(2)
   val scnGetBookmarksByUser = scenario("Get Bookmarks By User").exec(getBookmarksByUser).pause(2)
   val scnGetBookmarkById = scenario("Get Bookmark By Id").exec(getBookmarkById).pause(2)
-  val scnLogin = scenario("Login").exec(login).pause(2)
   val scnCreateBookmark = scenario("Create New Bookmark").exec(createBookmark).pause(2)
 
   //setUp(scn.inject(atOnceUsers(10)).protocols(httpConf))
 
   setUp(
-      scnGetAllBookmarks.inject(rampUsers(50) over (10 seconds)),
-      scnGetBookmarksByUser.inject(rampUsers(50) over (10 seconds)),
-      scnGetBookmarkById.inject(rampUsers(50) over (10 seconds)),
-      scnLogin.inject(rampUsers(2) over (10 seconds)),
-      scnCreateBookmark.inject(rampUsers(20) over (10 seconds))
+      scnGetAllBookmarks.inject(rampUsers(500) over (10 seconds)),
+      scnGetBookmarksByUser.inject(rampUsers(200) over (10 seconds)),
+      scnGetBookmarkById.inject(rampUsers(100) over (10 seconds)),
+      scnCreateBookmark.inject(rampUsers(100) over (10 seconds))
   ).protocols(httpConf)
 
 }
