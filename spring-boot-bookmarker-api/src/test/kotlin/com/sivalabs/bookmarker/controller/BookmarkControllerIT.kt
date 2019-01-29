@@ -33,7 +33,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         newBookmark = TestHelper.buildBookmark()
 
         existingBookmark = TestHelper.buildBookmark()
-        existingBookmark.createdBy = userRepository.findByEmail("admin@gmail.com")!!
+        existingBookmark.createdBy = userRepository.findByEmail("siva@gmail.com")!!
         existingBookmark = bookmarkRepository.save(existingBookmark)
     }
 
@@ -62,10 +62,37 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should delete bookmark`() {
-        val request = HttpEntity(null, getAuthHeaders())
+        val request = HttpEntity(null, getAuthHeaders("siva@gmail.com", "siva"))
         var responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(OK)
-        restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.DELETE, request, Void::class.java)
+        val response = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.DELETE, request,
+        Void::class.java)
+        assertThat(response.statusCode).isEqualTo(OK)
+        responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
+        assertThat(responseEntity.statusCode).isEqualTo(NOT_FOUND)
+    }
+
+    @Test
+    fun `should not be able to delete bookmark by other users`() {
+        var request = HttpEntity(null, getAuthHeaders("prasad@gmail.com", "prasad"))
+        var responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
+        assertThat(responseEntity.statusCode).isEqualTo(OK)
+        val response = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.DELETE, request,
+        Void::class.java)
+        assertThat(response.statusCode).isEqualTo(NOT_FOUND)
+        responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
+        assertThat(responseEntity.statusCode).isEqualTo(OK)
+    }
+
+    @Test
+    fun `admin should be able to delete bookmark of other users`() {
+        var request = HttpEntity(null, getAuthHeaders("siva@gmail.com", "siva"))
+        var responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
+        assertThat(responseEntity.statusCode).isEqualTo(OK)
+        request = HttpEntity(null, getAuthHeaders("admin@gmail.com", "admin"))
+        val response = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.DELETE, request,
+                Void::class.java)
+        assertThat(response.statusCode).isEqualTo(OK)
         responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(NOT_FOUND)
     }

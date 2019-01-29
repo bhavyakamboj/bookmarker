@@ -1,6 +1,7 @@
 package com.sivalabs.bookmarker.controller
 
 import com.sivalabs.bookmarker.entity.Bookmark
+import com.sivalabs.bookmarker.exception.ResourceNotFoundException
 import com.sivalabs.bookmarker.model.BookmarkDTO
 import com.sivalabs.bookmarker.security.SecurityUtils
 import com.sivalabs.bookmarker.service.BookmarkService
@@ -41,6 +42,12 @@ class BookmarkController(
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
     fun deleteBookmark(@PathVariable id: Long) {
-        bookmarkService.deleteBookmark(id)
+        val bookmark = bookmarkService.getBookmarkById(id)
+        if(bookmark == null || ( bookmark.createdBy != SecurityUtils.loginUser()?.id
+                        && !SecurityUtils.isCurrentUserAdmin())) {
+            throw ResourceNotFoundException("Bookmark not found with id=$id")
+        } else {
+            bookmarkService.deleteBookmark(id)
+        }
     }
 }

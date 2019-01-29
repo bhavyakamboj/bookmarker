@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 
-function get_all_users() {
-    echo -e "\n========== get_all_users ============\n"
-    curl -v http://localhost:18080/api/users
+function get_all_bookmarks() {
+    echo -e "\n========== get_all_bookmarks ============\n"
+    curl -v http://localhost:18080/api/bookmarks
 }
 
 function get_user_by_id() {

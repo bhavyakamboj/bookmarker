@@ -21,8 +21,8 @@ abstract class AbstractIntegrationTest {
     @Autowired
     protected lateinit var restTemplate: TestRestTemplate
 
-    protected fun getAuthHeaders(): HttpHeaders {
-        val responseEntity = authenticate("admin@gmail.com", "admin")
+    protected fun getAuthHeaders(username: String = "admin@gmail.com", password: String = "admin"): HttpHeaders {
+        val responseEntity = authenticate(username, password)
         val headers = HttpHeaders()
         headers.add("Authorization", "Bearer ${responseEntity.body?.accessToken}")
         return headers
