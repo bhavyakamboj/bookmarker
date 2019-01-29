@@ -15,7 +15,7 @@ create table users (
 
 create table roles (
     id bigint DEFAULT nextval('role_id_seq') not null,
-    name varchar2(255) not null CONSTRAINT role_name_unique UNIQUE,
+    name varchar(255) not null CONSTRAINT role_name_unique UNIQUE,
     created_at timestamp,
     updated_at timestamp,
     version bigint default 0 not null,

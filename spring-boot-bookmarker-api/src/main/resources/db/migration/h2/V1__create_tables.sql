@@ -16,7 +16,7 @@ create table users (
 
 create table roles (
     id bigint default role_id_seq.nextval,
-    name varchar2(255) not null,
+    name varchar(255) not null,
     created_at timestamp,
     updated_at timestamp,
     version bigint default 0 not null,

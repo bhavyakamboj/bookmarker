@@ -14,7 +14,7 @@ object SecurityUtils {
         return null
     }
 
-    fun isCurrentUserAdmin() : Boolean {
+    fun isCurrentUserAdmin(): Boolean {
         return loginUser()?.roles?.any { it.name == "ROLE_ADMIN" } ?: false
     }
 }

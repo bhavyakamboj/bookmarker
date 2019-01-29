@@ -1,7 +1,7 @@
 version: '3.1'
 services:
 
-  bookmarker:
+  spring-boot-bookmarker-api:
     build: spring-boot-bookmarker-api
     container_name: spring-boot-bookmarker-api
     ports:

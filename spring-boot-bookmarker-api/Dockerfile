@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-oraclejdk8:slim
+FROM fabric8/java-alpine-openjdk8-jre
 VOLUME /tmp
 ADD target/spring-boot-bookmarker-api-0.0.1-exec.jar app.jar
 RUN sh -c 'touch /app.jar'
