@@ -13,8 +13,14 @@ import java.util.Optional
 @Loggable
 class UserService(private val userRepository: UserRepository) {
 
+    @Transactional(readOnly = true)
     fun getUserById(id: Long): Optional<UserDTO> {
         return userRepository.findById(id).map { UserDTO.fromEntity(it) }
+    }
+
+    @Transactional(readOnly = true)
+    fun findByEmail(email: String): User? {
+        return userRepository.findByEmail(email)
     }
 
     fun createUser(user: User): UserDTO {
@@ -27,9 +33,5 @@ class UserService(private val userRepository: UserRepository) {
 
     fun deleteUser(userId: Long) {
         userRepository.findById(userId).map { userRepository.delete(it) }
-    }
-
-    fun findByEmail(email: String): User? {
-        return userRepository.findByEmail(email)
     }
 }
