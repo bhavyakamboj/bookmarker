@@ -1,6 +1,6 @@
 package com.sivalabs.bookmarker.security
 
-import com.sivalabs.bookmarker.repo.UserRepository
+import com.sivalabs.bookmarker.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 class CustomUserDetailsService : UserDetailsService {
 
     @Autowired
-    private lateinit var userRepository: UserRepository
+    private lateinit var userService: UserService
 
     @Autowired
     private lateinit var passwordEncoder: PasswordEncoder
@@ -25,7 +25,7 @@ class CustomUserDetailsService : UserDetailsService {
 
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = userRepository.findByEmail(username)
+        val user = userService.findByEmail(username)
         return if (user == null) {
             throw UsernameNotFoundException("No user found with username $username.")
         } else {
@@ -40,9 +40,9 @@ class CustomUserDetailsService : UserDetailsService {
 
         authenticationManager.authenticate(UsernamePasswordAuthenticationToken(email, oldPassword))
 
-        userRepository.findByEmail(email)?.also { user ->
+        userService.findByEmail(email)?.also { user ->
             user.password = passwordEncoder.encode(newPassword)
-            userRepository.save(user)
+            userService.updateUser(user)
         }
     }
 }

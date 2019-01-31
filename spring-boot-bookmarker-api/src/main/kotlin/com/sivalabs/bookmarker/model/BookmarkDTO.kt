@@ -1,28 +1,27 @@
 package com.sivalabs.bookmarker.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.sivalabs.bookmarker.entity.Bookmark
+import org.springframework.beans.factory.annotation.Value
 import java.time.LocalDateTime
 
-data class BookmarkDTO(
-    var id: Long = 0,
-    var url: String = "",
-    var title: String = "",
-    @JsonProperty("created_by")
-    var createdBy: Long = 0,
+interface BookmarkDTO {
+    fun getId(): Long
+
+    fun getUrl(): String
+
+    fun getTitle(): String
+
+    @JsonProperty("created_user_id")
+    @Value("#{target.createdBy.id}")
+    fun getCreatedUserId(): Long
+
+    @JsonProperty("created_user_name")
+    @Value("#{target.createdBy.name}")
+    fun getCreatedUserName(): String
+
     @JsonProperty("created_at")
-    var createdAt: LocalDateTime = LocalDateTime.now(),
+    fun getCreatedAt(): LocalDateTime
+
     @JsonProperty("updated_at")
-    var updatedAt: LocalDateTime? = LocalDateTime.now()
-) {
-    companion object {
-        fun fromEntity(bm: Bookmark) = BookmarkDTO(
-                bm.id,
-                bm.url,
-                bm.title,
-                bm.createdBy.id,
-                bm.createdAt,
-                bm.updatedAt
-        )
-    }
+    fun getUpdatedAt(): LocalDateTime?
 }
