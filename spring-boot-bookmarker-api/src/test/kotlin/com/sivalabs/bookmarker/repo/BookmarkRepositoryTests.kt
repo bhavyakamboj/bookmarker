@@ -18,7 +18,7 @@ class BookmarkRepositoryTests {
     @Test
     fun `should fetch all bookmarks`() {
         val sort = Sort.by(Sort.Direction.DESC, "createdAt")
-        val bookmarks = bookmarkRepo.findAllBookmarks(sort)
+        val bookmarks = bookmarkRepo.findAll(sort)
         assertThat(bookmarks).isNotEmpty
     }
 }

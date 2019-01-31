@@ -17,18 +17,19 @@ class BookmarkService(private val bookmarkRepository: BookmarkRepository) {
     fun getAllBookmarks(): List<BookmarkDTO> {
         log.debug("process=get_all_bookmarks")
         val sort = Sort.by(Sort.Direction.DESC, "createdAt")
-        return bookmarkRepository.findAllBookmarks(sort)
+        return bookmarkRepository.findAll(sort).map { BookmarkDTO.fromEntity(it) }
     }
 
     fun getBookmarksByUser(userId: Long): List<BookmarkDTO> {
         log.debug("process=get_bookmarks_by_user_id, user_id=$userId")
         val sort = Sort.by(Sort.Direction.DESC, "createdAt")
-        return bookmarkRepository.findByCreatedById(userId, sort)
+        return bookmarkRepository.findByCreatedById(userId, sort).map { BookmarkDTO.fromEntity(it) }
     }
 
     fun getBookmarkById(id: Long): BookmarkDTO? {
         log.debug("process=get_bookmark_by_id, id=$id")
-        return bookmarkRepository.findBookmarkById(id)
+        return bookmarkRepository.findById(id)
+                .map { BookmarkDTO.fromEntity(it) }
                 .orElse(null)
     }
 

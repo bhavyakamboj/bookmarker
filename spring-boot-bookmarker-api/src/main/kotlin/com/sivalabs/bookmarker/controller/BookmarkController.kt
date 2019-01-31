@@ -43,7 +43,7 @@ class BookmarkController(
     @PreAuthorize("hasRole('ROLE_USER')")
     fun deleteBookmark(@PathVariable id: Long) {
         val bookmark = bookmarkService.getBookmarkById(id)
-        if (bookmark == null || (bookmark.getCreatedUserId() != SecurityUtils.loginUser()?.id &&
+        if (bookmark == null || (bookmark.createdBy != SecurityUtils.loginUser()?.id &&
                         !SecurityUtils.isCurrentUserAdmin())) {
             throw ResourceNotFoundException("Bookmark not found with id=$id")
         } else {
