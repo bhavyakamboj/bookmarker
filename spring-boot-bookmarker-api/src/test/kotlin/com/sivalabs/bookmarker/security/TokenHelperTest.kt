@@ -3,14 +3,15 @@ package com.sivalabs.bookmarker.security
 import com.sivalabs.bookmarker.config.BookmarkerProperties
 import com.sivalabs.bookmarker.config.TimeProvider
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
 import org.springframework.test.util.ReflectionTestUtils
 
 class TokenHelperTest {
     lateinit var tokenHelper: TokenHelper
 
-    @Before
+    @BeforeEach
     fun setUp() {
         tokenHelper = TokenHelper()
         val bookmarkerProperties = BookmarkerProperties()

@@ -6,9 +6,10 @@ import com.sivalabs.bookmarker.repo.BookmarkRepository
 import com.sivalabs.bookmarker.repo.UserRepository
 import com.sivalabs.bookmarker.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -28,7 +29,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     lateinit var existingBookmark: Bookmark
     lateinit var newBookmark: Bookmark
 
-    @Before
+    @BeforeEach
     fun setUp() {
         newBookmark = TestHelper.buildBookmark()
 
@@ -37,7 +38,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         existingBookmark = bookmarkRepository.save(existingBookmark)
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         if (bookmarkRepository.existsById(newBookmark.id)) {
             bookmarkRepository.deleteById(newBookmark.id)

@@ -5,9 +5,9 @@ import com.sivalabs.bookmarker.model.UserDTO
 import com.sivalabs.bookmarker.repo.UserRepository
 import com.sivalabs.bookmarker.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
@@ -24,7 +24,7 @@ class UserControllerIT : AbstractIntegrationTest() {
     lateinit var newUser: User
     lateinit var updateUser: User
 
-    @Before
+    @BeforeEach
     fun setUp() {
         newUser = TestHelper.buildUser()
 
@@ -35,7 +35,7 @@ class UserControllerIT : AbstractIntegrationTest() {
         updateUser = userRepository.save(updateUser)
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         if (userRepository.existsById(newUser.id)) {
             userRepository.deleteById(newUser.id)

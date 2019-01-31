@@ -5,9 +5,10 @@ import com.sivalabs.bookmarker.model.AuthenticationResponse
 import com.sivalabs.bookmarker.repo.UserRepository
 import com.sivalabs.bookmarker.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -19,13 +20,13 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
 
     lateinit var existingUser: User
 
-    @Before
+    @BeforeEach
     fun setUp() {
         existingUser = TestHelper.buildUser()
         existingUser = userRepository.save(existingUser)
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         userRepository.deleteAll(userRepository.findAllById(listOf(existingUser.id)))
     }
