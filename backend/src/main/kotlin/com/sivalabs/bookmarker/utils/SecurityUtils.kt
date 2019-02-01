@@ -1,6 +1,7 @@
-package com.sivalabs.bookmarker.security
+package com.sivalabs.bookmarker.utils
 
 import com.sivalabs.bookmarker.entity.User
+import com.sivalabs.bookmarker.model.SecurityUser
 import org.springframework.security.core.context.SecurityContextHolder
 
 object SecurityUtils {

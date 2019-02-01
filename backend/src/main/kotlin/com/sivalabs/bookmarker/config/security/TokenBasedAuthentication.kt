@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.security.auth
+package com.sivalabs.bookmarker.config.security
 
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails

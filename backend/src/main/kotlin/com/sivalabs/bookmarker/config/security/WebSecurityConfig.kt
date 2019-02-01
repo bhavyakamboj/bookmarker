@@ -1,9 +1,5 @@
-package com.sivalabs.bookmarker.config
+package com.sivalabs.bookmarker.config.security
 
-import com.sivalabs.bookmarker.security.CustomUserDetailsService
-import com.sivalabs.bookmarker.security.TokenHelper
-import com.sivalabs.bookmarker.security.auth.RestAuthenticationEntryPoint
-import com.sivalabs.bookmarker.security.auth.TokenAuthenticationFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

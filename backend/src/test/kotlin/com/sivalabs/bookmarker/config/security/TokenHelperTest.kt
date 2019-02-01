@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.security
+package com.sivalabs.bookmarker.config.security
 
 import com.sivalabs.bookmarker.config.BookmarkerProperties
 import com.sivalabs.bookmarker.config.TimeProvider

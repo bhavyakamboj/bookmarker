@@ -12,6 +12,7 @@ import org.jsoup.Jsoup
 @Service
 @Transactional
 class BookmarkService(private val bookmarkRepository: BookmarkRepository) {
+
     private val log = logger()
 
     @Transactional(readOnly = true)

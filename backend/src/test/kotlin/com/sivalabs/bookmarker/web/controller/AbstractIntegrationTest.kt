@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.controller
+package com.sivalabs.bookmarker.web.controller
 
 import com.sivalabs.bookmarker.model.AuthenticationRequest
 import com.sivalabs.bookmarker.model.AuthenticationResponse

@@ -1,9 +1,9 @@
-package com.sivalabs.bookmarker.controller
+package com.sivalabs.bookmarker.web.controller
 
 import com.sivalabs.bookmarker.entity.Bookmark
 import com.sivalabs.bookmarker.exception.ResourceNotFoundException
 import com.sivalabs.bookmarker.model.BookmarkDTO
-import com.sivalabs.bookmarker.security.SecurityUtils
+import com.sivalabs.bookmarker.utils.SecurityUtils
 import com.sivalabs.bookmarker.service.BookmarkService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

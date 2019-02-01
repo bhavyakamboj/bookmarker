@@ -1,6 +1,5 @@
-package com.sivalabs.bookmarker.security.auth
+package com.sivalabs.bookmarker.config.security
 
-import com.sivalabs.bookmarker.security.TokenHelper
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.web.filter.OncePerRequestFilter

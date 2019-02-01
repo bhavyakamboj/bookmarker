@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.controller
+package com.sivalabs.bookmarker.web.advice
 
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus

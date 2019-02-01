@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.controller
+package com.sivalabs.bookmarker.web.controller
 
 import com.sivalabs.bookmarker.entity.Bookmark
 import com.sivalabs.bookmarker.model.BookmarkDTO

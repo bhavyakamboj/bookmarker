@@ -436,7 +436,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${build.directory}/classes/static</outputDirectory>
+                            <outputDirectory>${project.build.directory}/classes/static</outputDirectory>
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
@@ -478,7 +478,6 @@
         <profile>
             <id>sonar</id>
             <properties>
-                <!--<sonar.host.url>http://localhost:9000</sonar.host.url>-->
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
                 <sonar.organization>sivaprasadreddy-github</sonar.organization>
                 <sonar.jacoco.itReportPath>${project.build.directory}/coverage-reports/aggregate.exec</sonar.jacoco.itReportPath>
