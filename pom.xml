@@ -13,8 +13,8 @@
     <description>Bookmarking application</description>
 
     <modules>
-        <module>vuejs-frontend</module>
-        <module>spring-boot-bookmarker-api</module>
+        <module>frontend</module>
+        <module>backend</module>
     </modules>
 
 </project>

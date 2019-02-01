@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.sivalabs</groupId>
-    <artifactId>spring-boot-bookmarker-api</artifactId>
+    <artifactId>backend</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
-    <name>spring-boot-bookmarker-api</name>
+    <name>backend</name>
     <description>Bookmarker REST API</description>
 
     <parent>
@@ -175,7 +175,7 @@
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
-        <finalName>spring-boot-bookmarker-api-${project.version}</finalName>
+        <finalName>bookmarker-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -430,7 +430,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy Vue.js frontend content</id>
+                        <id>copy frontend content</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -440,7 +440,7 @@
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/../vuejs-frontend/target/dist</directory>
+                                    <directory>${project.basedir}/../frontend/target/dist</directory>
                                     <includes>
                                         <include>static/</include>
                                         <include>index.html</include>
