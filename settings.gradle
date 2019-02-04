@@ -1,0 +1,3 @@
+rootProject.name = 'bookmarker'
+// include 'frontend'
+include 'backend'
