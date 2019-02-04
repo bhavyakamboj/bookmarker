@@ -1,6 +1,6 @@
 package com.sivalabs.bookmarker.bookmarks
 
-import com.sivalabs.bookmarker.users.entity.Bookmark
+import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

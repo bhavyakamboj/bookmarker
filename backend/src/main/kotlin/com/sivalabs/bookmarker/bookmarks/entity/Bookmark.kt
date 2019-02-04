@@ -1,6 +1,7 @@
-package com.sivalabs.bookmarker.users.entity
+package com.sivalabs.bookmarker.bookmarks.entity
 
 import com.sivalabs.bookmarker.common.entity.BaseEntity
+import com.sivalabs.bookmarker.users.entity.User
 import javax.persistence.*
 
 @Entity

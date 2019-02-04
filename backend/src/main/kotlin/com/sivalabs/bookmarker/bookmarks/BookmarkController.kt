@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.bookmarks
 
 import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
-import com.sivalabs.bookmarker.users.entity.Bookmark
+import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
 import com.sivalabs.bookmarker.exception.ResourceNotFoundException
 import com.sivalabs.bookmarker.utils.SecurityUtils
 import org.springframework.http.HttpStatus

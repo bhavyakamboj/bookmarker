@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.bookmarks.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.sivalabs.bookmarker.users.entity.Bookmark
+import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
 import java.time.LocalDateTime
 
 data class BookmarkDTO(
