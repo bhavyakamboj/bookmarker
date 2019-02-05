@@ -55,10 +55,30 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `should get bookmarks by user`() {
+        val request = HttpEntity(null, getAuthHeaders())
+        val responseEntity =
+                restTemplate.exchange("/api/bookmarks?userId=${existingBookmark.createdBy.id}",
+                        HttpMethod.GET, request, Array<BookmarkDTO>::class.java)
+        val bookmarks = asList(*responseEntity.body!!)
+        assertThat(bookmarks).isNotEmpty
+    }
+
+    @Test
     fun `should create bookmark`() {
         val request = HttpEntity(newBookmark, getAuthHeaders())
         val responseEntity = restTemplate.postForEntity("/api/bookmarks", request, BookmarkDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(CREATED)
+    }
+
+    @Test
+    fun `should create bookmark with title if not present`() {
+        newBookmark.url = "http://sivalabs.in"
+        newBookmark.title = ""
+        val request = HttpEntity(newBookmark, getAuthHeaders())
+        val responseEntity = restTemplate.postForEntity("/api/bookmarks", request, BookmarkDTO::class.java)
+        assertThat(responseEntity.statusCode).isEqualTo(CREATED)
+        assertThat(responseEntity.body?.title).isNotBlank()
     }
 
     @Test
@@ -75,7 +95,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should not be able to delete bookmark by other users`() {
-        var request = HttpEntity(null, getAuthHeaders("prasad@gmail.com", "prasad"))
+        val request = HttpEntity(null, getAuthHeaders("prasad@gmail.com", "prasad"))
         var responseEntity = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.GET, request, BookmarkDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(OK)
         val response = restTemplate.exchange("/api/bookmarks/${existingBookmark.id}", HttpMethod.DELETE, request,

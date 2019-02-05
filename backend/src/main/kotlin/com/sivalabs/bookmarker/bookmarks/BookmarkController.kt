@@ -33,9 +33,9 @@ class BookmarkController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
-    fun createBookmark(@RequestBody bookmark: Bookmark) {
+    fun createBookmark(@RequestBody bookmark: Bookmark): BookmarkDTO {
         bookmark.createdBy = SecurityUtils.loginUser()!!
-        bookmarkService.createBookmark(bookmark)
+        return bookmarkService.createBookmark(bookmark)
     }
 
     @DeleteMapping("/{id}")

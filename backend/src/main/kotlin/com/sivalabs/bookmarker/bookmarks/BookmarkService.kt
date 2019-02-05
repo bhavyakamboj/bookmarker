@@ -36,13 +36,13 @@ class BookmarkService(private val bookmarkRepository: BookmarkRepository) {
                 .orElse(null)
     }
 
-    fun createBookmark(bookmark: Bookmark) {
+    fun createBookmark(bookmark: Bookmark): BookmarkDTO {
         log.debug("process=create_bookmark, url=${bookmark.url}")
         if (bookmark.title.isEmpty()) {
             val doc = Jsoup.connect(bookmark.url).get()
             bookmark.title = doc.title()
         }
-        bookmarkRepository.save(bookmark)
+        return BookmarkDTO.fromEntity(bookmarkRepository.save(bookmark))
     }
 
     fun deleteBookmark(id: Long) {

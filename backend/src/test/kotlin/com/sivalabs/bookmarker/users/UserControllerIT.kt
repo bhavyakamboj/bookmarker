@@ -10,9 +10,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
+import org.springframework.http.HttpStatus.UNAUTHORIZED
 import java.util.Arrays.asList
 
 class UserControllerIT : AbstractIntegrationTest() {
@@ -70,11 +72,28 @@ class UserControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `should delete user`() {
+    fun `unauthorized user should not be able to delete user`() {
+        val response = restTemplate.exchange("/api/users/${existingUser.id}", HttpMethod.DELETE, null, Void::class.java)
+        assertThat(response.statusCode).isEqualTo(UNAUTHORIZED)
+    }
+
+    @Test
+    fun `admin should be able to delete user`() {
         var responseEntity = restTemplate.getForEntity("/api/users/${existingUser.id}", UserDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(OK)
-        restTemplate.delete("/api/users/${existingUser.id}")
+
+        val request = HttpEntity(null, getAuthHeaders("admin@gmail.com", "admin"))
+        val response = restTemplate.exchange("/api/users/${existingUser.id}", HttpMethod.DELETE, request, Void::class.java)
+        assertThat(response.statusCode).isEqualTo(OK)
+
         responseEntity = restTemplate.getForEntity("/api/users/${existingUser.id}", UserDTO::class.java)
         assertThat(responseEntity.statusCode).isEqualTo(NOT_FOUND)
+    }
+
+    @Test
+    fun `normal user should not be able to delete other user`() {
+        val request = HttpEntity(null, getAuthHeaders("siva@gmail.com", "siva"))
+        val response = restTemplate.exchange("/api/users/${existingUser.id}", HttpMethod.DELETE, request, Void::class.java)
+        assertThat(response.statusCode).isEqualTo(NOT_FOUND)
     }
 }
