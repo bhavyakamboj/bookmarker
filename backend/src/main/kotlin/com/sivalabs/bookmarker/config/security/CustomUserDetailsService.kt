@@ -13,10 +13,10 @@ class CustomUserDetailsService(private val userRepository: UserRepository) : Use
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByEmail(username)
-        return if (user == null) {
-            throw UsernameNotFoundException("No user found with username $username.")
+        return if (user.isPresent) {
+            SecurityUser(user.get())
         } else {
-            SecurityUser(user)
+            throw UsernameNotFoundException("No user found with username $username.")
         }
     }
 }

@@ -1,8 +1,10 @@
 package com.sivalabs.bookmarker.users
 
 import com.sivalabs.bookmarker.config.Loggable
+import com.sivalabs.bookmarker.exception.IncorrectPasswordException
 import com.sivalabs.bookmarker.exception.UserNotFoundException
 import com.sivalabs.bookmarker.users.entity.User
+import com.sivalabs.bookmarker.users.model.ChangePassword
 import com.sivalabs.bookmarker.users.model.UserDTO
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -23,7 +25,7 @@ class UserService(
     }
 
     @Transactional(readOnly = true)
-    fun findByEmail(email: String): User? {
+    fun getUserByEmail(email: String): Optional<User> {
         return userRepository.findByEmail(email)
     }
 
@@ -43,10 +45,14 @@ class UserService(
         userRepository.findById(userId).map { userRepository.delete(it) }
     }
 
-    fun changePassword(email: String, newPassword: String) {
-        this.findByEmail(email)?.also { user ->
-            user.password = passwordEncoder.encode(newPassword)
-            updateUser(user)
-        }
+    fun changePassword(email: String, changePassword: ChangePassword) {
+        this.getUserByEmail(email).map { user ->
+            if (passwordEncoder.matches(changePassword.oldPassword, user.password)) {
+                user.password = passwordEncoder.encode(changePassword.newPassword)
+                updateUser(user)
+            } else {
+                throw IncorrectPasswordException("Current password doesn't match")
+            }
+        }.orElseThrow { UserNotFoundException("User not found") }
     }
 }

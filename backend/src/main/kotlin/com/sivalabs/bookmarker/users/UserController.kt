@@ -10,8 +10,6 @@ import com.sivalabs.bookmarker.utils.logger
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/users")
 @Loggable
 class UserController(
-    private val authenticationManager: AuthenticationManager,
     private val userService: UserService
 ) {
 
@@ -77,7 +74,6 @@ class UserController(
         val currentUser = SecurityContextHolder.getContext().authentication
         val email = currentUser.name
         log.info("process=change_password, email=$email")
-        authenticationManager.authenticate(UsernamePasswordAuthenticationToken(email, changePassword.oldPassword))
-        userService.changePassword(email, changePassword.newPassword)
+        userService.changePassword(email, changePassword)
     }
 }

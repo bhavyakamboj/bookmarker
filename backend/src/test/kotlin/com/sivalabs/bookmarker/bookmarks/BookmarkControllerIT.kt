@@ -34,7 +34,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         newBookmark = TestHelper.buildBookmark()
 
         existingBookmark = TestHelper.buildBookmark()
-        existingBookmark.createdBy = userRepository.findByEmail("siva@gmail.com")!!
+        existingBookmark.createdBy = userRepository.findByEmail("siva@gmail.com").get()
         existingBookmark = bookmarkRepository.save(existingBookmark)
     }
 
