@@ -17,12 +17,12 @@ INSERT INTO user_role (user_id, role_id) VALUES
 (3, 2)
 ;
 
-INSERT INTO tags(id, name) VALUES
-(1, 'java'),
-(2, 'spring'),
-(3, 'spring-boot'),
-(4, 'spring-cloud'),
-(5, 'jpa')
+INSERT INTO tags(name) VALUES
+('java'),
+('spring'),
+('spring-boot'),
+('spring-cloud'),
+('jpa')
 ;
 
 INSERT INTO bookmarks(url, title, created_by,created_at) VALUES
