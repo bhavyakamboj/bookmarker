@@ -1,7 +1,6 @@
 package com.sivalabs.bookmarker.bookmarks
 
 import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
-import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
 import com.sivalabs.bookmarker.exception.ResourceNotFoundException
 import com.sivalabs.bookmarker.utils.SecurityUtils
 import org.springframework.http.HttpStatus
@@ -33,8 +32,8 @@ class BookmarkController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
-    fun createBookmark(@RequestBody bookmark: Bookmark): BookmarkDTO {
-        bookmark.createdBy = SecurityUtils.loginUser()!!
+    fun createBookmark(@RequestBody bookmark: BookmarkDTO): BookmarkDTO {
+        bookmark.createdBy = SecurityUtils.loginUser()!!.id
         return bookmarkService.createBookmark(bookmark)
     }
 

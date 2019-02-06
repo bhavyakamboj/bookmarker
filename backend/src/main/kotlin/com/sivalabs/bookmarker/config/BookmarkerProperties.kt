@@ -4,7 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "bookmarker")
 class BookmarkerProperties {
-    var logstashHost: String = "localhost"
     var jwt: JwtConfig = JwtConfig()
 
     class JwtConfig {

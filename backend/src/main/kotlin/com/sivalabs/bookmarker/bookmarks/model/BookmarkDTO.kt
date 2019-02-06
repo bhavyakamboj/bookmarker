@@ -13,7 +13,8 @@ data class BookmarkDTO(
     @JsonProperty("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
     @JsonProperty("updated_at")
-    var updatedAt: LocalDateTime? = LocalDateTime.now()
+    var updatedAt: LocalDateTime? = LocalDateTime.now(),
+    var tags: List<String> = listOf()
 ) {
     companion object {
         fun fromEntity(bm: Bookmark) = BookmarkDTO(
@@ -22,7 +23,8 @@ data class BookmarkDTO(
                 bm.title,
                 bm.createdBy.id,
                 bm.createdAt,
-                bm.updatedAt
+                bm.updatedAt,
+                bm.tags.map { it.name }
         )
     }
 }
