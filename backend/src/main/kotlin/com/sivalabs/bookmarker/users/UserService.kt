@@ -2,6 +2,8 @@ package com.sivalabs.bookmarker.users
 
 import com.sivalabs.bookmarker.config.Loggable
 import com.sivalabs.bookmarker.exception.IncorrectPasswordException
+import com.sivalabs.bookmarker.exception.ResourceAlreadyExistException
+import com.sivalabs.bookmarker.exception.ResourceNotFoundException
 import com.sivalabs.bookmarker.exception.UserNotFoundException
 import com.sivalabs.bookmarker.users.entity.User
 import com.sivalabs.bookmarker.users.model.ChangePassword
@@ -30,6 +32,9 @@ class UserService(
     }
 
     fun createUser(user: User): UserDTO {
+        if(userRepository.existsByEmail(user.email)) {
+            throw ResourceAlreadyExistException("Email ${user.email} is already in use")
+        }
         user.password = passwordEncoder.encode(user.password)
         return UserDTO.fromEntity(userRepository.save(user))
     }

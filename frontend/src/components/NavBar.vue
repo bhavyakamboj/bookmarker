@@ -21,6 +21,10 @@
           <li class="nav-item" v-if="!isUserLoggedIn">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
+          <li class="nav-item" v-if="!isUserLoggedIn">
+            <router-link class="nav-link" to="/registration">Register</router-link>
+          </li>
+
           <li class="nav-item" v-if="isUserLoggedIn" >
             <a class="nav-link" href="#" @click.prevent="doLogout">Logout</a>
           </li>

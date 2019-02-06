@@ -44,6 +44,10 @@ const actions = {
     }
   },
 
+  async register ({ commit, state }, user) {
+    return HTTP.post('users', user)
+  },
+
   logout ({ commit }) {
     commit('clearAuth')
   }

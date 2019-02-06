@@ -11,3 +11,6 @@ class UserNotFoundException(message: String) : ResourceNotFoundException(message
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 class IncorrectPasswordException(message: String) : RuntimeException(message)
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+class ResourceAlreadyExistException(message: String) : RuntimeException(message)
