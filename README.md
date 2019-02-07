@@ -1,4 +1,4 @@
-# bookmarker
+# Bookmarker
 
 ## Run tests
 
