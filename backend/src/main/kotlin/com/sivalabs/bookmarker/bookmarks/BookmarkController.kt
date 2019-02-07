@@ -1,8 +1,10 @@
 package com.sivalabs.bookmarker.bookmarks
 
 import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
+import com.sivalabs.bookmarker.bookmarks.model.BookmarksResultDTO
 import com.sivalabs.bookmarker.bookmarks.model.TagDTO
 import com.sivalabs.bookmarker.exception.BookmarkNotFoundException
+import com.sivalabs.bookmarker.utils.Constants
 import com.sivalabs.bookmarker.utils.SecurityUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,16 +18,20 @@ class BookmarkController(
 ) {
 
     @GetMapping
-    fun getAllBookmarks(@RequestParam(name = "userId", required = false) userId: Long?): List<BookmarkDTO> {
+    fun getAllBookmarks(
+        @RequestParam(name = "userId", required = false) userId: Long?,
+        @RequestParam(name = "page", required = false, defaultValue = "1") page: Int,
+        @RequestParam(name = "size", required = false, defaultValue = "${Constants.DEFAULT_PAGE_SIZE}") size: Int
+    ): BookmarksResultDTO {
         return if (userId == null) {
-            bookmarkService.getAllBookmarks()
+            bookmarkService.getAllBookmarks(page, size)
         } else {
-            bookmarkService.getBookmarksByUser(userId)
+            bookmarkService.getBookmarksByUser(userId, page, size)
         }
     }
 
     @GetMapping("/tagged/{tag}")
-    fun getBookmarksByTag(@PathVariable tag: String): TagDTO {
+    fun getBookmarksByTag(@PathVariable("tag") tag: String): TagDTO {
         return bookmarkService.getBookmarksByTag(tag)
     }
 
