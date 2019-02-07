@@ -7,12 +7,16 @@ Vue.use(Vuex)
 const state = {
   user: {},
   auth_token: {},
-  bookmarks: []
+  bookmarks: [],
+  tags: []
 }
 
 const mutations = {
   createBookmark (state, bookmark) {
     state.bookmarks.push(bookmark)
+  },
+  loadTags (state, tags) {
+    state.tags = tags
   },
   loadBookmarks (state, bookmarks) {
     state.bookmarks = bookmarks
@@ -28,6 +32,11 @@ const mutations = {
 }
 
 const actions = {
+  async fetchTags ({ commit }) {
+    let tags = (await HTTP.get('tags')).data
+    commit('loadTags', tags)
+  },
+
   async fetchBookmarks ({ commit }) {
     let bookmarks = (await HTTP.get('bookmarks')).data
     commit('loadBookmarks', bookmarks)

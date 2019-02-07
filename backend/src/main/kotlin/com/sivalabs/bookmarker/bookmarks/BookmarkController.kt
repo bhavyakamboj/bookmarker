@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.bookmarks
 
 import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
-import com.sivalabs.bookmarker.exception.ResourceNotFoundException
+import com.sivalabs.bookmarker.exception.BookmarkNotFoundException
 import com.sivalabs.bookmarker.utils.SecurityUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -43,7 +43,7 @@ class BookmarkController(
         val bookmark = bookmarkService.getBookmarkById(id)
         if (bookmark == null || (bookmark.createdBy != SecurityUtils.loginUser()?.id &&
                         !SecurityUtils.isCurrentUserAdmin())) {
-            throw ResourceNotFoundException("Bookmark not found with id=$id")
+            throw BookmarkNotFoundException("Bookmark not found with id=$id")
         } else {
             bookmarkService.deleteBookmark(id)
         }

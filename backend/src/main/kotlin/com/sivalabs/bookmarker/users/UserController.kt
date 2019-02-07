@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.users
 
 import com.sivalabs.bookmarker.config.Loggable
-import com.sivalabs.bookmarker.exception.ResourceNotFoundException
+import com.sivalabs.bookmarker.exception.UserNotFoundException
 import com.sivalabs.bookmarker.users.entity.User
 import com.sivalabs.bookmarker.users.model.ChangePassword
 import com.sivalabs.bookmarker.users.model.UserDTO
@@ -61,7 +61,7 @@ class UserController(
         userService.getUserById(id).map { u ->
             if (u == null || (u.id != SecurityUtils.loginUser()?.id &&
                             !SecurityUtils.isCurrentUserAdmin())) {
-                throw ResourceNotFoundException("User not found with id=$id")
+                throw UserNotFoundException("User not found with id=$id")
             } else {
                 userService.deleteUser(id)
             }

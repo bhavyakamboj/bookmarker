@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.ResponseStatus
 open class ResourceNotFoundException(message: String) : RuntimeException(message)
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
+class BookmarkNotFoundException(message: String) : ResourceNotFoundException(message)
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
 class UserNotFoundException(message: String) : ResourceNotFoundException(message)
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
