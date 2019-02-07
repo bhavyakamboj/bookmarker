@@ -1,6 +1,7 @@
 package com.sivalabs.bookmarker.bookmarks
 
 import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
+import com.sivalabs.bookmarker.bookmarks.model.TagDTO
 import com.sivalabs.bookmarker.exception.BookmarkNotFoundException
 import com.sivalabs.bookmarker.utils.SecurityUtils
 import org.springframework.http.HttpStatus
@@ -21,6 +22,11 @@ class BookmarkController(
         } else {
             bookmarkService.getBookmarksByUser(userId)
         }
+    }
+
+    @GetMapping("/tagged/{tag}")
+    fun getBookmarksByTag(@PathVariable tag: String): TagDTO {
+        return bookmarkService.getBookmarksByTag(tag)
     }
 
     @GetMapping("/{id}")

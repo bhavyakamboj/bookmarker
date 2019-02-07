@@ -4,6 +4,8 @@ import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
 import com.sivalabs.bookmarker.bookmarks.entity.Tag
 import com.sivalabs.bookmarker.bookmarks.entity.toDTO
 import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
+import com.sivalabs.bookmarker.bookmarks.model.TagDTO
+import com.sivalabs.bookmarker.exception.ResourceNotFoundException
 import com.sivalabs.bookmarker.users.UserRepository
 import com.sivalabs.bookmarker.utils.logger
 import org.jsoup.Jsoup
@@ -33,6 +35,14 @@ class BookmarkService(
         log.debug("process=get_bookmarks_by_user_id, user_id=$userId")
         val sort = Sort.by(Sort.Direction.DESC, "createdAt")
         return bookmarkRepository.findByCreatedById(userId, sort).map { it.toDTO() }
+    }
+
+    @Transactional(readOnly = true)
+    fun getBookmarksByTag(tag: String): TagDTO {
+        val tagOptional = tagRepository.findByName(tag)
+        return tagOptional.map {
+            TagDTO(it.id, it.name, it.bookmarks.map { b -> b.toDTO() })
+        }.orElseThrow { ResourceNotFoundException("Tag $tag not found") }
     }
 
     @Transactional(readOnly = true)

@@ -2,6 +2,7 @@ package com.sivalabs.bookmarker.bookmarks
 
 import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
 import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
+import com.sivalabs.bookmarker.bookmarks.model.TagDTO
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
 import com.sivalabs.bookmarker.users.UserRepository
 import com.sivalabs.bookmarker.utils.TestHelper
@@ -52,6 +53,14 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         val responseEntity = restTemplate.exchange("/api/bookmarks", HttpMethod.GET, request, Array<BookmarkDTO>::class.java)
         val bookmarks = asList(*responseEntity.body!!)
         assertThat(bookmarks).isNotEmpty
+    }
+
+    @Test
+    fun `should get bookmarks by tag`() {
+        val responseEntity = restTemplate.exchange("/api/bookmarks/tagged/java", HttpMethod.GET, null, TagDTO::class.java)
+        assertThat(responseEntity.statusCode).isEqualTo(OK)
+        val tagDTO = responseEntity.body!!
+        assertThat(tagDTO).isNotNull
     }
 
     @Test

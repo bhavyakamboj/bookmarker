@@ -8,18 +8,19 @@ const state = {
   user: {},
   auth_token: {},
   bookmarks: [],
+  selectedTag: {},
   tags: []
 }
 
 const mutations = {
-  createBookmark (state, bookmark) {
-    state.bookmarks.push(bookmark)
-  },
-  loadTags (state, tags) {
+  setTags (state, tags) {
     state.tags = tags
   },
-  loadBookmarks (state, bookmarks) {
+  setBookmarks (state, bookmarks) {
     state.bookmarks = bookmarks
+  },
+  setSelectedTag (state, selectedTag) {
+    state.selectedTag = selectedTag
   },
   setAuth (state, authResponse) {
     state.auth_token = authResponse
@@ -34,12 +35,17 @@ const mutations = {
 const actions = {
   async fetchTags ({ commit }) {
     let tags = (await HTTP.get('tags')).data
-    commit('loadTags', tags)
+    commit('setTags', tags)
   },
 
   async fetchBookmarks ({ commit }) {
     let bookmarks = (await HTTP.get('bookmarks')).data
-    commit('loadBookmarks', bookmarks)
+    commit('setBookmarks', bookmarks)
+  },
+
+  async fetchBookmarksByTag ({ commit }, tag) {
+    let selectedTag = (await HTTP.get(`bookmarks/tagged/${tag}`)).data
+    commit('setSelectedTag', selectedTag)
   },
 
   async createBookmark ({ commit, state }, bookmark) {

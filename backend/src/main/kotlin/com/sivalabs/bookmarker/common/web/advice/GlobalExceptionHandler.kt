@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.common.web.advice
 
 import com.sivalabs.bookmarker.common.model.ApiError
-import com.sivalabs.bookmarker.exception.ResourceAlreadyExistException
+import com.sivalabs.bookmarker.exception.BookmarkerException
 import com.sivalabs.bookmarker.exception.ResourceNotFoundException
 import com.sivalabs.bookmarker.utils.logger
 import org.springframework.dao.EmptyResultDataAccessException
@@ -25,8 +25,8 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(ApiError(exception.localizedMessage), NOT_FOUND)
     }
 
-    @ExceptionHandler(value = [ResourceAlreadyExistException::class])
-    fun handleResourceAlreadyExistException(exception: Exception): ResponseEntity<*> {
+    @ExceptionHandler(value = [BookmarkerException::class])
+    fun handleBookmarkerException(exception: Exception): ResponseEntity<*> {
         log.error(exception.localizedMessage, exception)
         return ResponseEntity(ApiError(exception.localizedMessage), BAD_REQUEST)
     }
