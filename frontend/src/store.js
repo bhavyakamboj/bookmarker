@@ -8,7 +8,7 @@ const state = {
   user: {},
   auth_token: {},
   bookmarks: [],
-  selectedTag: {},
+  selectedTag: { bookmarks: { content: {} } },
   tags: []
 }
 

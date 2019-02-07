@@ -45,7 +45,7 @@ class BookmarkController(
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
     fun createBookmark(@RequestBody bookmark: BookmarkDTO): BookmarkDTO {
-        bookmark.createdBy = SecurityUtils.loginUser()!!.id
+        bookmark.createdUserId = SecurityUtils.loginUser()!!.id
         return bookmarkService.createBookmark(bookmark)
     }
 
@@ -53,7 +53,7 @@ class BookmarkController(
     @PreAuthorize("hasRole('ROLE_USER')")
     fun deleteBookmark(@PathVariable id: Long) {
         val bookmark = bookmarkService.getBookmarkById(id)
-        if (bookmark == null || (bookmark.createdBy != SecurityUtils.loginUser()?.id &&
+        if (bookmark == null || (bookmark.createdUserId != SecurityUtils.loginUser()?.id &&
                         !SecurityUtils.isCurrentUserAdmin())) {
             throw BookmarkNotFoundException("Bookmark not found with id=$id")
         } else {

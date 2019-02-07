@@ -42,10 +42,12 @@ class BookmarkService(
     }
 
     @Transactional(readOnly = true)
-    fun getBookmarksByTag(tag: String): TagDTO {
+    fun getBookmarksByTag(tag: String, page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): TagDTO {
         val tagOptional = tagRepository.findByName(tag)
         return tagOptional.map {
-            TagDTO(it.id, it.name, it.bookmarks.map { b -> b.toDTO() })
+            val pageable = buildPageRequest(page, size)
+            val bookmarksPage = bookmarkRepository.findByTag(tag, pageable)
+            TagDTO(it.id, it.name, buildBookmarksResult(bookmarksPage))
         }.orElseThrow { ResourceNotFoundException("Tag $tag not found") }
     }
 
@@ -91,7 +93,7 @@ class BookmarkService(
             val doc = Jsoup.connect(bookmark.url).get()
             bookmark.title = doc.title()
         }
-        bookmark.createdBy = userRepository.getOne(bookmarkDTO.createdBy)
+        bookmark.createdBy = userRepository.getOne(bookmarkDTO.createdUserId)
         val tagsList = mutableListOf<Tag>()
         bookmarkDTO.tags.forEach { tagName ->
             if (tagName.trim() != "") {

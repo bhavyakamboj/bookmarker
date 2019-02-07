@@ -66,9 +66,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should get bookmarks by user`() {
-        val responseEntity =
-                restTemplate.exchange("/api/bookmarks?userId=${existingBookmark.createdBy.id}",
-                        GET, null, BookmarksResultDTO::class.java)
+        val responseEntity = restTemplate.exchange("/api/bookmarks?userId=${existingBookmark.createdBy.id}", GET, null, BookmarksResultDTO::class.java)
         val bookmarksResults = responseEntity.body!!
         assertThat(bookmarksResults.content).isNotEmpty
     }
