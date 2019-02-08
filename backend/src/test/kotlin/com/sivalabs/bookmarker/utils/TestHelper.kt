@@ -21,10 +21,14 @@ object TestHelper {
     fun buildBookmark(withId: Boolean = false): Bookmark {
         val id = if (withId) Random().nextLong() else 0
         val uuid = UUID.randomUUID().toString()
+        return buildBookmark(id, "http://$uuid.com", "title-$uuid")
+    }
+
+    fun buildBookmark(id: Long?=null, url:String, title:String=""): Bookmark {
         val bookmark = Bookmark()
-        bookmark.id = id
-        bookmark.url = "http://$uuid.com"
-        bookmark.title = "title-$uuid"
+        bookmark.id = id ?: 0
+        bookmark.url = url
+        bookmark.title = title
         return bookmark
     }
 }
