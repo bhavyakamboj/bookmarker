@@ -26,6 +26,7 @@
         <kotlin.version>1.3.20</kotlin.version>
         <spring-cloud.version>Greenwich.M1</spring-cloud.version>
         <jjwt.version>0.6.0</jjwt.version>
+        <jasypt.version>2.1.1</jasypt.version>
         <swagger2.version>2.9.2</swagger2.version>
         <logstash-logback.version>4.9</logstash-logback.version>
         <rest-assured.version>3.1.1</rest-assured.version>
@@ -130,6 +131,11 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.11.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>${jasypt.version}</version>
         </dependency>
 
         <!-- Test dependencies -->
