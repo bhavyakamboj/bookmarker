@@ -30,6 +30,7 @@
         <swagger2.version>2.9.2</swagger2.version>
         <logstash-logback.version>4.9</logstash-logback.version>
         <rest-assured.version>3.1.1</rest-assured.version>
+        <testcontainers.version>1.10.6</testcontainers.version>
 
         <flyway.url>jdbc:postgresql://localhost:5432/postgres</flyway.url>
         <flyway.user>postgres</flyway.user>
@@ -163,6 +164,18 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
 

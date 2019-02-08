@@ -13,11 +13,17 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.boot.test.util.TestPropertyValues
+import org.springframework.context.ConfigurableApplicationContext
+import org.springframework.context.ApplicationContextInitializer
+import org.testcontainers.containers.PostgreSQLContainer
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@ContextConfiguration(initializers = [AbstractIntegrationTest.Initializer::class])
 abstract class AbstractIntegrationTest {
 
     @Autowired
@@ -30,6 +36,14 @@ abstract class AbstractIntegrationTest {
     protected val user1Credentials = Pair("siva@gmail.com", "siva")
     protected val user2Credentials = Pair("prasad@gmail.com", "prasad")
 
+
+    companion object {
+        val postgresContainer: PostgreSQLContainer<*> = PostgreSQLContainer<Nothing>()
+    }
+
+    init {
+        postgresContainer.start()
+    }
     protected fun asAuthenticateUser(credentials: Pair<String, String>) {
         httpHeaders = getAuthHeaders(credentials.first, credentials.second)
     }
@@ -53,4 +67,18 @@ abstract class AbstractIntegrationTest {
         val request = HttpEntity(authenticationRequest)
         return restTemplate.postForEntity("/api/auth/login", request, AuthenticationResponse::class.java)
     }
+
+
+    internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+        override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
+            TestPropertyValues.of(
+                    "spring.datasource.url=" + postgresContainer.getJdbcUrl(),
+                    "spring.datasource.username=" + postgresContainer.getUsername(),
+                    "spring.datasource.password=" + postgresContainer.getPassword()
+                    )
+                    .applyTo(configurableApplicationContext.environment)
+        }
+    }
+
 }
