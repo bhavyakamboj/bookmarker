@@ -36,7 +36,6 @@ abstract class AbstractIntegrationTest {
     protected val user1Credentials = Pair("siva@gmail.com", "siva")
     protected val user2Credentials = Pair("prasad@gmail.com", "prasad")
 
-
     companion object {
         val postgresContainer: PostgreSQLContainer<*> = PostgreSQLContainer<Nothing>()
     }
@@ -68,7 +67,6 @@ abstract class AbstractIntegrationTest {
         return restTemplate.postForEntity("/api/auth/login", request, AuthenticationResponse::class.java)
     }
 
-
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
@@ -80,5 +78,4 @@ abstract class AbstractIntegrationTest {
                     .applyTo(configurableApplicationContext.environment)
         }
     }
-
 }
