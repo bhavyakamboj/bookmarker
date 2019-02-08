@@ -1,12 +1,27 @@
 # Bookmarker
 
+Bookmarker is a simple bookmarking application developed using Kotlin, SpringBoot, VueJS.
+
+## Backend Tech Stack
+* Java8 / Kotlin
+* SpringBoot
+* H2(Dev) / Postgres (Prod)
+* Spring Data JPA
+* Spring Security JWT Authentication
+* Maven
+
+## Frontend Tech Stack
+* VueJS 2.5
+* Vuex, Vue-router
+* Bootstrap 4
+
 ## Run tests
 
 `> ./mvnw clean verify`
 
 ## Run application locally
 
-`> ./mvnw clean spring-boot:run`
+`> ./mvnw clean package & java -jar backend/target/bookmarker-0.0.1.jar`
 
 ## Running using Docker
 
@@ -14,20 +29,15 @@ To start application and Postgres
 
 `> ./run.sh start`
 
-
 To start application and all dependent services like ELK, grafana, prometheus
 
 `> ./run.sh start_all`
 
-* Application: http://localhost:18080/
-* SwaggerUI: http://localhost:18080/swagger-ui.html
+* Application: http://localhost:8080/
+* SwaggerUI: http://localhost:8080/swagger-ui.html
 * Prometheus: http://localhost:9090/
 * Grafana: http://localhost:3000/ (admin/admin)
 * Kibana: http://localhost:5601/ 
-
-### Database migration
-
-`./mvnw compile flyway:migrate`
 
 ### Run Performance Tests
 
@@ -39,6 +49,21 @@ To start application and all dependent services like ELK, grafana, prometheus
 > ./run.sh sonar
 > ./mvnw clean verify -P sonar -Dsonar.login=$SONAR_LOGIN_TOKEN
 ```
+
+## TODO
+
+* User forgot password, reset password
+* Bookmark like feature
+* Weekly Email NewsLetter
+* Improve Test coverage and readability of tests
+* Use Vuetify for UI
+* Refactor Gatling tests to simulate typical user behaviour
+* Script to automatically create Grafana dashboard
+* Add gradle based build
+
+
+## Contributing
+If you want to contribute to add new feature or improve existing code quality please raise issues and ofcourse, Pull Requests are welcome.
 
 ## References
 
