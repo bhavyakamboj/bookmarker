@@ -13,9 +13,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod.DELETE
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
@@ -29,21 +27,13 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     @Autowired
     lateinit var bookmarkRepository: BookmarkRepository
 
-    private var httpHeaders: HttpHeaders? = null
-
-    private val adminCredentials = Pair("admin@gmail.com", "admin")
-    private val user1Credentials = Pair("siva@gmail.com", "siva")
-    private val user2Credentials = Pair("prasad@gmail.com", "prasad")
-
-    private val adminUserId = 1L
-
     @BeforeEach
     fun setUp() {
-        httpHeaders = null
     }
 
     @AfterEach
     fun tearDown() {
+        httpHeaders = null
     }
 
     private fun createBookmarkByUser(userEmail: String): Bookmark {
@@ -79,7 +69,6 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         assertThat(bookmarksResults.content).isNotEmpty
     }
 
-
     @Test
     fun `should create bookmark`() {
         asAuthenticateUser(user1Credentials)
@@ -89,7 +78,6 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
         verifyStatusCode(responseEntity, CREATED)
     }
-
 
     @Test
     fun `should create bookmark with title if not present`() {
@@ -139,14 +127,6 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         verifyStatusCode(response, OK)
 
         verifyBookmarkNotExists(bookmark.id)
-    }
-
-    private fun asAuthenticateUser(credentials: Pair<String, String>) {
-        httpHeaders = getAuthHeaders(credentials.first, credentials.second)
-    }
-
-    private fun verifyStatusCode(responseEntity: ResponseEntity<*>, code: HttpStatus) {
-        assertThat(responseEntity.statusCode).isEqualTo(code)
     }
 
     private fun getAllBookmarks(): ResponseEntity<BookmarksResultDTO> {

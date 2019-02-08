@@ -24,7 +24,7 @@ object TestHelper {
         return buildBookmark(id, "http://$uuid.com", "title-$uuid")
     }
 
-    fun buildBookmark(id: Long?=null, url:String, title:String=""): Bookmark {
+    fun buildBookmark(id: Long? = null, url: String, title: String = ""): Bookmark {
         val bookmark = Bookmark()
         bookmark.id = id ?: 0
         bookmark.url = url

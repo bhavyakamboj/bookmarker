@@ -2,6 +2,7 @@ package com.sivalabs.bookmarker.common
 
 import com.sivalabs.bookmarker.users.model.AuthenticationRequest
 import com.sivalabs.bookmarker.users.model.AuthenticationResponse
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDO
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -21,7 +23,25 @@ abstract class AbstractIntegrationTest {
     @Autowired
     protected lateinit var restTemplate: TestRestTemplate
 
-    protected fun getAuthHeaders(username: String = "admin@gmail.com", password: String = "admin"): HttpHeaders {
+    protected val adminUserId = 1L
+    protected var httpHeaders: HttpHeaders? = null
+
+    protected val adminCredentials = Pair("admin@gmail.com", "admin")
+    protected val user1Credentials = Pair("siva@gmail.com", "siva")
+    protected val user2Credentials = Pair("prasad@gmail.com", "prasad")
+
+    protected fun asAuthenticateUser(credentials: Pair<String, String>) {
+        httpHeaders = getAuthHeaders(credentials.first, credentials.second)
+    }
+
+    protected fun verifyStatusCode(responseEntity: ResponseEntity<*>, code: HttpStatus) {
+        Assertions.assertThat(responseEntity.statusCode).isEqualTo(code)
+    }
+
+    protected fun getAuthHeaders(
+        username: String = adminCredentials.first,
+        password: String = adminCredentials.second
+    ): HttpHeaders {
         val responseEntity = authenticate(username, password)
         val headers = HttpHeaders()
         headers.add("Authorization", "Bearer ${responseEntity.body?.accessToken}")
