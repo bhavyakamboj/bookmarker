@@ -24,9 +24,15 @@
           <li class="nav-item" v-if="!isUserLoggedIn">
             <router-link class="nav-link" to="/registration">Register</router-link>
           </li>
-
-          <li class="nav-item" v-if="isUserLoggedIn" >
-            <a class="nav-link" href="#" @click.prevent="doLogout">Logout</a>
+          <li class="nav-item dropdown" v-if="isUserLoggedIn">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{loginUser.name}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <router-link class="dropdown-item"
+                           :to="{name: 'UserProfile', params: {id: loginUser.id}}">My Profile</router-link>
+              <a class="dropdown-item" href="#" @click.prevent="doLogout">Logout</a>
+            </div>
           </li>
         </ul>
       </div>
@@ -39,23 +45,27 @@ export default {
   name: 'NavBar',
   data () {
     return {
-      loggedIn: false
+      loggedIn: false,
+      loginUser: {}
     }
   },
-  created: function () {
+  mounted: function () {
     const accessToken = localStorage.getItem('access_token')
     if (accessToken) {
       this.loggedIn = true
     }
-    var self = this
-
+    this.reloadCurrentUser()
+    const self = this
     window.eventBus.$on('loggedin', function () {
+      console.log('received loggedin emit event')
       self.loggedIn = true
+      self.reloadCurrentUser()
     })
 
     window.eventBus.$on('logout', function () {
       console.log('received logout emit event')
       self.loggedIn = false
+      self.loginUser = {}
       self.$store.dispatch('logout')
       self.$router.push('/login')
     })
@@ -64,6 +74,9 @@ export default {
   methods: {
     doLogout () {
       window.eventBus.$emit('logout')
+    },
+    reloadCurrentUser () {
+      this.loginUser = this.$store.getters.currentUser()
     }
   },
 

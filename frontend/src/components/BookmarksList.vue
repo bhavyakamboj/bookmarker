@@ -13,7 +13,13 @@
         </div>
         <div>
           <span>Posted on <strong>{{bookmark.created_at | dt_format}}</strong></span>
-          <span> By <strong>{{bookmark.created_user_name }}</strong></span>
+          <span> By <strong>
+            <router-link
+                         :to="{name: 'UserProfile', params: {id: bookmark.created_user_id}}">
+              {{bookmark.created_user_name }}
+            </router-link>
+          </strong>
+          </span>
         </div>
       </li>
     </ul>

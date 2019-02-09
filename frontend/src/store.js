@@ -5,8 +5,10 @@ import { HTTP } from './http-utils'
 Vue.use(Vuex)
 
 const state = {
-  user: {},
-  auth_token: {},
+  user: JSON.parse(localStorage.getItem('currentUser') || '{}'),
+  auth_token: {
+    access_token: localStorage.getItem('access_token')
+  },
   bookmarks: [],
   selectedTag: { bookmarks: { content: {} } },
   tags: []
@@ -22,6 +24,10 @@ const mutations = {
   setSelectedTag (state, selectedTag) {
     state.selectedTag = selectedTag
   },
+  setCurrentUser (state, currentUser) {
+    state.user = currentUser
+    localStorage.setItem('currentUser', JSON.stringify(currentUser))
+  },
   setAuth (state, authResponse) {
     state.auth_token = authResponse
     localStorage.setItem('access_token', authResponse.access_token)
@@ -29,6 +35,7 @@ const mutations = {
   clearAuth (state) {
     state.auth_token = {}
     localStorage.removeItem('access_token')
+    localStorage.removeItem('currentUser')
   }
 }
 
@@ -48,6 +55,10 @@ const actions = {
     commit('setSelectedTag', selectedTag)
   },
 
+  async fetchBookmarksByUser ({ commit }, userId) {
+    return HTTP.get(`bookmarks?userId=${userId}`)
+  },
+
   async createBookmark ({ commit, state }, bookmark) {
     return HTTP.post('bookmarks', bookmark)
   },
@@ -57,6 +68,15 @@ const actions = {
     if (response.status === 200) {
       commit('setAuth', response.data)
     }
+  },
+
+  async fetchUserProfile ({ commit }, userId) {
+    return HTTP.get(`users/${userId}`)
+  },
+
+  async fetchCurrentUser ({ commit }) {
+    let currentUser = (await HTTP.get('me')).data
+    commit('setCurrentUser', currentUser)
   },
 
   async register ({ commit, state }, user) {
@@ -70,6 +90,10 @@ const actions = {
 }
 
 const getters = {
+  currentUser: state => () => {
+    const user = localStorage.getItem('currentUser') || '{}'
+    return JSON.parse(user)
+  }
 }
 
 export default new Vuex.Store({

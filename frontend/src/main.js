@@ -7,6 +7,8 @@ import vSelect from 'vue-select/dist/vue-select'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'font-awesome/css/font-awesome.min.css'
 import './assets/css/styles.css'
+import 'jquery/dist/jquery.min.js'
+import 'bootstrap/dist/js/bootstrap.min'
 
 Vue.component('v-select', vSelect)
 Vue.config.productionTip = false

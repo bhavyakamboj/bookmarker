@@ -6,6 +6,7 @@ import BookmarksByTag from './components/BookmarksByTag'
 import Login from './components/Login'
 import Registration from './components/Registration'
 import NewBookmark from './components/NewBookmark'
+import UserProfile from './components/UserProfile'
 
 Vue.use(Router)
 
@@ -46,6 +47,12 @@ const router = new Router({
       name: 'NewBookmark',
       component: NewBookmark,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/users/:id',
+      name: 'UserProfile',
+      component: UserProfile,
+      meta: { requiresAuth: false }
     },
     {
       path: '*',
