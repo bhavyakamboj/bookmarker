@@ -7,10 +7,10 @@ const axiosConfig = {
   timeout: 30000
 }
 
-export const HTTP = axios.create(axiosConfig)
+const axiosInstance = axios.create(axiosConfig)
 
 // Set the AUTH token for any request
-HTTP.interceptors.request.use(function (config) {
+axiosInstance.interceptors.request.use(function (config) {
   const accessToken = localStorage.getItem('access_token')
   if (!config.headers.Authorization && accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
@@ -19,7 +19,7 @@ HTTP.interceptors.request.use(function (config) {
 })
 
 // Add a response interceptor
-HTTP.interceptors.response.use(function (response) {
+axiosInstance.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   console.log(error)
@@ -30,3 +30,5 @@ HTTP.interceptors.response.use(function (response) {
     return Promise.reject(error)
   }
 })
+
+export default axiosInstance

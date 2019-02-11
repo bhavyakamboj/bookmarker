@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { HTTP } from './http-utils'
+import axios from './axios-config'
 
 Vue.use(Vuex)
 
@@ -41,46 +41,46 @@ const mutations = {
 
 const actions = {
   async fetchTags ({ commit }) {
-    let tags = (await HTTP.get('tags')).data
+    let tags = (await axios.get('tags')).data
     commit('setTags', tags)
   },
 
   async fetchBookmarks ({ commit }) {
-    let bookmarks = (await HTTP.get('bookmarks')).data
+    let bookmarks = (await axios.get('bookmarks')).data
     commit('setBookmarks', bookmarks)
   },
 
   async fetchBookmarksByTag ({ commit }, tag) {
-    let selectedTag = (await HTTP.get(`bookmarks/tagged/${tag}`)).data
+    let selectedTag = (await axios.get(`bookmarks/tagged/${tag}`)).data
     commit('setSelectedTag', selectedTag)
   },
 
   async fetchBookmarksByUser ({ commit }, userId) {
-    return HTTP.get(`bookmarks?userId=${userId}`)
+    return axios.get(`bookmarks?userId=${userId}`)
   },
 
   async createBookmark ({ commit, state }, bookmark) {
-    return HTTP.post('bookmarks', bookmark)
+    return axios.post('bookmarks', bookmark)
   },
 
   async login ({ commit, state }, credentials) {
-    let response = await HTTP.post('auth/login', credentials)
+    let response = await axios.post('auth/login', credentials)
     if (response.status === 200) {
       commit('setAuth', response.data)
     }
   },
 
   async fetchUserProfile ({ commit }, userId) {
-    return HTTP.get(`users/${userId}`)
+    return axios.get(`users/${userId}`)
   },
 
   async fetchCurrentUser ({ commit }) {
-    let currentUser = (await HTTP.get('me')).data
+    let currentUser = (await axios.get('me')).data
     commit('setCurrentUser', currentUser)
   },
 
   async register ({ commit, state }, user) {
-    return HTTP.post('users', user)
+    return axios.post('users', user)
   },
 
   logout ({ commit }) {

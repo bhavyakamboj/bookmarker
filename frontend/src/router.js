@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './components/Home'
-import Bookmarks from './components/Bookmarks'
-import BookmarksByTag from './components/BookmarksByTag'
-import Login from './components/Login'
-import Registration from './components/Registration'
-import NewBookmark from './components/NewBookmark'
-import UserProfile from './components/UserProfile'
+import Bookmarks from './components/bookmarks/Bookmarks'
+import BookmarksByTag from './components/bookmarks/BookmarksByTag'
+import Login from './components/users/Login'
+import Registration from './components/users/Registration'
+import NewBookmark from './components/bookmarks/NewBookmark'
+import UserProfile from './components/users/UserProfile'
 
 Vue.use(Router)
 
@@ -63,9 +63,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  // const publicPages = ['/login', '/registration', '/bookmarks']
-  // const authRequired = !publicPages.includes(to.path)
-
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const accessToken = localStorage.getItem('access_token')
     if (!accessToken) {

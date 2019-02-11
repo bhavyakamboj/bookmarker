@@ -29,7 +29,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import BookmarksList from './BookmarksList'
+import BookmarksList from '../bookmarks/BookmarksList'
 export default {
   name: 'UserProfile',
   components: {
