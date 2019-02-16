@@ -32,7 +32,7 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
-                sh '../mvnw dependency-check:check'
+                sh './mvnw dependency-check:check'
             }
             post {
                 always {
