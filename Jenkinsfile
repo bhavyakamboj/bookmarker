@@ -17,10 +17,12 @@ pipeline {
     stages {
         stage('Test') {
             steps {
+                sh 'cd backend'
                 sh './mvnw clean verify'
             }
             post {
                 always {
+                    sh 'cd backend'
                     junit 'target/surefire-reports/*.xml'
                     junit 'target/failsafe-reports/*.xml'
                 }
@@ -29,10 +31,12 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
+                sh 'cd backend'
                 sh './mvnw dependency-check:check'
             }
             post {
                 always {
+                    sh 'cd backend'
                     publishHTML(target:[
                          allowMissing: true,
                          alwaysLinkToLastBuild: true,
@@ -51,6 +55,7 @@ pipeline {
                 expression { params.PUBLISH_TO_DOCKERHUB == true }
             }
             steps {
+                sh 'cd backend'
               sh "docker build -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER} -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest ."
 
               withCredentials([[$class: 'UsernamePasswordMultiBinding',
