@@ -59,7 +59,7 @@ To start application and all dependent services like ELK, grafana, prometheus
 * User forgot password, reset password
 * Bookmark like feature
 * Weekly Email NewsLetter
-* Improve Test coverage and readability of tests
+* Improve Test coverage and ~~readability of tests~~
 * Use Vuetify for UI
 * Refactor Gatling tests to simulate typical user behaviour
 * Script to automatically create Grafana dashboard
