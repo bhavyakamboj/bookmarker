@@ -2,6 +2,7 @@ package com.sivalabs.bookmarker.utils
 
 import com.sivalabs.bookmarker.users.entity.User
 import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
+import com.sivalabs.bookmarker.bookmarks.entity.Tag
 import java.util.Random
 import java.util.UUID
 
@@ -24,11 +25,17 @@ object TestHelper {
         return buildBookmark(id, "http://$uuid.com", "title-$uuid")
     }
 
-    fun buildBookmark(id: Long? = null, url: String, title: String = ""): Bookmark {
+    fun buildBookmark(id: Long? = null, url: String, title: String = "", vararg tags: String): Bookmark {
         val bookmark = Bookmark()
         bookmark.id = id ?: 0
         bookmark.url = url
         bookmark.title = title
+        val tagList = tags.map {
+            val t = Tag()
+            t.name = it
+            t
+        }
+        bookmark.tags = tagList.toMutableList()
         return bookmark
     }
 }

@@ -1,6 +1,7 @@
 package com.sivalabs.bookmarker.bookmarks
 
 import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
+import com.sivalabs.bookmarker.bookmarks.entity.toDTO
 import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
 import com.sivalabs.bookmarker.bookmarks.model.BookmarksResultDTO
 import com.sivalabs.bookmarker.bookmarks.model.TagDTO
@@ -52,6 +53,25 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
+    fun `should get first page bookmarks if page number is less than 1`() {
+        val responseEntity = getAllBookmarks(-1)
+
+        verifyStatusCode(responseEntity, OK)
+        val bookmarksResults = responseEntity.body!!
+        assertThat(bookmarksResults.content).isNotEmpty
+        assertThat(bookmarksResults.currentPage).isEqualTo(1)
+    }
+
+    @Test
+    fun `should get bookmark by id`() {
+        val responseEntity = getBookmarkById(1)
+
+        verifyStatusCode(responseEntity, OK)
+        val bookmarkDTO = responseEntity.body!!
+        assertThat(bookmarkDTO).isNotNull
+    }
+
+    @Test
     fun `should get bookmarks by tag`() {
         val responseEntity = getBookmarksByTag("java")
 
@@ -73,8 +93,8 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     fun `should create bookmark`() {
         asAuthenticateUser(user1Credentials)
 
-        val bookmark = TestHelper.buildBookmark(null, "http://sivalabs.in", "SivaLabs Blog")
-        val responseEntity = createBookmark(bookmark)
+        val bookmark = TestHelper.buildBookmark(null, "http://sivalabs.in", "SivaLabs Blog", "java", "spring", "newtag", " ")
+        val responseEntity = createBookmark(bookmark.toDTO())
 
         verifyStatusCode(responseEntity, CREATED)
     }
@@ -84,7 +104,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         asAuthenticateUser(adminCredentials)
 
         val bookmark = TestHelper.buildBookmark(null, "http://sivalabs.in", "")
-        val responseEntity = createBookmark(bookmark)
+        val responseEntity = createBookmark(bookmark.toDTO())
 
         verifyStatusCode(responseEntity, CREATED)
         assertThat(responseEntity.body?.title).isNotBlank()
@@ -101,6 +121,17 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         verifyStatusCode(response, OK)
 
         verifyBookmarkNotExists(bookmark.id)
+    }
+
+    @Test
+    fun `deleting non-existing bookmark should return 404`() {
+        val nonExistingBookmarkId = 9999L
+        verifyBookmarkNotExists(nonExistingBookmarkId)
+
+        asAuthenticateUser(adminCredentials)
+        val response = deleteBookmark(nonExistingBookmarkId)
+
+        verifyStatusCode(response, NOT_FOUND)
     }
 
     @Test
@@ -129,8 +160,8 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         verifyBookmarkNotExists(bookmark.id)
     }
 
-    private fun getAllBookmarks(): ResponseEntity<BookmarksResultDTO> {
-        return restTemplate.getForEntity("/api/bookmarks", BookmarksResultDTO::class.java)
+    private fun getAllBookmarks(pageNo: Int = 1): ResponseEntity<BookmarksResultDTO> {
+        return restTemplate.getForEntity("/api/bookmarks?page=$pageNo", BookmarksResultDTO::class.java)
     }
 
     private fun getBookmarksByTag(tag: String): ResponseEntity<TagDTO> {
@@ -141,7 +172,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         return restTemplate.getForEntity("/api/bookmarks?userId=$userId", BookmarksResultDTO::class.java)
     }
 
-    private fun createBookmark(bookmark: Bookmark): ResponseEntity<BookmarkDTO> {
+    private fun createBookmark(bookmark: BookmarkDTO): ResponseEntity<BookmarkDTO> {
         val request = HttpEntity(bookmark, httpHeaders)
         return restTemplate.postForEntity("/api/bookmarks", request, BookmarkDTO::class.java)
     }
