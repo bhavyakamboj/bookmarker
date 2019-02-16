@@ -18,9 +18,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                dir(BACKEND_MODULE) {
-                    sh '../mvnw clean verify'
-                }
+                sh './mvnw clean verify'
             }
             post {
                 always {
