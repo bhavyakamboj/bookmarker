@@ -32,7 +32,9 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
-                sh './mvnw dependency-check:check'
+                dir(BACKEND_MODULE) {
+                    sh '../mvnw dependency-check:check'
+                }
             }
             post {
                 always {

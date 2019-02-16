@@ -43,11 +43,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>frontend</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
@@ -459,7 +454,7 @@
                     <!-- additional 3rd party ruleset(s) can be specified here -->
                 </dependencies>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
@@ -473,7 +468,7 @@
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/../frontend/target/dist</directory>
+                                    <directory>${project.basedir}/../frontend/dist</directory>
                                     <includes>
                                         <include>static/</include>
                                         <include>index.html</include>
@@ -484,7 +479,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
         </plugins>
 
         <pluginManagement>
