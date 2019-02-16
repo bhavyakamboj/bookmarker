@@ -19,7 +19,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir(BACKEND_MODULE) {
-                    sh './mvnw clean verify'
+                    sh '../mvnw clean verify'
                 }
             }
             post {
@@ -35,7 +35,7 @@ pipeline {
         stage('OWASP Dependency Check') {
             steps {
                 dir(BACKEND_MODULE) {
-                    sh './mvnw dependency-check:check'
+                    sh '../mvnw dependency-check:check'
                 }
             }
             post {
