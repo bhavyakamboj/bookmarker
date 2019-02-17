@@ -1,7 +1,13 @@
 package com.sivalabs.bookmarker.bookmarks.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.ManyToMany
+import javax.persistence.SequenceGenerator
+import javax.persistence.Table
 
 @Entity
 @Table(name = "tags")

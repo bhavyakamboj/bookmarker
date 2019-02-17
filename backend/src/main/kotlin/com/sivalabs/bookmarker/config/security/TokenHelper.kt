@@ -8,9 +8,8 @@ import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
-
-import javax.servlet.http.HttpServletRequest
 import java.util.Date
+import javax.servlet.http.HttpServletRequest
 
 @Component
 class TokenHelper {
@@ -21,9 +20,12 @@ class TokenHelper {
     @Autowired
     private lateinit var timeProvider: TimeProvider
 
-    private val signatureAlgorithm = SignatureAlgorithm.HS512
-
-    private val audienceWeb = "web"
+    companion object {
+        private const val MILLIS_PER_SECOND = 1000
+        private const val AUDIENCE_WEB = "web"
+        private const val TOKEN_PREFIX = "Bearer "
+        private val signatureAlgorithm = SignatureAlgorithm.HS512
+    }
 
     fun getUsernameFromToken(token: String): String {
         return this.getAllClaimsFromToken(token).subject
@@ -33,32 +35,32 @@ class TokenHelper {
         val claims = this.getAllClaimsFromToken(token)
         claims.issuedAt = timeProvider.now()
         return Jwts.builder()
-                .setClaims(claims)
-                .setExpiration(generateExpirationDate())
-                .signWith(signatureAlgorithm, bookmarkerProperties.jwt.secret)
-                .compact()
+            .setClaims(claims)
+            .setExpiration(generateExpirationDate())
+            .signWith(signatureAlgorithm, bookmarkerProperties.jwt.secret)
+            .compact()
     }
 
     fun generateToken(username: String): String {
         return Jwts.builder()
-                .setIssuer(bookmarkerProperties.jwt.issuer)
-                .setSubject(username)
-                .setAudience(audienceWeb)
-                .setIssuedAt(timeProvider.now())
-                .setExpiration(generateExpirationDate())
-                .signWith(signatureAlgorithm, bookmarkerProperties.jwt.secret)
-                .compact()
+            .setIssuer(bookmarkerProperties.jwt.issuer)
+            .setSubject(username)
+            .setAudience(AUDIENCE_WEB)
+            .setIssuedAt(timeProvider.now())
+            .setExpiration(generateExpirationDate())
+            .signWith(signatureAlgorithm, bookmarkerProperties.jwt.secret)
+            .compact()
     }
 
     private fun getAllClaimsFromToken(token: String): Claims {
         return Jwts.parser()
-                .setSigningKey(bookmarkerProperties.jwt.secret)
-                .parseClaimsJws(token)
-                .body
+            .setSigningKey(bookmarkerProperties.jwt.secret)
+            .parseClaimsJws(token)
+            .body
     }
 
     private fun generateExpirationDate(): Date {
-        return Date(timeProvider.now().time + bookmarkerProperties.jwt.expiresIn * 1000)
+        return Date(timeProvider.now().time + bookmarkerProperties.jwt.expiresIn * MILLIS_PER_SECOND)
     }
 
     fun validateToken(token: String, userDetails: UserDetails): Boolean {
@@ -67,8 +69,8 @@ class TokenHelper {
 
     fun getToken(request: HttpServletRequest): String? {
         val authHeader = getAuthHeaderFromHeader(request)
-        return if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            authHeader.substring(7)
+        return if (authHeader != null && authHeader.startsWith(TOKEN_PREFIX)) {
+            authHeader.substring(TOKEN_PREFIX.length)
         } else null
     }
 

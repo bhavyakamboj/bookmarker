@@ -3,18 +3,16 @@ package com.sivalabs.bookmarker.config.security
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.web.filter.OncePerRequestFilter
-
+import java.io.IOException
 import javax.servlet.FilterChain
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import java.io.IOException
 
 class TokenAuthenticationFilter(
     private val tokenHelper: TokenHelper,
     private val userDetailsService: UserDetailsService
-)
-    : OncePerRequestFilter() {
+) : OncePerRequestFilter() {
 
     @Throws(IOException::class, ServletException::class)
     public override fun doFilterInternal(
@@ -23,19 +21,14 @@ class TokenAuthenticationFilter(
         chain: FilterChain
     ) {
         val authToken = tokenHelper.getToken(request)
-
-        try {
-            if (authToken != null) {
-                val username = tokenHelper.getUsernameFromToken(authToken)
-                val userDetails = userDetailsService.loadUserByUsername(username)
-                if (tokenHelper.validateToken(authToken, userDetails)) {
-                    val authentication = TokenBasedAuthentication(authToken, userDetails)
-                    SecurityContextHolder.getContext().authentication = authentication
-                }
+        if (authToken != null) {
+            val username = tokenHelper.getUsernameFromToken(authToken)
+            val userDetails = userDetailsService.loadUserByUsername(username)
+            if (tokenHelper.validateToken(authToken, userDetails)) {
+                val authentication = TokenBasedAuthentication(authToken, userDetails)
+                SecurityContextHolder.getContext().authentication = authentication
             }
-            chain.doFilter(request, response)
-        } catch (e: Exception) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
         }
+        chain.doFilter(request, response)
     }
 }

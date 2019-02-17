@@ -34,8 +34,8 @@ class UserController(
     fun getUser(@PathVariable id: Long): ResponseEntity<UserDTO> {
         log.info("process=get_user, user_id=$id")
         return userService.getUserById(id)
-                .map { ResponseEntity.ok(it) }
-                .orElse(ResponseEntity.notFound().build())
+            .map { ResponseEntity.ok(it) }
+            .orElse(ResponseEntity.notFound().build())
     }
 
     @PostMapping("")
@@ -60,7 +60,8 @@ class UserController(
 
         userService.getUserById(id).map { u ->
             if (u == null || (u.id != SecurityUtils.loginUser()?.id &&
-                            !SecurityUtils.isCurrentUserAdmin())) {
+                        !SecurityUtils.isCurrentUserAdmin())
+            ) {
                 throw UserNotFoundException("User not found with id=$id")
             } else {
                 userService.deleteUser(id)

@@ -9,7 +9,15 @@ import com.sivalabs.bookmarker.utils.SecurityUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/bookmarks")
@@ -38,7 +46,7 @@ class BookmarkController(
     @GetMapping("/{id}")
     fun getBookmarkById(@PathVariable id: Long): ResponseEntity<BookmarkDTO> {
         return bookmarkService.getBookmarkById(id)?.let { ResponseEntity.ok(it) }
-                ?: ResponseEntity.notFound().build()
+            ?: ResponseEntity.notFound().build()
     }
 
     @PostMapping
@@ -54,7 +62,8 @@ class BookmarkController(
     fun deleteBookmark(@PathVariable id: Long) {
         val bookmark = bookmarkService.getBookmarkById(id)
         if (bookmark == null || (bookmark.createdUserId != SecurityUtils.loginUser()?.id &&
-                        !SecurityUtils.isCurrentUserAdmin())) {
+                    !SecurityUtils.isCurrentUserAdmin())
+        ) {
             throw BookmarkNotFoundException("Bookmark not found with id=$id")
         } else {
             bookmarkService.deleteBookmark(id)

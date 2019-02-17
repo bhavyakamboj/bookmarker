@@ -7,7 +7,7 @@ fun main(args: Array<String>) {
     encryptor.setPassword("dummy")
 
     listOf("secret")
-       .forEach {
-        println("plain text: '$it', encrypted: '${encryptor.encrypt(it)}'")
-    }
+        .forEach {
+            println("plain text: '$it', encrypted: '${encryptor.encrypt(it)}'")
+        }
 }

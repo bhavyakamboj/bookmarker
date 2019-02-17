@@ -33,7 +33,7 @@ class AuthenticationController(
     @PostMapping(value = ["/auth/login"])
     fun createAuthenticationToken(@RequestBody credentials: AuthenticationRequest): AuthenticationResponse {
         val authentication = authenticationManager.authenticate(
-                UsernamePasswordAuthenticationToken(credentials.username, credentials.password)
+            UsernamePasswordAuthenticationToken(credentials.username, credentials.password)
         )
 
         SecurityContextHolder.getContext().authentication = authentication
@@ -66,6 +66,6 @@ class AuthenticationController(
     @PreAuthorize("hasRole('ROLE_USER')")
     fun me(): ResponseEntity<User> {
         return SecurityUtils.loginUser()?.let { ResponseEntity.ok(it) }
-                ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+            ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 }

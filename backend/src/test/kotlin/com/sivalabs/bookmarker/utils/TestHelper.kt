@@ -1,8 +1,8 @@
 package com.sivalabs.bookmarker.utils
 
-import com.sivalabs.bookmarker.users.entity.User
 import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
 import com.sivalabs.bookmarker.bookmarks.entity.Tag
+import com.sivalabs.bookmarker.users.entity.User
 import java.util.Random
 import java.util.UUID
 

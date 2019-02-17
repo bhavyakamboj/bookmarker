@@ -93,7 +93,8 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     fun `should create bookmark`() {
         asAuthenticateUser(user1Credentials)
 
-        val bookmark = TestHelper.buildBookmark(null, "http://sivalabs.in", "SivaLabs Blog", "java", "spring", "newtag", " ")
+        val bookmark =
+            TestHelper.buildBookmark(null, "http://sivalabs.in", "SivaLabs Blog", "java", "spring", "newtag", " ")
         val responseEntity = createBookmark(bookmark.toDTO())
 
         verifyStatusCode(responseEntity, CREATED)

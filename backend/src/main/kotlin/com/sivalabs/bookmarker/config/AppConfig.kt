@@ -6,8 +6,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
-import org.zalando.problem.validation.ConstraintViolationProblemModule
 import org.zalando.problem.ProblemModule
+import org.zalando.problem.validation.ConstraintViolationProblemModule
 
 @Configuration
 internal class AppConfig {

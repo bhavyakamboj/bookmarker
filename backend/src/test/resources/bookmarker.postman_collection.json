@@ -1,364 +1,364 @@
 {
-	"info": {
-		"_postman_id": "442f11e1-cd8c-4408-9ff6-ddfd0f9c2f48",
-		"name": "bookmarker",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "login",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "47706cf1-e63c-47f5-be19-afdca0fb1eeb",
-						"exec": [
-							"var jsonData = JSON.parse(responseBody);",
-							"postman.clearEnvironmentVariable(\"bmAccessToken\");",
-							"postman.setEnvironmentVariable(\"bmAccessToken\", jsonData.access_token);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\": \"admin@gmail.com\",\n\t\"password\": \"admin\"\n}"
-				},
-				"url": {
-					"raw": "{{base_path}}/api/auth/login",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"auth",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get-all-users",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "5b8f062c-425a-4988-9a17-a2cfb094657e",
-						"exec": [
-							"pm.test(\"response is ok\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "{{base_path}}/api/users",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get-user-by-id",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "8d963a3c-7757-4af0-ad65-56980412d5ab",
-						"exec": [
-							"pm.test(\"response is ok\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "{{base_path}}/api/users/1",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"users",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "create-user",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "86fec435-a5ba-43d5-8dcd-02a5545214f6",
-						"exec": [
-							"pm.test(\"response is ok\", function () {",
-							"    pm.response.to.have.status(201);",
-							"    var jsonData = JSON.parse(responseBody);",
-							"    postman.clearEnvironmentVariable(\"user_id\");",
-							"    postman.setEnvironmentVariable(\"user_id\", jsonData.id);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"name-{{$guid}}\",\n    \"email\": \"name-{{$guid}}@gmail.com\",\n    \"githubUsername\": \"ghuser-{{$guid}}\"\n}"
-				},
-				"url": {
-					"raw": "{{base_path}}/api/users",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "update-user",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "74a5758a-467c-4e50-9a94-6d27e5b20e7e",
-						"exec": [
-							"pm.test(\"response is ok\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"name-{{$guid}}\",\n    \"email\": \"name-{{$guid}}@gmail.com\",\n    \"githubUsername\": \"ghuser-{{$guid}}\"\n}"
-				},
-				"url": {
-					"raw": "{{base_path}}/api/users/{{user_id}}",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"users",
-						"{{user_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete-user",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "cb74f0d3-8f4a-4df7-a7c3-d0a7621fd886",
-						"exec": [
-							"pm.test(\"response is ok\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "{{base_path}}/api/users/{{user_id}}",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"users",
-						"{{user_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get-all-bookmarks",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\n}"
-				},
-				"url": {
-					"raw": "{{base_path}}/api/bookmarks",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"bookmarks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "create-bookmark",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer {{bmAccessToken}}"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"url\": \"http://sivalabs.in\",\n\t\"description\": \"SivaLabs blog\"\n}"
-				},
-				"url": {
-					"raw": "{{base_path}}/api/bookmarks",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"bookmarks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete-bookmark",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer {{bmAccessToken}}"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "{{base_path}}/api/bookmarks/1",
-					"host": [
-						"{{base_path}}"
-					],
-					"path": [
-						"api",
-						"bookmarks",
-						"1"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "442f11e1-cd8c-4408-9ff6-ddfd0f9c2f48",
+    "name": "bookmarker",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "47706cf1-e63c-47f5-be19-afdca0fb1eeb",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "postman.clearEnvironmentVariable(\"bmAccessToken\");",
+              "postman.setEnvironmentVariable(\"bmAccessToken\", jsonData.access_token);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\": \"admin@gmail.com\",\n\t\"password\": \"admin\"\n}"
+        },
+        "url": {
+          "raw": "{{base_path}}/api/auth/login",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get-all-users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "5b8f062c-425a-4988-9a17-a2cfb094657e",
+            "exec": [
+              "pm.test(\"response is ok\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_path}}/api/users",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get-user-by-id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "8d963a3c-7757-4af0-ad65-56980412d5ab",
+            "exec": [
+              "pm.test(\"response is ok\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_path}}/api/users/1",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create-user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "86fec435-a5ba-43d5-8dcd-02a5545214f6",
+            "exec": [
+              "pm.test(\"response is ok\", function () {",
+              "    pm.response.to.have.status(201);",
+              "    var jsonData = JSON.parse(responseBody);",
+              "    postman.clearEnvironmentVariable(\"user_id\");",
+              "    postman.setEnvironmentVariable(\"user_id\", jsonData.id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"name-{{$guid}}\",\n    \"email\": \"name-{{$guid}}@gmail.com\",\n    \"githubUsername\": \"ghuser-{{$guid}}\"\n}"
+        },
+        "url": {
+          "raw": "{{base_path}}/api/users",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update-user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "74a5758a-467c-4e50-9a94-6d27e5b20e7e",
+            "exec": [
+              "pm.test(\"response is ok\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"name-{{$guid}}\",\n    \"email\": \"name-{{$guid}}@gmail.com\",\n    \"githubUsername\": \"ghuser-{{$guid}}\"\n}"
+        },
+        "url": {
+          "raw": "{{base_path}}/api/users/{{user_id}}",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete-user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "cb74f0d3-8f4a-4df7-a7c3-d0a7621fd886",
+            "exec": [
+              "pm.test(\"response is ok\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_path}}/api/users/{{user_id}}",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get-all-bookmarks",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\n}"
+        },
+        "url": {
+          "raw": "{{base_path}}/api/bookmarks",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "bookmarks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create-bookmark",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bmAccessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"url\": \"http://sivalabs.in\",\n\t\"description\": \"SivaLabs blog\"\n}"
+        },
+        "url": {
+          "raw": "{{base_path}}/api/bookmarks",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "bookmarks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete-bookmark",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bmAccessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_path}}/api/bookmarks/1",
+          "host": [
+            "{{base_path}}"
+          ],
+          "path": [
+            "api",
+            "bookmarks",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
 }

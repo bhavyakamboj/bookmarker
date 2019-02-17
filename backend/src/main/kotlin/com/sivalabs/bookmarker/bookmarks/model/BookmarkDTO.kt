@@ -20,14 +20,14 @@ data class BookmarkDTO(
 ) {
     companion object {
         fun fromEntity(bm: Bookmark) = BookmarkDTO(
-                bm.id,
-                bm.url,
-                bm.title,
-                bm.createdBy.id,
-                bm.createdBy.name,
-                bm.createdAt,
-                bm.updatedAt,
-                bm.tags.map { it.name }
+            bm.id,
+            bm.url,
+            bm.title,
+            bm.createdBy.id,
+            bm.createdBy.name,
+            bm.createdAt,
+            bm.updatedAt,
+            bm.tags.map { it.name }
         )
     }
 }

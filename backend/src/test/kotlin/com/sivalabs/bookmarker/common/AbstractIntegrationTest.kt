@@ -7,7 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.context.ApplicationContextInitializer
+import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -15,9 +18,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.boot.test.util.TestPropertyValues
-import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.context.ApplicationContextInitializer
 import org.testcontainers.containers.PostgreSQLContainer
 
 @ActiveProfiles("test")
@@ -43,6 +43,7 @@ abstract class AbstractIntegrationTest {
     init {
         postgresContainer.start()
     }
+
     protected fun asAuthenticateUser(credentials: Pair<String, String>) {
         httpHeaders = getAuthHeaders(credentials.first, credentials.second)
     }
@@ -71,11 +72,11 @@ abstract class AbstractIntegrationTest {
 
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
             TestPropertyValues.of(
-                    "spring.datasource.url=" + postgresContainer.getJdbcUrl(),
-                    "spring.datasource.username=" + postgresContainer.getUsername(),
-                    "spring.datasource.password=" + postgresContainer.getPassword()
-                    )
-                    .applyTo(configurableApplicationContext.environment)
+                "spring.datasource.url=" + postgresContainer.getJdbcUrl(),
+                "spring.datasource.username=" + postgresContainer.getUsername(),
+                "spring.datasource.password=" + postgresContainer.getPassword()
+            )
+                .applyTo(configurableApplicationContext.environment)
         }
     }
 }

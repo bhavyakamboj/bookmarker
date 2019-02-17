@@ -16,7 +16,10 @@ class GlobalExceptionHandler : /*ResponseEntityExceptionHandler(),*/ ProblemHand
     private val log = logger()
 
     @ExceptionHandler(value = [ResourceNotFoundException::class])
-    fun handleResourceNotFoundException(exception: ResourceNotFoundException, request: NativeWebRequest): ResponseEntity<Problem> {
+    fun handleResourceNotFoundException(
+        exception: ResourceNotFoundException,
+        request: NativeWebRequest
+    ): ResponseEntity<Problem> {
         log.error(exception.localizedMessage, exception)
         return create(Status.NOT_FOUND, exception, request)
     }

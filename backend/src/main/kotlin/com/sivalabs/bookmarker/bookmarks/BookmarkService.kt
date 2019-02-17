@@ -55,8 +55,8 @@ class BookmarkService(
     fun getBookmarkById(id: Long): BookmarkDTO? {
         log.debug("process=get_bookmark_by_id, id=$id")
         return bookmarkRepository.findById(id)
-                .map { it.toDTO() }
-                .orElse(null)
+            .map { it.toDTO() }
+            .orElse(null)
     }
 
     fun createBookmark(bookmark: BookmarkDTO): BookmarkDTO {
@@ -78,10 +78,10 @@ class BookmarkService(
 
     private fun buildBookmarksResult(page: Page<Bookmark>): BookmarksResultDTO {
         return BookmarksResultDTO(
-                content = page.content.map { it.toDTO() },
-                currentPage = page.number + 1,
-                totalElements = page.totalElements,
-                totalPages = page.totalPages
+            content = page.content.map { it.toDTO() },
+            currentPage = page.number + 1,
+            totalElements = page.totalElements,
+            totalPages = page.totalPages
         )
     }
 

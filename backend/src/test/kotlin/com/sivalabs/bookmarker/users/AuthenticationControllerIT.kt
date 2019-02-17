@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
-import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.FORBIDDEN
+import org.springframework.http.HttpStatus.OK
 
 class AuthenticationControllerIT : AbstractIntegrationTest() {
 
@@ -53,7 +53,7 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
     fun `should refresh auth token`() {
         val request = HttpEntity<String>(getAuthHeaders())
         val responseEntity = restTemplate
-                .exchange("/api/auth/refresh", POST, request, AuthenticationResponse::class.java)
+            .exchange("/api/auth/refresh", POST, request, AuthenticationResponse::class.java)
 
         verifyStatusCode(responseEntity, OK)
         val userTokenState = responseEntity.body!!
@@ -65,7 +65,7 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
     fun `should return unauthorized for not logged in user when refresh auth token`() {
         val request = HttpEntity.EMPTY
         val responseEntity =
-                restTemplate.postForEntity("/api/auth/refresh", request, AuthenticationResponse::class.java)
+            restTemplate.postForEntity("/api/auth/refresh", request, AuthenticationResponse::class.java)
         verifyStatusCode(responseEntity, FORBIDDEN)
     }
 }

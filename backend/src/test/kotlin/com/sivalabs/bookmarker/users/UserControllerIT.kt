@@ -1,8 +1,8 @@
 package com.sivalabs.bookmarker.users
 
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
-import com.sivalabs.bookmarker.users.model.UserDTO
 import com.sivalabs.bookmarker.users.entity.User
+import com.sivalabs.bookmarker.users.model.UserDTO
 import com.sivalabs.bookmarker.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod.DELETE
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
-import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.ResponseEntity
 
 class UserControllerIT : AbstractIntegrationTest() {

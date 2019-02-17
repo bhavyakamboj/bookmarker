@@ -56,23 +56,26 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         http
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .exceptionHandling()
-                // .authenticationEntryPoint(restAuthenticationEntryPoint)
-                .authenticationEntryPoint(problemSupport)
-                .accessDeniedHandler(problemSupport)
-                .and()
+            // .authenticationEntryPoint(restAuthenticationEntryPoint)
+            .authenticationEntryPoint(problemSupport)
+            .accessDeniedHandler(problemSupport)
+            .and()
             .authorizeRequests()
             .antMatchers("/api/auth/**").permitAll()
             // .antMatchers(HttpMethod.POST,"/users").hasAnyRole("USER", "ADMIN")
             // .anyRequest().authenticated()
             .and()
-            .addFilterBefore(TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService), BasicAuthenticationFilter::class.java)
+            .addFilterBefore(
+                TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService),
+                BasicAuthenticationFilter::class.java
+            )
 
         http
             .csrf()
-                // .ignoringAntMatchers("/h2-console/**")//don't apply CSRF protection to /h2-console
-                .disable()
+            // .ignoringAntMatchers("/h2-console/**")//don't apply CSRF protection to /h2-console
+            .disable()
             .headers()
-                .frameOptions().sameOrigin() // allow use of frame to same origin urls
+            .frameOptions().sameOrigin() // allow use of frame to same origin urls
     }
 
     override fun configure(web: WebSecurity) {
