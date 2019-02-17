@@ -1,9 +1,10 @@
 package com.sivalabs.bookmarker.users
 
 import com.sivalabs.bookmarker.config.Loggable
+import com.sivalabs.bookmarker.exception.BadRequestException
 import com.sivalabs.bookmarker.exception.UserNotFoundException
-import com.sivalabs.bookmarker.users.entity.User
 import com.sivalabs.bookmarker.users.model.ChangePassword
+import com.sivalabs.bookmarker.users.model.CreateUserRequest
 import com.sivalabs.bookmarker.users.model.UserDTO
 import com.sivalabs.bookmarker.utils.SecurityUtils
 import com.sivalabs.bookmarker.utils.logger
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/users")
@@ -40,17 +42,27 @@ class UserController(
 
     @PostMapping("")
     @ResponseStatus(CREATED)
-    fun createUser(@RequestBody user: User): UserDTO {
-        log.info("process=create_user, user_email=${user.email}")
-        return userService.createUser(user)
+    fun createUser(@RequestBody @Valid createUserRequest: CreateUserRequest): UserDTO {
+        log.info("process=create_user, user_email=${createUserRequest.email}")
+        val userDTO = UserDTO(
+            id = 0L,
+            name = createUserRequest.name,
+            email = createUserRequest.email,
+            password = createUserRequest.password,
+            roles = listOf())
+        return userService.createUser(userDTO)
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/{id}")
-    fun updateUser(@PathVariable id: Long, @RequestBody user: User): UserDTO {
+    fun updateUser(@PathVariable id: Long, @RequestBody @Valid user: UserDTO): UserDTO {
         log.info("process=update_user, user_id=$id")
-        user.id = id
-        return userService.updateUser(user)
+        if (id != SecurityUtils.loginUser()?.id && !SecurityUtils.isCurrentUserAdmin()) {
+            throw BadRequestException("You can't mess with other user details")
+        } else {
+            user.id = id
+            return userService.updateUser(user)
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -71,7 +83,7 @@ class UserController(
 
     @PostMapping("/change-password")
     @PreAuthorize("hasRole('ROLE_USER')")
-    fun changePassword(@RequestBody changePassword: ChangePassword) {
+    fun changePassword(@RequestBody @Valid changePassword: ChangePassword) {
         val currentUser = SecurityContextHolder.getContext().authentication
         val email = currentUser.name
         log.info("process=change_password, email=$email")

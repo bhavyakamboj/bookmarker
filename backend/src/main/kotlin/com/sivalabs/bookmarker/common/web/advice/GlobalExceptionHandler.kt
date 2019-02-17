@@ -12,7 +12,7 @@ import org.zalando.problem.Status
 import org.zalando.problem.spring.web.advice.ProblemHandling
 
 @RestControllerAdvice
-class GlobalExceptionHandler : /*ResponseEntityExceptionHandler(),*/ ProblemHandling {
+class GlobalExceptionHandler : ProblemHandling {
     private val log = logger()
 
     @ExceptionHandler(value = [ResourceNotFoundException::class])

@@ -16,6 +16,7 @@ import java.util.Optional
 @Loggable
 class UserService(
     private val userRepository: UserRepository,
+    private val roleRepository: RoleRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
 
@@ -29,18 +30,22 @@ class UserService(
         return userRepository.findByEmail(email)
     }
 
-    fun createUser(user: User): UserDTO {
+    fun createUser(user: UserDTO): UserDTO {
         if (userRepository.existsByEmail(user.email)) {
             throw BookmarkerException("Email ${user.email} is already in use")
         }
         user.password = passwordEncoder.encode(user.password)
-        return UserDTO.fromEntity(userRepository.save(user))
+        val userEntity = user.toEntity()
+        roleRepository.findByName("ROLE_USER").map { userEntity.roles = mutableListOf(it) }
+        return UserDTO.fromEntity(userRepository.save(userEntity))
     }
 
-    fun updateUser(user: User): UserDTO {
+    fun updateUser(user: UserDTO): UserDTO {
         return userRepository.findById(user.id).map {
-            user.password = it.password
-            UserDTO.fromEntity(userRepository.save(user))
+            val userEntity = user.toEntity()
+            userEntity.password = it.password
+            userEntity.roles = it.roles
+            UserDTO.fromEntity(userRepository.save(userEntity))
         }.orElseThrow { UserNotFoundException("User not found") }
     }
 
@@ -52,7 +57,7 @@ class UserService(
         this.getUserByEmail(email).map { user ->
             if (passwordEncoder.matches(changePassword.oldPassword, user.password)) {
                 user.password = passwordEncoder.encode(changePassword.newPassword)
-                updateUser(user)
+                userRepository.save(user)
             } else {
                 throw BookmarkerException("Current password doesn't match")
             }

@@ -1,7 +1,8 @@
 package com.sivalabs.bookmarker.users
 
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
-import com.sivalabs.bookmarker.users.entity.User
+import com.sivalabs.bookmarker.users.model.ChangePassword
+import com.sivalabs.bookmarker.users.model.CreateUserRequest
 import com.sivalabs.bookmarker.users.model.UserDTO
 import com.sivalabs.bookmarker.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
@@ -11,16 +12,18 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod.DELETE
+import org.springframework.http.HttpMethod.PUT
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
+import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.ResponseEntity
 
 class UserControllerIT : AbstractIntegrationTest() {
 
     @Autowired
-    lateinit var userRepository: UserRepository
+    lateinit var userService: UserService
 
     @BeforeEach
     fun setUp() {
@@ -42,7 +45,7 @@ class UserControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should create user`() {
-        val newUser = TestHelper.buildUser()
+        val newUser = UserDTO.fromEntity(TestHelper.buildUser())
         val responseEntity = createUser(newUser)
 
         verifyStatusCode(responseEntity, CREATED)
@@ -51,9 +54,12 @@ class UserControllerIT : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `should update user`() {
+    fun `authenticated user should be able to update their details`() {
         val updateUser = createUser()
+        val credentials = Pair(updateUser.email, TestHelper.DEFAULT_PASSWORD)
+        asAuthenticateUser(credentials)
 
+        updateUser.name = "my new name"
         updateUser(updateUser)
 
         val responseEntity = getUserById(updateUser.id)
@@ -61,6 +67,18 @@ class UserControllerIT : AbstractIntegrationTest() {
         val updatedUser = responseEntity.body!!
         assertThat(updatedUser.id).isEqualTo(updateUser.id)
         assertThat(updatedUser.email).isEqualTo(updateUser.email)
+        assertThat(updatedUser.name).isEqualTo(updateUser.name)
+    }
+
+    @Test
+    fun `admin user should be able to update other user details`() {
+        val updateUser = createUser()
+        asAuthenticateUser(adminCredentials)
+
+        updateUser.name = "my new name"
+        val responseEntity = updateUser(updateUser)
+
+        verifyStatusCode(responseEntity, OK)
     }
 
     @Test
@@ -97,18 +115,49 @@ class UserControllerIT : AbstractIntegrationTest() {
         verifyStatusCode(responseEntity, NOT_FOUND)
     }
 
+    @Test
+    fun `authenticated user should be able to change password`() {
+        val newUser = createUser()
+        val credentials = Pair(newUser.email, TestHelper.DEFAULT_PASSWORD)
+        asAuthenticateUser(credentials)
+
+        val changePassword = ChangePassword(credentials.second, credentials.second + "-new")
+        val response = changePassword(changePassword)
+        verifyStatusCode(response, OK)
+
+        val authResponse = authenticate(credentials.first, credentials.second)
+        verifyStatusCode(authResponse, UNAUTHORIZED)
+    }
+
+    @Test
+    fun `unauthenticated user should not be able to change password`() {
+        val changePassword = ChangePassword(user1Credentials.second, user1Credentials.second + "-new")
+        val response = changePassword(changePassword)
+        verifyStatusCode(response, FORBIDDEN)
+    }
+
+    private fun changePassword(changePassword: ChangePassword): ResponseEntity<Void> {
+        val request = HttpEntity(changePassword, httpHeaders)
+        return restTemplate.postForEntity("/api/users/change-password", request, Void::class.java)
+    }
+
     private fun getUserById(id: Long): ResponseEntity<UserDTO> {
         return restTemplate.getForEntity("/api/users/$id", UserDTO::class.java)
     }
 
-    private fun createUser(user: User): ResponseEntity<UserDTO> {
-        val request = HttpEntity(user)
+    private fun createUser(user: UserDTO): ResponseEntity<UserDTO> {
+        val createUserRequest = CreateUserRequest(
+            name = user.name,
+            email = user.email,
+            password = user.password ?: ""
+        )
+        val request = HttpEntity(createUserRequest)
         return restTemplate.postForEntity("/api/users", request, UserDTO::class.java)
     }
 
-    private fun updateUser(user: User) {
-        val request = HttpEntity(user)
-        restTemplate.put("/api/users/${user.id}", request, UserDTO::class.java)
+    private fun updateUser(user: UserDTO): ResponseEntity<UserDTO> {
+        val request = HttpEntity(user, httpHeaders)
+        return restTemplate.exchange("/api/users/${user.id}", PUT, request, UserDTO::class.java)
     }
 
     private fun deleteUserById(id: Long): ResponseEntity<Void> {
@@ -116,7 +165,8 @@ class UserControllerIT : AbstractIntegrationTest() {
         return restTemplate.exchange("/api/users/$id", DELETE, request, Void::class.java)
     }
 
-    private fun createUser(): User {
-        return userRepository.save(TestHelper.buildUser())
+    private fun createUser(): UserDTO {
+        val user = TestHelper.buildUser()
+        return userService.createUser(UserDTO.fromEntity(user))
     }
 }

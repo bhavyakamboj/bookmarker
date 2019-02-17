@@ -7,6 +7,7 @@ import java.util.Random
 import java.util.UUID
 
 object TestHelper {
+    const val DEFAULT_PASSWORD = "secret"
 
     fun buildUser(withUserId: Boolean = false): User {
         val userId = if (withUserId) Random().nextLong() else 0
@@ -15,7 +16,7 @@ object TestHelper {
         user.id = userId
         user.name = "name-$uuid"
         user.email = "someone-$uuid@gmail.com"
-        user.password = "pwd-$uuid"
+        user.password = DEFAULT_PASSWORD
         return user
     }
 

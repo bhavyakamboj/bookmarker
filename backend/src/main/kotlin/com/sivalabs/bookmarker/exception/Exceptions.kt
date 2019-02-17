@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus
 
 open class BookmarkerException(message: String) : RuntimeException(message)
 
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+class BadRequestException(message: String) : BookmarkerException(message)
+
 @ResponseStatus(HttpStatus.NOT_FOUND)
 open class ResourceNotFoundException(message: String) : RuntimeException(message)
 

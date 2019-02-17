@@ -1,5 +1,6 @@
 package com.sivalabs.bookmarker.config
 
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.micrometer.core.aop.TimedAspect
 import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.boot.web.client.RestTemplateBuilder
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 import org.zalando.problem.ProblemModule
 import org.zalando.problem.validation.ConstraintViolationProblemModule
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 
 @Configuration
 internal class AppConfig {
@@ -23,12 +25,9 @@ internal class AppConfig {
     }
 
     @Bean
-    fun problemModule(): ProblemModule {
-        return ProblemModule()
-    }
-
-    @Bean
-    fun constraintViolationProblemModule(): ConstraintViolationProblemModule {
-        return ConstraintViolationProblemModule()
+    fun jacksonBuilder(): Jackson2ObjectMapperBuilder {
+        val b = Jackson2ObjectMapperBuilder()
+        b.modulesToInstall(ProblemModule(), ConstraintViolationProblemModule(), KotlinModule())
+        return b
     }
 }

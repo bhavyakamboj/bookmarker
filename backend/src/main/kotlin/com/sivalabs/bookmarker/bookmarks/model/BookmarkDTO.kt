@@ -3,9 +3,11 @@ package com.sivalabs.bookmarker.bookmarks.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
 import java.time.LocalDateTime
+import javax.validation.constraints.NotBlank
 
 data class BookmarkDTO(
     var id: Long = 0,
+    @field:NotBlank(message = "URL cannot be blank")
     var url: String = "",
     var title: String = "",
     @JsonProperty("created_user_id")
