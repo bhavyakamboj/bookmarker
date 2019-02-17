@@ -25,6 +25,15 @@ pipeline {
                     dir(BACKEND_MODULE) {
                         junit 'target/surefire-reports/*.xml'
                         junit 'target/failsafe-reports/*.xml'
+
+                        publishHTML(target:[
+                             allowMissing: true,
+                             alwaysLinkToLastBuild: true,
+                             keepAll: true,
+                             reportDir: 'target/site/jacoco-aggregate',
+                             reportFiles: 'index.html',
+                             reportName: "Jacoco Report"
+                        ])
                     }
                 }
             }
