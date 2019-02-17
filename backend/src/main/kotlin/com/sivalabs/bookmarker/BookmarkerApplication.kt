@@ -4,12 +4,13 @@ import com.sivalabs.bookmarker.config.BookmarkerProperties
 import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 
-@SpringBootApplication
+@SpringBootApplication(exclude = [ErrorMvcAutoConfiguration::class])
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties(value = [BookmarkerProperties::class])
 class BookmarkerApplication {

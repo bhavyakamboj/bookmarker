@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   console.log(error)
-  if (error.response.status === 401) {
+  if (error.response.status === 401 || error.response.status === 403) {
     window.eventBus.$emit('logout')
     router.push('/login')
   } else {

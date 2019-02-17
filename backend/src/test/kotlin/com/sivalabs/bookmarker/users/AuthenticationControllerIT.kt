@@ -11,7 +11,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
 import org.springframework.http.HttpStatus.OK
-import org.springframework.http.HttpStatus.UNAUTHORIZED
+import org.springframework.http.HttpStatus.FORBIDDEN
 
 class AuthenticationControllerIT : AbstractIntegrationTest() {
 
@@ -46,7 +46,7 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
     @Test
     fun `should return unauthorized for not logged in user when get me`() {
         val responseEntity = restTemplate.getForEntity("/api/me", User::class.java)
-        verifyStatusCode(responseEntity, UNAUTHORIZED)
+        verifyStatusCode(responseEntity, FORBIDDEN)
     }
 
     @Test
@@ -66,6 +66,6 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
         val request = HttpEntity.EMPTY
         val responseEntity =
                 restTemplate.postForEntity("/api/auth/refresh", request, AuthenticationResponse::class.java)
-        verifyStatusCode(responseEntity, UNAUTHORIZED)
+        verifyStatusCode(responseEntity, FORBIDDEN)
     }
 }

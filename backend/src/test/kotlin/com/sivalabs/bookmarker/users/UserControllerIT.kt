@@ -14,7 +14,7 @@ import org.springframework.http.HttpMethod.DELETE
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
-import org.springframework.http.HttpStatus.UNAUTHORIZED
+import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.ResponseEntity
 
 class UserControllerIT : AbstractIntegrationTest() {
@@ -69,7 +69,7 @@ class UserControllerIT : AbstractIntegrationTest() {
 
         val responseEntity = deleteUserById(existingUser.id)
 
-        verifyStatusCode(responseEntity, UNAUTHORIZED)
+        verifyStatusCode(responseEntity, FORBIDDEN)
     }
 
     @Test
