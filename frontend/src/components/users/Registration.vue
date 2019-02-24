@@ -55,10 +55,10 @@ export default {
         v => /.+@.+/.test(v) || 'E-mail must be valid'
       ],
       passwordRules: [
-        v => !!v || 'Password is required',
+        v => !!v || 'Password is required'
       ],
       nameRules: [
-        v => !!v || 'Name is required',
+        v => !!v || 'Name is required'
       ],
       user: {},
       error: ''

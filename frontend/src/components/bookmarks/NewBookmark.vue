@@ -64,7 +64,7 @@ export default {
     return {
       valid: true,
       urlRules: [
-        v => !!v || 'URL is required',
+        v => !!v || 'URL is required'
       ],
       newBookmark: {},
       message: {
@@ -102,7 +102,6 @@ export default {
           }
         })
       }
-
     },
     removeSelectedTag (item) {
       this.newBookmark.tags.splice(this.newBookmark.tags.indexOf(item), 1)

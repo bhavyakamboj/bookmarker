@@ -2,32 +2,57 @@
 
 Bookmarker is a simple bookmarking application developed using Kotlin, SpringBoot, VueJS.
 
-[![Build Status](https://travis-ci.org/sivaprasadreddy/bookmarker.svg?branch=master)](https://travis-ci.org/sivaprasadreddy/bookmarker)
+## Motivation
+The motivation behind building this simple application is try out stuff before using in production apps.
+There are plenty of new tools, libraries and frameworks coming in everyday. 
+I personally don't like using new tools without playing around with them for a while 
+because "Everything just works great in HELLO WORLD apps" but is hard to use in real projects.
 
+Also, occasionally we want to quickly try out something to see if it is working or not.
+Trying them in our real application might not be easy because of various reasons.
+So, in those situations having a simple but not as simple as Hello World app comes handy.
+Hence this **Bookmarker** application :-)
+
+
+[![Build Status](https://travis-ci.org/sivaprasadreddy/bookmarker.svg?branch=master)](https://travis-ci.org/sivaprasadreddy/bookmarker)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.sivalabs%3Abookmarker&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.sivalabs%3Abookmarker)
 
 ## Backend Tech Stack
 * Java8 / Kotlin
-* SpringBoot
+* SpringBoot 2.x
 * H2(Dev) / Postgres (Prod)
 * Spring Data JPA
 * Spring Security JWT Authentication
+* Jasypt
+* Swagger2
+* Rest-assured
+* Zalando problem-spring-web
+* Flyway
+* SonarQube
+* Jacoco
 * Maven
+* JUnit 5, Mockito, Testcontainers
+* ktlint, detekt
 
 ## Frontend Tech Stack
-* VueJS 2.5
+* VueJS 2.x
 * Vuex, Vue-router
-* Bootstrap 4
+* Vuetify
+* Vuelidate
+* Axios
+* Font-awesome
 
-## Run tests
+## How to run?
 
-`> ./mvnw clean verify`
+### Run Backend tests
 
-## Run application locally
+`bookmarker/backend> ./mvnw clean verify`
 
-`> ./mvnw clean package & java -jar backend/target/bookmarker-0.0.1.jar`
+### Run application locally
 
-## Running using Docker
+`bookmarker> ./mvnw clean package & java -jar backend/target/bookmarker-0.0.1.jar`
+
+### Running using Docker
 
 To start application and Postgres
 
@@ -54,20 +79,42 @@ To start application and all dependent services like ELK, grafana, prometheus
 > ./mvnw clean verify -P sonar -Dsonar.login=$SONAR_LOGIN_TOKEN
 ```
 
+## Screenshots
+
+##### Home Page
+![Home](docs/images/home.png)
+
+##### Login Page
+![Home](docs/images/login.png)
+
+##### Registration Page
+![Home](docs/images/register.png)
+
+##### User Home Page
+![Home](docs/images/user_home.png)
+
+##### Add Bookmark Page
+![Home](docs/images/add_bookmark.png)
+
+##### User Profile Page
+![Home](docs/images/user_profile.png)
+
 ## TODO
 
 * User forgot password, reset password
 * Bookmark like feature
 * Weekly Email NewsLetter
-* Improve Test coverage and ~~readability of tests~~
-* Use Vuetify for UI
+* Improve Test coverage
 * Refactor Gatling tests to simulate typical user behaviour
 * Script to automatically create Grafana dashboard
 * Add gradle based build
+* Use Mockk instead of Mockito
+* ~~Use Vuetify for UI~~
 
 
 ## Contributing
-If you want to contribute to add new feature or improve existing code quality please raise issues and ofcourse, Pull Requests are welcome.
+If you want to contribute to add new feature or improve existing code quality 
+please raise issues and ofcourse, Pull Requests are welcome.
 
 ## References
 

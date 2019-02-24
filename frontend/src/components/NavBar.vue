@@ -50,8 +50,6 @@
       </v-list>
     </v-menu>
 
-
-
   </v-toolbar>
   </div>
 </template>
