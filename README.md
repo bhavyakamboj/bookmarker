@@ -6,7 +6,7 @@ Bookmarker is a simple bookmarking application developed using Kotlin, SpringBoo
 The motivation behind building this simple application is try out stuff before using in production apps.
 There are plenty of new tools, libraries and frameworks coming in everyday. 
 I personally don't like using new tools without playing around with them for a while 
-because "Everything just works great in HELLO WORLD apps" but is hard to use in real projects.
+because "Everything just works great in HELLO WORLD apps" :wink: but is hard to use in real projects.
 
 Also, occasionally we want to quickly try out something to see if it is working or not.
 Trying them in our real application might not be easy because of various reasons.
@@ -109,7 +109,8 @@ To start application and all dependent services like ELK, grafana, prometheus
 * Script to automatically create Grafana dashboard
 * Add gradle based build
 * Use Mockk instead of Mockito
-* ~~Use Vuetify for UI~~
+* Deploy on Heroku
+* ~~Use Vuetify for UI~~ :white_check_mark:
 
 
 ## Contributing
