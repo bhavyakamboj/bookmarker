@@ -36,11 +36,12 @@ class UserControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should get user by id`() {
-        val responseEntity = getUserById(adminUserId)
+        val user = createUser()
+        val responseEntity = getUserById(user.id)
 
         verifyStatusCode(responseEntity, OK)
-        val user = responseEntity.body
-        assertThat(user).isNotNull
+        val userResult = responseEntity.body
+        assertThat(userResult).isNotNull
     }
 
     @Test

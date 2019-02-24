@@ -65,7 +65,7 @@ const actions = {
 
   async login ({ commit, state }, credentials) {
     let response = await axios.post('auth/login', credentials)
-    if (response.status === 200) {
+    if (response && response.status === 200) {
       commit('setAuth', response.data)
     }
   },

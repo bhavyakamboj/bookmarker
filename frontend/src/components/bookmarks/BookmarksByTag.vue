@@ -1,17 +1,22 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-8">
-        <h4>
-          Bookmarks tagged: [{{selectedTag.name}}]
-        </h4>
+  <v-container grid-list-md>
+    <v-layout row wrap>
+      <v-flex xs9>
+        <v-alert
+          :value="true"
+          color="info"
+          icon="info"
+          outline
+        >
+          Bookmarks tagged: <code>{{selectedTag.name}}</code>
+        </v-alert>
         <bookmarks-list v-bind:bookmarks="selectedTag.bookmarks"></bookmarks-list>
-      </div>
-      <div class="col-4">
+      </v-flex>
+      <v-flex xs3>
         <tag-cloud v-bind:tags="tags"></tag-cloud>
-      </div>
-    </div>
-  </div>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'

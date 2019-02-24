@@ -1,31 +1,38 @@
 <template>
-  <div class="row justify-content-center">
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-header text-center">
-          <h3>Login Form</h3>
-        </div>
-        <div class="card-body">
-          <form @submit.prevent="doLogin">
-            <div v-if="error" class="alert alert-danger">
-              {{ error }}
-            </div>
-            <div class="form-group">
-              <label for="email"><strong>Email<span style="color: red">*</span></strong></label>
-              <input type="email" class="form-control" id="email" placeholder="Enter email" v-model="credentials.username">
-            </div>
-            <div class="form-group">
-              <label for="password"><strong>Password<span style="color: red">*</span></strong></label>
-              <input type="password" class="form-control" id="password" placeholder="Password" v-model="credentials.password">
-            </div>
+  <v-content>
+    <v-container fluid fill-height>
+      <v-layout align-center justify-center>
+        <v-flex xs12 sm8 md4>
+          <v-form ref="form"
+                  v-model="valid"
+                  lazy-validation
+                  @submit.prevent="doLogin">
+          <v-card class="elevation-12">
+            <v-toolbar dark color="primary">
+              <v-toolbar-title>Login form</v-toolbar-title>
+            </v-toolbar>
+            <v-card-text>
+                  <v-alert v-if="error" :value="true" type="error">
+                    Invalid credentials. Please try again
+                  </v-alert>
+                <v-text-field prepend-icon="email" name="login" label="Email" type="text"
+                              :rules="emailRules"
+                              v-model="credentials.username"></v-text-field>
+                <v-text-field id="password" prepend-icon="lock" name="password" label="Password"
+                              :rules="passwordRules"
+                              type="password" v-model="credentials.password"></v-text-field>
 
-            <button type="submit" class="btn btn-primary">Login</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn type="submit" color="primary">Login</v-btn>
+            </v-card-actions>
+          </v-card>
+          </v-form>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-content>
 </template>
 
 <script>
@@ -34,6 +41,14 @@ export default {
   name: 'Login',
   data () {
     return {
+      valid: true,
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required',
+      ],
       credentials: {},
       error: ''
     }
@@ -41,16 +56,18 @@ export default {
   methods: {
     ...mapActions([ 'login', 'fetchCurrentUser' ]),
     doLogin () {
-      this.login(this.credentials).then(response => {
-        console.log('Login successful')
-        this.fetchCurrentUser().then(resp => {
-          window.eventBus.$emit('loggedin')
-          this.$router.push('/bookmarks')
+      if (this.$refs.form.validate()) {
+        this.login(this.credentials).then(response => {
+          console.log('Login successful')
+          this.fetchCurrentUser().then(resp => {
+            window.eventBus.$emit('loggedin')
+            this.$router.push('/bookmarks')
+          })
+        }, error => {
+          console.error('Login failed', error)
+          this.error = 'Login failed'
         })
-      }, error => {
-        console.error('Login failed', error)
-        this.error = 'Login failed'
-      })
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 package com.sivalabs.bookmarker.config
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.micrometer.core.aop.TimedAspect
 import io.micrometer.core.instrument.MeterRegistry
@@ -27,7 +28,7 @@ internal class AppConfig {
     @Bean
     fun jacksonBuilder(): Jackson2ObjectMapperBuilder {
         val b = Jackson2ObjectMapperBuilder()
-        b.modulesToInstall(ProblemModule(), ConstraintViolationProblemModule(), KotlinModule())
+        b.modulesToInstall(ProblemModule(), JavaTimeModule(), ConstraintViolationProblemModule(), KotlinModule())
         return b
     }
 }

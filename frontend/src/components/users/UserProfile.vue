@@ -1,31 +1,33 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-8">
-        <form>
-          <div class="form-group row">
-            <label for="name" class="col-sm-2 col-form-label">Name</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="name" v-bind:value="userProfile.name" readonly>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="email" class="col-sm-2 col-form-label">Email</label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control" id="email" placeholder="Email" v-bind:value="userProfile.email" readonly>
-            </div>
-          </div>
-        </form>
+  <v-form>
+    <v-container>
+      <v-layout row wrap>
+        <v-flex xs12 sm6>
+          <v-text-field
+            v-bind:value="userProfile.name"
+            label="Name"
+            readonly
+          ></v-text-field>
+        </v-flex>
+
+        <v-flex xs12 sm6>
+          <v-text-field
+            v-bind:value="userProfile.email"
+            label="Email"
+            readonly
+          ></v-text-field>
+        </v-flex>
+
         <div>
-          <h4>
+          <h4 class="headline">
             Bookmarks Created By: {{userProfile.name}}
           </h4>
           <bookmarks-list v-bind:bookmarks="userBookmarks"></bookmarks-list>
         </div>
-      </div>
+      </v-layout>
+    </v-container>
+  </v-form>
 
-    </div>
-  </div>
 </template>
 <script>
 import { mapActions } from 'vuex'

@@ -1,43 +1,59 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <router-link class="navbar-brand" to="/bookmarks">BookMarker</router-link>
-      <button class="navbar-toggler" type="button" data-toggle="collapse"
-              data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <!--
-          <li class="nav-item">
-            <router-link class="nav-link" to="/">Home</router-link>
-          </li>
-          -->
-        </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item" v-if="isUserLoggedIn">
-            <router-link class="nav-link" to="/new-bookmark">Add Bookmark</router-link>
-          </li>
-          <li class="nav-item" v-if="!isUserLoggedIn">
-            <router-link class="nav-link" to="/login">Login</router-link>
-          </li>
-          <li class="nav-item" v-if="!isUserLoggedIn">
-            <router-link class="nav-link" to="/registration">Register</router-link>
-          </li>
-          <li class="nav-item dropdown" v-if="isUserLoggedIn">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{loginUser.name}}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <router-link class="dropdown-item"
-                           :to="{name: 'UserProfile', params: {id: loginUser.id}}">My Profile</router-link>
-              <a class="dropdown-item" href="#" @click.prevent="doLogout">Logout</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <div>
+  <v-toolbar dark color="primary" >
+    <v-toolbar-title class="white--text">
+      <router-link to="/" class="toolbar-title white--text">BookMarker</router-link>
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-toolbar-items class="hidden-sm-and-down">
+      <v-btn flat to="/login" v-if="!isUserLoggedIn">Login</v-btn>
+      <v-btn flat to="/registration" v-if="!isUserLoggedIn">Register</v-btn>
+      <v-btn flat to="/new-bookmark" v-if="isUserLoggedIn">Add Bookmark</v-btn>
+      <v-menu offset-y v-if="isUserLoggedIn">
+        <v-btn
+          slot="activator"
+          color="normal"
+          dark
+          flat
+        >
+          {{loginUser.name}}
+        </v-btn>
+
+        <v-list>
+          <v-list-tile :to="{name: 'UserProfile', params: {id: loginUser.id}}">
+            <v-list-tile-title >My Profile</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click.prevent="doLogout">
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile>
+
+        </v-list>
+      </v-menu>
+    </v-toolbar-items>
+
+    <v-menu class="hidden-md-and-up">
+      <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
+      <v-list>
+        <v-list-tile v-if="!isUserLoggedIn" :to="{path: '/login'}">
+          <v-list-tile-title >Login</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile v-if="!isUserLoggedIn" :to="{path: '/registration'}">
+          <v-list-tile-title >Register</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile v-if="isUserLoggedIn" :to="{name: 'UserProfile', params: {id: loginUser.id}}">
+          <v-list-tile-title >My Profile</v-list-tile-title>
+        </v-list-tile>
+
+        <v-list-tile v-if="isUserLoggedIn" @click.prevent="doLogout">
+          <v-list-tile-title>Logout</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-menu>
+
+
+
+  </v-toolbar>
+  </div>
 </template>
 
 <script>
@@ -87,3 +103,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+  #drawer{
+    background: rgba(240, 240, 240, 1);
+
+  }
+</style>

@@ -1,15 +1,15 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-8">
+  <v-container grid-list-md>
+    <v-layout row wrap>
+      <v-flex xs9>
         <bookmarks-list v-bind:bookmarks="bookmarks"></bookmarks-list>
-      </div>
-      <div class="col-4">
-          <tag-cloud v-bind:tags="tags"></tag-cloud>
-      </div>
-    </div>
+      </v-flex>
+      <v-flex xs3>
+        <tag-cloud v-bind:tags="tags"></tag-cloud>
+      </v-flex>
 
-  </div>
+    </v-layout>
+  </v-container>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'

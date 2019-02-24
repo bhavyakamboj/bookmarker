@@ -1,11 +1,12 @@
 <template>
-  <div class="container">
-    <span v-for="tag in tags" :key="tag.id">
-      <router-link class="badge badge-primary"
-                   :to="{name: 'BookmarksByTag', params: {tag: tag.name}}"
-      >{{tag.name}}</router-link>&nbsp;
-    </span>
-  </div>
+  <v-container>
+    <div v-for="tag in tags" :key="tag.name">
+      <v-btn small color="error"
+             :to="{name: 'BookmarksByTag', params: {tag: tag.name}}">
+        <i class="fa fa-tags" aria-hidden="true"></i>{{'&nbsp;'+ tag.name}}
+      </v-btn>
+    </div>
+  </v-container>
 </template>
 <script>
 export default {

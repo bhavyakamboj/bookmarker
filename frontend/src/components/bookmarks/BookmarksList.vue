@@ -1,28 +1,26 @@
 <template>
   <div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item" v-for="bookmark in bookmarks.content" :key="bookmark.id">
-        <h5><a v-bind:href="bookmark.url" target="_blank">{{bookmark.title}}</a></h5>
-        <div>
-          <span v-for="tag in bookmark.tags" :key="tag">
-            <router-link class="badge badge-primary"
-                         :to="{name: 'BookmarksByTag', params: {tag: tag}}"
-            >{{tag}}</router-link>&nbsp;
-          </span>
-
+    <v-card v-for="bookmark in bookmarks.content" :key="bookmark.id">
+      <v-card-text>
+        <h3 class="title">
+          <a style="text-decoration: none" v-bind:href="bookmark.url" target="_blank">{{bookmark.title}}</a>
+        </h3>
+        <div class="text-sm-left caption">
+          Posted on <strong>{{bookmark.created_at | dt_format}}</strong> By
+          <router-link
+            :to="{name: 'UserProfile', params: {id: bookmark.created_user_id}}">
+            {{bookmark.created_user_name }}
+          </router-link>
         </div>
         <div>
-          <span>Posted on <strong>{{bookmark.created_at | dt_format}}</strong></span>
-          <span> By <strong>
-            <router-link
-                         :to="{name: 'UserProfile', params: {id: bookmark.created_user_id}}">
-              {{bookmark.created_user_name }}
-            </router-link>
-          </strong>
-          </span>
+          <v-btn v-for="tag in bookmark.tags" :key="tag"
+                 small color="error"
+                 :to="{name: 'BookmarksByTag', params: {tag: tag}}">
+            <i class="fa fa-tags" aria-hidden="true"></i>{{'&nbsp;'+ tag}}
+          </v-btn>
         </div>
-      </li>
-    </ul>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 <script>
