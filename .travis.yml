@@ -8,6 +8,7 @@ services:
 env:
   global:
   - secure: "R9W2ZrMnhXIv5s74t4PRS3WzVhue3JV7gLjWLNAVyuNpZO/OGgdCj8ZbdXEuTD60qwULkhiUnu4SkpdLCQonghQDz8OJK02RU8D7TjOaNiMIfYMEPznM2xsDt5qrJ8J0xNuVFeG3V+oUbVcAvnBamA7N2KEaDqPCCHFHo59QDB3cLmiLRUKi7L4j3mooZv0h4oQ+KdCuD5oACi6wyWScBHYeuXD2v/AOjRFENc2vw2cD7GMXAXGshuC0c9whJWrrlQVGl+RAa11iCSnUAXxfn9QTvRP2Q99DSo3sgz4wkQzbwsysLqTCTb+reBrT8udeFOY7XPtXfQGdNZdm+GgOg7phZ/ys3DAbFLfpsyF921lPo7vqAeMoCZGO1o9v1J/lj49LGvAJ8hlHxJlsFcQz+cXih+Dvx5AT4irXs9CI8GGIdD6TXBMdtatSU/bUsd2GwJPRJYRv/66943HDLnbc9w44YTmC+5UPA6CCASiN5sPHGsMdN4ytDs8WO6WoIWq0LrtciHLkPuz9HHDVNB1xdETXOtHGLA+2xCKoj5kfd5vgWQLyFZydCsKskKWi09L+AnAES4ltKaY6UIoqPzNoNf3VuVMafyrZBg39sy/Yx3JwvqPb9oiixVq82AJ4DGDaJfei7EV/8PJG+drv2/ELYMLsouQMV0xHlfN+nywDEjM="
+  - secure: "flEIS64MiG0c1ziJ3heyFTL2jzeoIrPRdphRXewJEQyso19jDwktMvLeaZL49dtbKKm9HPzR+58cDXbXfGgNHPnyZdLjHmi7M1LkzhqWMkFSQk8SWFginXbMEMyqBLtpiy5RXybEB8XxEiSEHytrc+i66c242ebf7ZT+Payvr9Nn0cS1I31G00ZsIN85I+eg5+e+vuy2g5WwwYeFhBDmjsFWVg2itCn/5Nj5sg6ujrEcy/SCDn9OtdHhWkO4KJ4bbnwcFBc8B2Pb8XX/n0zxIyPGCqpUczrHbalbvvcYaYwF9fFt/kHHIOjXRNG40809HqShkS8+GTTS+J9muq0B/GUvX6CkUADZ0kcj6/t27o6s297KGEz/F+WeqOZvty2pD91YUW4JkM6JHHCYm7C9nS6NRJTNaLuTt6coV/gAU3xa63T63hTN72v5ZL39rXAFqD0spm7nzvGzSJJhLOCK7OHsioIaQqPfYEc1/SnUo+tbJKEnkFnToTctMG55L+5wJu9XbW8rRijbewxNGm08tDRE/TZxcbNO2ukSK542hzqBlG5RHEtIpa5aVLXVTNBAtzL5Di9Mo1OMWTJA4crS8upTu2GuPHhknT0MhN8oRVQ6yjW6LcU33G10kLhOJblG4kf1eRwrK6B+3tP6ADxs73ZcG9yEpdsc0Gkp3jB6F6Y="
 
 addons:
   sonarcloud:
@@ -19,4 +20,9 @@ script:
   - ./mvnw clean verify
   - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
 
-
+deploy:
+  provider: heroku
+  api_key: $HEROKU_API_KEY
+  app: sivalabs-bookmarker
+  on:
+    branch: master
