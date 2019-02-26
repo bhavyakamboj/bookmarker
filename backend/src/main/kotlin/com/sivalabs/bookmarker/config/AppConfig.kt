@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 import org.zalando.problem.ProblemModule
 import org.zalando.problem.validation.ConstraintViolationProblemModule
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 
 @Configuration
 internal class AppConfig {
@@ -26,9 +25,23 @@ internal class AppConfig {
     }
 
     @Bean
-    fun jacksonBuilder(): Jackson2ObjectMapperBuilder {
-        val b = Jackson2ObjectMapperBuilder()
-        b.modulesToInstall(ProblemModule(), JavaTimeModule(), ConstraintViolationProblemModule(), KotlinModule())
-        return b
+    fun constraintViolationProblemModule(): ConstraintViolationProblemModule {
+        return ConstraintViolationProblemModule()
     }
+
+    @Bean
+    fun problemModule(): ProblemModule {
+        return ProblemModule()
+    }
+
+    @Bean
+    fun javaTimeModule(): JavaTimeModule {
+        return JavaTimeModule()
+    }
+
+    @Bean
+    fun kotlinModule(): KotlinModule {
+        return KotlinModule()
+    }
+
 }
