@@ -17,6 +17,9 @@ Hence this **Bookmarker** application :-)
 [![Build Status](https://travis-ci.org/sivaprasadreddy/bookmarker.svg?branch=master)](https://travis-ci.org/sivaprasadreddy/bookmarker)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.sivalabs%3Abookmarker&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.sivalabs%3Abookmarker)
 
+#### Live Demo 
+https://sivalabs-bookmarker.herokuapp.com/
+
 ## Backend Tech Stack
 * Java8 / Kotlin
 * SpringBoot 2.x
@@ -108,8 +111,8 @@ To start application and all dependent services like ELK, grafana, prometheus
 * Refactor Gatling tests to simulate typical user behaviour
 * Script to automatically create Grafana dashboard
 * Add gradle based build
-* Use Mockk instead of Mockito
-* Deploy on Heroku
+* ~~Use Mockk instead of Mockito~~ :white_check_mark:
+* ~~Deploy on Heroku~~ :white_check_mark:
 * ~~Use Vuetify for UI~~ :white_check_mark:
 
 

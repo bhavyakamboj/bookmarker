@@ -86,16 +86,15 @@ export default {
     ...mapActions(['fetchTags']),
     addNewBookmark () {
       if (this.$refs.form.validate()) {
-        // this.snackbar = true
         this.$store.dispatch('createBookmark', this.newBookmark).then(response => {
-          console.log('saved bookmark successfully')
+          this.$log.info('saved bookmark successfully')
           this.message = {
             type: 'info',
             text: 'saved bookmark successfully'
           }
           this.$router.push('/')
         }, error => {
-          console.error('Save failed', error)
+          this.$log.error('Save failed', error)
           this.message = {
             type: 'error',
             text: 'Failed to save bookmark. Please try again'

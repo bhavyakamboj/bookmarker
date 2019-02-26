@@ -68,10 +68,10 @@ export default {
     doRegister () {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('register', this.user).then(response => {
-          console.log('Registration successful')
+          this.$log.info('Registration successful')
           this.$router.push('/login')
         }, error => {
-          console.error('Registration failed', error)
+          this.$log.error('Registration failed', error)
           this.error = 'Registration failed'
         })
       }

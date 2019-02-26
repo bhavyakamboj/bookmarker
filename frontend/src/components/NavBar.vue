@@ -71,13 +71,13 @@ export default {
     this.reloadCurrentUser()
     const self = this
     window.eventBus.$on('loggedin', function () {
-      console.log('received loggedin emit event')
+      this.$log.info('received loggedin emit event')
       self.loggedIn = true
       self.reloadCurrentUser()
     })
 
     window.eventBus.$on('logout', function () {
-      console.log('received logout emit event')
+      this.$log.info('received logout emit event')
       self.loggedIn = false
       self.loginUser = {}
       self.$store.dispatch('logout')
@@ -101,9 +101,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-  #drawer{
-    background: rgba(240, 240, 240, 1);
-
-  }
-</style>

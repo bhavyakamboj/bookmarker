@@ -58,13 +58,13 @@ export default {
     doLogin () {
       if (this.$refs.form.validate()) {
         this.login(this.credentials).then(response => {
-          console.log('Login successful')
+          this.$log.debug('Login successful')
           this.fetchCurrentUser().then(resp => {
             window.eventBus.$emit('loggedin')
             this.$router.push('/bookmarks')
           })
         }, error => {
-          console.error('Login failed', error)
+          this.$log.error('Login failed', error)
           this.error = 'Login failed'
         })
       }
