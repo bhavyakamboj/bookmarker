@@ -2,7 +2,7 @@ package com.sivalabs.bookmarker.utils
 
 import org.jasypt.util.text.BasicTextEncryptor
 
-fun main(args: Array<String>) {
+fun main() {
     val encryptor = BasicTextEncryptor()
     encryptor.setPassword("dummy")
 
