@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.common
 
-import com.sivalabs.bookmarker.users.model.AuthenticationRequest
-import com.sivalabs.bookmarker.users.model.AuthenticationResponse
+import com.sivalabs.bookmarker.domain.model.AuthenticationRequest
+import com.sivalabs.bookmarker.domain.model.AuthenticationResponse
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired

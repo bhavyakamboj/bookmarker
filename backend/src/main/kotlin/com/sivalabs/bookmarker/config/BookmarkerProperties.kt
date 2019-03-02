@@ -1,6 +1,6 @@
 package com.sivalabs.bookmarker.config
 
-import com.sivalabs.bookmarker.utils.Constants.DEFAULT_JWT_TOKEN_EXPIRES
+import com.sivalabs.bookmarker.domain.utils.Constants.DEFAULT_JWT_TOKEN_EXPIRES
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "bookmarker")

@@ -43,5 +43,4 @@ internal class AppConfig {
     fun kotlinModule(): KotlinModule {
         return KotlinModule()
     }
-
 }

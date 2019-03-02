@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.config.security
 
-import com.sivalabs.bookmarker.users.UserRepository
-import com.sivalabs.bookmarker.users.model.SecurityUser
+import com.sivalabs.bookmarker.domain.repository.UserRepository
+import com.sivalabs.bookmarker.domain.model.SecurityUser
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException

@@ -1,8 +1,11 @@
 package com.sivalabs.bookmarker.bookmarks
 
-import com.sivalabs.bookmarker.exception.ResourceNotFoundException
-import com.sivalabs.bookmarker.users.UserRepository
-import com.sivalabs.bookmarker.utils.Constants.DEFAULT_PAGE_SIZE
+import com.sivalabs.bookmarker.domain.repository.BookmarkRepository
+import com.sivalabs.bookmarker.domain.repository.TagRepository
+import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException
+import com.sivalabs.bookmarker.domain.repository.UserRepository
+import com.sivalabs.bookmarker.domain.service.BookmarkService
+import com.sivalabs.bookmarker.domain.utils.Constants.DEFAULT_PAGE_SIZE
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -23,7 +26,8 @@ internal class BookmarkServiceTest {
 
     private val userRepository = mockk<UserRepository>()
 
-    private val bookmarkService = BookmarkService(bookmarkRepository, tagRepository, userRepository)
+    private val bookmarkService =
+        BookmarkService(bookmarkRepository, tagRepository, userRepository)
 
     @Test
     internal fun `should get first page of all bookmarks if page number is not specified`() {

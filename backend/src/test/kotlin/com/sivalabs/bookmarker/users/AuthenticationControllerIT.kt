@@ -1,8 +1,8 @@
 package com.sivalabs.bookmarker.users
 
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
-import com.sivalabs.bookmarker.users.entity.User
-import com.sivalabs.bookmarker.users.model.AuthenticationResponse
+import com.sivalabs.bookmarker.domain.entity.User
+import com.sivalabs.bookmarker.domain.model.AuthenticationResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

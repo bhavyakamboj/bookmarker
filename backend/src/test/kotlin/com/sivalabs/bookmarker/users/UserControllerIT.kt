@@ -1,10 +1,11 @@
 package com.sivalabs.bookmarker.users
 
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
-import com.sivalabs.bookmarker.users.model.ChangePassword
-import com.sivalabs.bookmarker.users.model.CreateUserRequest
-import com.sivalabs.bookmarker.users.model.UserDTO
-import com.sivalabs.bookmarker.utils.TestHelper
+import com.sivalabs.bookmarker.domain.model.ChangePassword
+import com.sivalabs.bookmarker.domain.model.CreateUserRequest
+import com.sivalabs.bookmarker.domain.model.UserDTO
+import com.sivalabs.bookmarker.domain.service.UserService
+import com.sivalabs.bookmarker.domain.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -122,7 +123,8 @@ class UserControllerIT : AbstractIntegrationTest() {
         val credentials = Pair(newUser.email, TestHelper.DEFAULT_PASSWORD)
         asAuthenticateUser(credentials)
 
-        val changePassword = ChangePassword(credentials.second, credentials.second + "-new")
+        val changePassword =
+            ChangePassword(credentials.second, credentials.second + "-new")
         val response = changePassword(changePassword)
         verifyStatusCode(response, OK)
 
@@ -132,7 +134,10 @@ class UserControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `unauthenticated user should not be able to change password`() {
-        val changePassword = ChangePassword(user1Credentials.second, user1Credentials.second + "-new")
+        val changePassword = ChangePassword(
+            user1Credentials.second,
+            user1Credentials.second + "-new"
+        )
         val response = changePassword(changePassword)
         verifyStatusCode(response, FORBIDDEN)
     }

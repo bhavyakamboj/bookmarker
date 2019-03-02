@@ -1,13 +1,14 @@
 package com.sivalabs.bookmarker.bookmarks
 
-import com.sivalabs.bookmarker.bookmarks.entity.Bookmark
-import com.sivalabs.bookmarker.bookmarks.entity.toDTO
-import com.sivalabs.bookmarker.bookmarks.model.BookmarkDTO
-import com.sivalabs.bookmarker.bookmarks.model.BookmarksResultDTO
-import com.sivalabs.bookmarker.bookmarks.model.TagDTO
+import com.sivalabs.bookmarker.domain.entity.Bookmark
+import com.sivalabs.bookmarker.domain.entity.toDTO
+import com.sivalabs.bookmarker.domain.model.BookmarkDTO
+import com.sivalabs.bookmarker.domain.model.BookmarksResultDTO
+import com.sivalabs.bookmarker.domain.model.TagDTO
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
-import com.sivalabs.bookmarker.users.UserRepository
-import com.sivalabs.bookmarker.utils.TestHelper
+import com.sivalabs.bookmarker.domain.repository.BookmarkRepository
+import com.sivalabs.bookmarker.domain.repository.UserRepository
+import com.sivalabs.bookmarker.domain.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

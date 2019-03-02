@@ -1,6 +1,6 @@
 package com.sivalabs.bookmarker.config
 
-import com.sivalabs.bookmarker.utils.logger
+import com.sivalabs.bookmarker.domain.utils.logger
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -12,7 +12,7 @@ class LoggingAspect {
 
     private val log = logger()
 
-    @Around("@within(com.sivalabs.bookmarker.config.Loggable) || @annotation(com.sivalabs.bookmarker.config.Loggable)")
+    @Around("@within(com.sivalabs.bookmarker.domain.annotation.Loggable) || @annotation(com.sivalabs.bookmarker.domain.annotation.Loggable)")
     @Throws(Throwable::class)
     fun logMethodEntryExit(pjp: ProceedingJoinPoint): Any? {
 
