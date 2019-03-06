@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.users
+package com.sivalabs.bookmarker.web.controller
 
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
 import com.sivalabs.bookmarker.domain.entity.User

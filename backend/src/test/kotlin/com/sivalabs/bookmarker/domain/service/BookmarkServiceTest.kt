@@ -1,10 +1,9 @@
-package com.sivalabs.bookmarker.bookmarks
+package com.sivalabs.bookmarker.domain.service
 
 import com.sivalabs.bookmarker.domain.repository.BookmarkRepository
 import com.sivalabs.bookmarker.domain.repository.TagRepository
 import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException
 import com.sivalabs.bookmarker.domain.repository.UserRepository
-import com.sivalabs.bookmarker.domain.service.BookmarkService
 import com.sivalabs.bookmarker.domain.utils.Constants.DEFAULT_PAGE_SIZE
 import io.mockk.every
 import io.mockk.mockk

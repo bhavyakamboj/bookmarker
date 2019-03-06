@@ -1,6 +1,5 @@
-package com.sivalabs.bookmarker.bookmarks
+package com.sivalabs.bookmarker.domain.repository
 
-import com.sivalabs.bookmarker.domain.repository.BookmarkRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
