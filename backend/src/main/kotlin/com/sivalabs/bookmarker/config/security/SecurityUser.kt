@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.domain.model
+package com.sivalabs.bookmarker.config.security
 
 import com.sivalabs.bookmarker.domain.entity.User
 import org.springframework.security.core.authority.SimpleGrantedAuthority

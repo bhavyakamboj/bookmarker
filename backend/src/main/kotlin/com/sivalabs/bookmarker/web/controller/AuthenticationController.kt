@@ -6,7 +6,7 @@ import com.sivalabs.bookmarker.config.security.TokenHelper
 import com.sivalabs.bookmarker.domain.entity.User
 import com.sivalabs.bookmarker.domain.model.AuthenticationRequest
 import com.sivalabs.bookmarker.domain.model.AuthenticationResponse
-import com.sivalabs.bookmarker.domain.model.SecurityUser
+import com.sivalabs.bookmarker.config.security.SecurityUser
 import com.sivalabs.bookmarker.web.utils.SecurityUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
