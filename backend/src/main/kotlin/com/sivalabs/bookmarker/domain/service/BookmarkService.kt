@@ -13,6 +13,8 @@ import com.sivalabs.bookmarker.domain.repository.UserRepository
 import com.sivalabs.bookmarker.domain.utils.Constants.DEFAULT_PAGE_SIZE
 import com.sivalabs.bookmarker.domain.utils.logger
 import org.jsoup.Jsoup
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -30,6 +32,7 @@ class BookmarkService(
     private val log = logger()
 
     @Transactional(readOnly = true)
+    @Cacheable("bookmarks")
     fun getAllBookmarks(page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): BookmarksResultDTO {
         log.debug("process=get_all_bookmarks, pageNo=$page, size=$size")
         val pageable = buildPageRequest(page, size)
@@ -37,6 +40,7 @@ class BookmarkService(
     }
 
     @Transactional(readOnly = true)
+    @Cacheable("bookmarks-by-user")
     fun getBookmarksByUser(userId: Long, page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): BookmarksResultDTO {
         log.debug("process=get_bookmarks_by_user_id, user_id=$userId, pageNo=$page, size=$size")
         val pageable = buildPageRequest(page, size)
@@ -44,6 +48,7 @@ class BookmarkService(
     }
 
     @Transactional(readOnly = true)
+    @Cacheable("bookmarks-by-tag")
     fun getBookmarksByTag(tag: String, page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): TagDTO {
         val tagOptional = tagRepository.findByName(tag)
         return tagOptional.map {
@@ -54,6 +59,7 @@ class BookmarkService(
     }
 
     @Transactional(readOnly = true)
+    @Cacheable("bookmark-by-id")
     fun getBookmarkById(id: Long): BookmarkDTO? {
         log.debug("process=get_bookmark_by_id, id=$id")
         return bookmarkRepository.findById(id)
@@ -61,11 +67,13 @@ class BookmarkService(
             .orElse(null)
     }
 
+    @CacheEvict("bookmarks", "bookmarks-by-tag", "bookmarks-by-user")
     fun createBookmark(bookmark: BookmarkDTO): BookmarkDTO {
         log.debug("process=create_bookmark, url=${bookmark.url}")
         return saveBookmark(bookmark).toDTO()
     }
 
+    @CacheEvict("bookmarks", "bookmark-by-id", "bookmarks-by-tag", "bookmarks-by-user")
     fun deleteBookmark(id: Long) {
         log.debug("process=delete_bookmark_by_id, id=$id")
         bookmarkRepository.deleteById(id)

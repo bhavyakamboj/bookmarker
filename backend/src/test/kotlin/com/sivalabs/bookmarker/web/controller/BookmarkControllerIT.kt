@@ -39,7 +39,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
     }
 
     private fun createBookmarkByUser(userEmail: String): Bookmark {
-        var bookmark = TestHelper.buildBookmark()
+        val bookmark = TestHelper.buildBookmark()
         bookmark.createdBy = userRepository.findByEmail(userEmail).get()
         return bookmarkRepository.save(bookmark)
     }
