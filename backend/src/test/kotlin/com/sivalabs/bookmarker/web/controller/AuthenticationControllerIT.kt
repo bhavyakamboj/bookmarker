@@ -1,11 +1,9 @@
 package com.sivalabs.bookmarker.web.controller
 
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
-import com.sivalabs.bookmarker.domain.entity.User
 import com.sivalabs.bookmarker.domain.model.AuthenticationResponse
+import com.sivalabs.bookmarker.domain.model.UserDTO
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod.GET
@@ -14,14 +12,6 @@ import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.OK
 
 class AuthenticationControllerIT : AbstractIntegrationTest() {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     fun `should login successfully`() {
@@ -36,7 +26,7 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
     @Test
     fun `should get logged in user info`() {
         val request = HttpEntity<String>(getAuthHeaders())
-        val responseEntity = restTemplate.exchange("/api/me", GET, request, User::class.java)
+        val responseEntity = restTemplate.exchange("/api/me", GET, request, UserDTO::class.java)
 
         verifyStatusCode(responseEntity, OK)
         val user = responseEntity.body!!
@@ -45,7 +35,7 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should return unauthorized for not logged in user when get me`() {
-        val responseEntity = restTemplate.getForEntity("/api/me", User::class.java)
+        val responseEntity = restTemplate.getForEntity("/api/me", String::class.java)
         verifyStatusCode(responseEntity, FORBIDDEN)
     }
 

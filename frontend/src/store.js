@@ -10,7 +10,7 @@ const state = {
     access_token: localStorage.getItem('access_token')
   },
   bookmarks: [],
-  selectedTag: { bookmarks: { content: {} } },
+  selectedTag: { bookmarks: [] },
   tags: []
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-for="bookmark in bookmarks.content" :key="bookmark.id">
+    <v-card v-for="bookmark in bookmarks" :key="bookmark.id">
       <v-card-text>
         <h3 class="title">
           <a style="text-decoration: none" v-bind:href="bookmark.url" target="_blank">{{bookmark.title}}</a>

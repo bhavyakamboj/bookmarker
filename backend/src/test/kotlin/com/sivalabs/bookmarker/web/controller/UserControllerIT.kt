@@ -1,7 +1,7 @@
 package com.sivalabs.bookmarker.web.controller
 
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
-import com.sivalabs.bookmarker.domain.model.ChangePassword
+import com.sivalabs.bookmarker.domain.model.ChangePasswordRequest
 import com.sivalabs.bookmarker.domain.model.CreateUserRequest
 import com.sivalabs.bookmarker.domain.model.UserDTO
 import com.sivalabs.bookmarker.domain.service.UserService
@@ -124,7 +124,7 @@ class UserControllerIT : AbstractIntegrationTest() {
         asAuthenticateUser(credentials)
 
         val changePassword =
-            ChangePassword(credentials.second, credentials.second + "-new")
+            ChangePasswordRequest(credentials.second, credentials.second + "-new")
         val response = changePassword(changePassword)
         verifyStatusCode(response, OK)
 
@@ -134,7 +134,7 @@ class UserControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `unauthenticated user should not be able to change password`() {
-        val changePassword = ChangePassword(
+        val changePassword = ChangePasswordRequest(
             user1Credentials.second,
             user1Credentials.second + "-new"
         )
@@ -142,8 +142,8 @@ class UserControllerIT : AbstractIntegrationTest() {
         verifyStatusCode(response, FORBIDDEN)
     }
 
-    private fun changePassword(changePassword: ChangePassword): ResponseEntity<Void> {
-        val request = HttpEntity(changePassword, httpHeaders)
+    private fun changePassword(changePasswordRequest: ChangePasswordRequest): ResponseEntity<Void> {
+        val request = HttpEntity(changePasswordRequest, httpHeaders)
         return restTemplate.postForEntity("/api/users/change-password", request, Void::class.java)
     }
 

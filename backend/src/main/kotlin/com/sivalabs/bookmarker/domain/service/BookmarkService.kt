@@ -2,10 +2,9 @@ package com.sivalabs.bookmarker.domain.service
 
 import com.sivalabs.bookmarker.domain.entity.Bookmark
 import com.sivalabs.bookmarker.domain.entity.Tag
-import com.sivalabs.bookmarker.domain.entity.toDTO
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO
-import com.sivalabs.bookmarker.domain.model.BookmarksResultDTO
-import com.sivalabs.bookmarker.domain.model.TagDTO
+import com.sivalabs.bookmarker.domain.model.BookmarksListDTO
+import com.sivalabs.bookmarker.domain.model.BookmarkByTagDTO
 import com.sivalabs.bookmarker.domain.repository.BookmarkRepository
 import com.sivalabs.bookmarker.domain.repository.TagRepository
 import com.sivalabs.bookmarker.domain.exception.TagNotFoundException
@@ -33,7 +32,7 @@ class BookmarkService(
 
     @Transactional(readOnly = true)
     @Cacheable("bookmarks")
-    fun getAllBookmarks(page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): BookmarksResultDTO {
+    fun getAllBookmarks(page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): BookmarksListDTO {
         log.debug("process=get_all_bookmarks, pageNo=$page, size=$size")
         val pageable = buildPageRequest(page, size)
         return buildBookmarksResult(bookmarkRepository.findAll(pageable))
@@ -41,7 +40,7 @@ class BookmarkService(
 
     @Transactional(readOnly = true)
     @Cacheable("bookmarks-by-user")
-    fun getBookmarksByUser(userId: Long, page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): BookmarksResultDTO {
+    fun getBookmarksByUser(userId: Long, page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): BookmarksListDTO {
         log.debug("process=get_bookmarks_by_user_id, user_id=$userId, pageNo=$page, size=$size")
         val pageable = buildPageRequest(page, size)
         return buildBookmarksResult(bookmarkRepository.findByCreatedById(userId, pageable))
@@ -49,12 +48,19 @@ class BookmarkService(
 
     @Transactional(readOnly = true)
     @Cacheable("bookmarks-by-tag")
-    fun getBookmarksByTag(tag: String, page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): TagDTO {
+    fun getBookmarksByTag(tag: String, page: Int = 1, size: Int = DEFAULT_PAGE_SIZE): BookmarkByTagDTO {
         val tagOptional = tagRepository.findByName(tag)
         return tagOptional.map {
             val pageable = buildPageRequest(page, size)
             val bookmarksPage = bookmarkRepository.findByTag(tag, pageable)
-            TagDTO(it.id, it.name, buildBookmarksResult(bookmarksPage))
+            val bookmarksResult = buildBookmarksResult(bookmarksPage)
+            BookmarkByTagDTO(
+                    id = it.id,
+                    name = it.name,
+                    bookmarks = bookmarksResult.content,
+                    totalElements = bookmarksResult.totalElements,
+                    totalPages = bookmarksResult.totalPages,
+                    currentPage = bookmarksResult.currentPage)
         }.orElseThrow { TagNotFoundException("Tag $tag not found") }
     }
 
@@ -63,14 +69,14 @@ class BookmarkService(
     fun getBookmarkById(id: Long): BookmarkDTO? {
         log.debug("process=get_bookmark_by_id, id=$id")
         return bookmarkRepository.findById(id)
-            .map { it.toDTO() }
+            .map { BookmarkDTO.fromEntity(it) }
             .orElse(null)
     }
 
     @CacheEvict("bookmarks", "bookmarks-by-tag", "bookmarks-by-user")
     fun createBookmark(bookmark: BookmarkDTO): BookmarkDTO {
         log.debug("process=create_bookmark, url=${bookmark.url}")
-        return saveBookmark(bookmark).toDTO()
+        return BookmarkDTO.fromEntity(saveBookmark(bookmark))
     }
 
     @CacheEvict("bookmarks", "bookmark-by-id", "bookmarks-by-tag", "bookmarks-by-user")
@@ -86,9 +92,9 @@ class BookmarkService(
         return PageRequest.of(pageNo, size, sort)
     }
 
-    private fun buildBookmarksResult(page: Page<Bookmark>): BookmarksResultDTO {
-        return BookmarksResultDTO(
-            content = page.content.map { it.toDTO() },
+    private fun buildBookmarksResult(page: Page<Bookmark>): BookmarksListDTO {
+        return BookmarksListDTO(
+            content = page.content.map { BookmarkDTO.fromEntity(it) },
             currentPage = page.number + 1,
             totalElements = page.totalElements,
             totalPages = page.totalPages

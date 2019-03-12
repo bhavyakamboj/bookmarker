@@ -2,7 +2,7 @@
   <v-container grid-list-md>
     <v-layout row wrap>
       <v-flex xs9>
-        <bookmarks-list v-bind:bookmarks="bookmarks"></bookmarks-list>
+        <bookmarks-list v-bind:bookmarks="bookmarks.content"></bookmarks-list>
       </v-flex>
       <v-flex xs3>
         <tag-cloud v-bind:tags="tags"></tag-cloud>

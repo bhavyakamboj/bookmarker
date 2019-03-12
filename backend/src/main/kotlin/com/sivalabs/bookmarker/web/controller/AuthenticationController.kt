@@ -3,10 +3,10 @@ package com.sivalabs.bookmarker.web.controller
 import com.sivalabs.bookmarker.config.BookmarkerProperties
 import com.sivalabs.bookmarker.config.security.CustomUserDetailsService
 import com.sivalabs.bookmarker.config.security.TokenHelper
-import com.sivalabs.bookmarker.domain.entity.User
 import com.sivalabs.bookmarker.domain.model.AuthenticationRequest
 import com.sivalabs.bookmarker.domain.model.AuthenticationResponse
 import com.sivalabs.bookmarker.config.security.SecurityUser
+import com.sivalabs.bookmarker.domain.model.UserDTO
 import com.sivalabs.bookmarker.web.utils.SecurityUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -69,8 +69,9 @@ class AuthenticationController(
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('ROLE_USER')")
-    fun me(): ResponseEntity<User> {
-        return SecurityUtils.loginUser()?.let { ResponseEntity.ok(it) }
-            ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+    fun me(): ResponseEntity<UserDTO> {
+        return SecurityUtils.loginUser()?.let {
+            ResponseEntity.ok(UserDTO.fromEntity(it))
+        } ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 }

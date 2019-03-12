@@ -3,7 +3,7 @@ package com.sivalabs.bookmarker.web.controller
 import com.sivalabs.bookmarker.domain.annotation.Loggable
 import com.sivalabs.bookmarker.web.exception.BadRequestException
 import com.sivalabs.bookmarker.domain.exception.UserNotFoundException
-import com.sivalabs.bookmarker.domain.model.ChangePassword
+import com.sivalabs.bookmarker.domain.model.ChangePasswordRequest
 import com.sivalabs.bookmarker.domain.model.CreateUserRequest
 import com.sivalabs.bookmarker.domain.model.UserDTO
 import com.sivalabs.bookmarker.domain.service.UserService
@@ -85,10 +85,10 @@ class UserController(
 
     @PostMapping("/change-password")
     @PreAuthorize("hasRole('ROLE_USER')")
-    fun changePassword(@RequestBody @Valid changePassword: ChangePassword) {
+    fun changePassword(@RequestBody @Valid changePasswordRequest: ChangePasswordRequest) {
         val currentUser = SecurityContextHolder.getContext().authentication
         val email = currentUser.name
         log.info("process=change_password, email=$email")
-        userService.changePassword(email, changePassword)
+        userService.changePassword(email, changePasswordRequest)
     }
 }

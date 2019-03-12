@@ -1,6 +1,5 @@
 package com.sivalabs.bookmarker.domain.entity
 
-import com.sivalabs.bookmarker.domain.model.BookmarkDTO
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -39,5 +38,3 @@ class Bookmark : BaseEntity() {
     @JoinColumn(name = "created_by", nullable = false)
     var createdBy: User = User()
 }
-
-fun Bookmark.toDTO() = BookmarkDTO.fromEntity(this)

@@ -1,10 +1,9 @@
 package com.sivalabs.bookmarker.web.controller
 
 import com.sivalabs.bookmarker.domain.entity.Bookmark
-import com.sivalabs.bookmarker.domain.entity.toDTO
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO
-import com.sivalabs.bookmarker.domain.model.BookmarksResultDTO
-import com.sivalabs.bookmarker.domain.model.TagDTO
+import com.sivalabs.bookmarker.domain.model.BookmarksListDTO
+import com.sivalabs.bookmarker.domain.model.BookmarkByTagDTO
 import com.sivalabs.bookmarker.common.AbstractIntegrationTest
 import com.sivalabs.bookmarker.domain.repository.BookmarkRepository
 import com.sivalabs.bookmarker.domain.repository.UserRepository
@@ -96,7 +95,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
         val bookmark =
             TestHelper.buildBookmark(null, "http://sivalabs.in", "SivaLabs Blog", "java", "spring", "newtag", " ")
-        val responseEntity = createBookmark(bookmark.toDTO())
+        val responseEntity = createBookmark(BookmarkDTO.fromEntity(bookmark))
 
         verifyStatusCode(responseEntity, CREATED)
     }
@@ -106,7 +105,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         asAuthenticateUser(adminCredentials)
 
         val bookmark = TestHelper.buildBookmark(null, "http://sivalabs.in", "")
-        val responseEntity = createBookmark(bookmark.toDTO())
+        val responseEntity = createBookmark(BookmarkDTO.fromEntity(bookmark))
 
         verifyStatusCode(responseEntity, CREATED)
         assertThat(responseEntity.body?.title).isNotBlank()
@@ -162,16 +161,16 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         verifyBookmarkNotExists(bookmark.id)
     }
 
-    private fun getAllBookmarks(pageNo: Int = 1): ResponseEntity<BookmarksResultDTO> {
-        return restTemplate.getForEntity("/api/bookmarks?page=$pageNo", BookmarksResultDTO::class.java)
+    private fun getAllBookmarks(pageNo: Int = 1): ResponseEntity<BookmarksListDTO> {
+        return restTemplate.getForEntity("/api/bookmarks?page=$pageNo", BookmarksListDTO::class.java)
     }
 
-    private fun getBookmarksByTag(tag: String): ResponseEntity<TagDTO> {
-        return restTemplate.getForEntity("/api/bookmarks/tagged/$tag", TagDTO::class.java)
+    private fun getBookmarksByTag(tag: String): ResponseEntity<BookmarkByTagDTO> {
+        return restTemplate.getForEntity("/api/bookmarks/tagged/$tag", BookmarkByTagDTO::class.java)
     }
 
-    private fun getBookmarksByUser(userId: Long): ResponseEntity<BookmarksResultDTO> {
-        return restTemplate.getForEntity("/api/bookmarks?userId=$userId", BookmarksResultDTO::class.java)
+    private fun getBookmarksByUser(userId: Long): ResponseEntity<BookmarksListDTO> {
+        return restTemplate.getForEntity("/api/bookmarks?userId=$userId", BookmarksListDTO::class.java)
     }
 
     private fun createBookmark(bookmark: BookmarkDTO): ResponseEntity<BookmarkDTO> {

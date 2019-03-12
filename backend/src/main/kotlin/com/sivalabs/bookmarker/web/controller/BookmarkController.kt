@@ -1,8 +1,8 @@
 package com.sivalabs.bookmarker.web.controller
 
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO
-import com.sivalabs.bookmarker.domain.model.BookmarksResultDTO
-import com.sivalabs.bookmarker.domain.model.TagDTO
+import com.sivalabs.bookmarker.domain.model.BookmarksListDTO
+import com.sivalabs.bookmarker.domain.model.BookmarkByTagDTO
 import com.sivalabs.bookmarker.domain.service.BookmarkService
 import com.sivalabs.bookmarker.domain.exception.BookmarkNotFoundException
 import com.sivalabs.bookmarker.domain.utils.Constants
@@ -31,7 +31,7 @@ class BookmarkController(
         @RequestParam(name = "userId", required = false) userId: Long?,
         @RequestParam(name = "page", required = false, defaultValue = "1") page: Int,
         @RequestParam(name = "size", required = false, defaultValue = "${Constants.DEFAULT_PAGE_SIZE}") size: Int
-    ): BookmarksResultDTO {
+    ): BookmarksListDTO {
         return if (userId == null) {
             bookmarkService.getAllBookmarks(page, size)
         } else {
@@ -40,7 +40,7 @@ class BookmarkController(
     }
 
     @GetMapping("/tagged/{tag}")
-    fun getBookmarksByTag(@PathVariable("tag") tag: String): TagDTO {
+    fun getBookmarksByTag(@PathVariable("tag") tag: String): BookmarkByTagDTO {
         return bookmarkService.getBookmarksByTag(tag)
     }
 

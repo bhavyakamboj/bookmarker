@@ -7,14 +7,18 @@ import javax.validation.constraints.NotBlank
 
 data class UserDTO(
     var id: Long,
+
     @NotBlank(message = "Name cannot be blank")
     var name: String,
+
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email address")
     var email: String,
+
     @NotBlank(message = "Password cannot be blank")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     var password: String?,
+
     var roles: List<String>
 ) {
     companion object {

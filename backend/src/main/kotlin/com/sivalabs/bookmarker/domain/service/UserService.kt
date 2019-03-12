@@ -1,12 +1,11 @@
 package com.sivalabs.bookmarker.domain.service
 
-import com.sivalabs.bookmarker.domain.annotation.Loggable
 import com.sivalabs.bookmarker.domain.exception.BookmarkerException
 import com.sivalabs.bookmarker.domain.exception.UserNotFoundException
 import com.sivalabs.bookmarker.domain.entity.User
 import com.sivalabs.bookmarker.domain.repository.RoleRepository
 import com.sivalabs.bookmarker.domain.repository.UserRepository
-import com.sivalabs.bookmarker.domain.model.ChangePassword
+import com.sivalabs.bookmarker.domain.model.ChangePasswordRequest
 import com.sivalabs.bookmarker.domain.model.UserDTO
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -15,7 +14,6 @@ import java.util.Optional
 
 @Service
 @Transactional
-@Loggable
 class UserService(
     private val userRepository: UserRepository,
     private val roleRepository: RoleRepository,
@@ -48,21 +46,21 @@ class UserService(
             userEntity.password = it.password
             userEntity.roles = it.roles
             UserDTO.fromEntity(userRepository.save(userEntity))
-        }.orElseThrow { UserNotFoundException("User not found") }
+        }.orElseThrow { UserNotFoundException("User with id ${user.id} not found") }
     }
 
     fun deleteUser(userId: Long) {
         userRepository.findById(userId).map { userRepository.delete(it) }
     }
 
-    fun changePassword(email: String, changePassword: ChangePassword) {
+    fun changePassword(email: String, changePasswordRequest: ChangePasswordRequest) {
         this.getUserByEmail(email).map { user ->
-            if (passwordEncoder.matches(changePassword.oldPassword, user.password)) {
-                user.password = passwordEncoder.encode(changePassword.newPassword)
+            if (passwordEncoder.matches(changePasswordRequest.oldPassword, user.password)) {
+                user.password = passwordEncoder.encode(changePasswordRequest.newPassword)
                 userRepository.save(user)
             } else {
                 throw BookmarkerException("Current password doesn't match")
             }
-        }.orElseThrow { UserNotFoundException("User not found") }
+        }.orElseThrow { UserNotFoundException("User with email $email not found") }
     }
 }
