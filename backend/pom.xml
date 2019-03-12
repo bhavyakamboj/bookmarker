@@ -561,20 +561,20 @@
 
     <pluginRepositories>
         <pluginRepository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>bintray-ozsie-maven</id>
+            <name>bintray-plugins</name>
+            <url>https://dl.bintray.com/ozsie/maven</url>
+        </pluginRepository>
+        <pluginRepository>
             <id>spring-snapshots</id>
             <url>https://repo.spring.io/snapshot</url>
         </pluginRepository>
         <pluginRepository>
             <id>spring-milestones</id>
             <url>https://repo.spring.io/milestone</url>
-        </pluginRepository>
-        <pluginRepository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>bintray-ozsie-maven</id>
-            <name>bintray-plugins</name>
-            <url>https://dl.bintray.com/ozsie/maven</url>
         </pluginRepository>
         <pluginRepository>
             <id>oss-sonatype</id>
