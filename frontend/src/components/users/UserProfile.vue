@@ -22,7 +22,7 @@
           <h4 class="headline">
             Bookmarks Created By: {{userProfile.name}}
           </h4>
-          <bookmarks-list v-bind:bookmarks="userBookmarks.content"></bookmarks-list>
+          <bookmarks-list v-bind:bookmarks="userBookmarks.data"></bookmarks-list>
         </div>
       </v-layout>
     </v-container>

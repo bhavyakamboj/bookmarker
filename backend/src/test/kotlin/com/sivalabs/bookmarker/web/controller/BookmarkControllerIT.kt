@@ -10,7 +10,6 @@ import com.sivalabs.bookmarker.domain.repository.UserRepository
 import com.sivalabs.bookmarker.domain.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
@@ -27,10 +26,6 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
     @Autowired
     lateinit var bookmarkRepository: BookmarkRepository
-
-    @BeforeEach
-    fun setUp() {
-    }
 
     @AfterEach
     fun tearDown() {
@@ -49,17 +44,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
         verifyStatusCode(responseEntity, OK)
         val bookmarksResults = responseEntity.body!!
-        assertThat(bookmarksResults.content).isNotEmpty
-    }
-
-    @Test
-    fun `should get first page bookmarks if page number is less than 1`() {
-        val responseEntity = getAllBookmarks(-1)
-
-        verifyStatusCode(responseEntity, OK)
-        val bookmarksResults = responseEntity.body!!
-        assertThat(bookmarksResults.content).isNotEmpty
-        assertThat(bookmarksResults.currentPage).isEqualTo(1)
+        assertThat(bookmarksResults.data).isNotEmpty
     }
 
     @Test
@@ -86,7 +71,7 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
 
         verifyStatusCode(responseEntity, OK)
         val bookmarksResults = responseEntity.body!!
-        assertThat(bookmarksResults.content).isNotEmpty
+        assertThat(bookmarksResults.data).isNotEmpty
     }
 
     @Test
@@ -161,8 +146,8 @@ class BookmarkControllerIT : AbstractIntegrationTest() {
         verifyBookmarkNotExists(bookmark.id)
     }
 
-    private fun getAllBookmarks(pageNo: Int = 1): ResponseEntity<BookmarksListDTO> {
-        return restTemplate.getForEntity("/api/bookmarks?page=$pageNo", BookmarksListDTO::class.java)
+    private fun getAllBookmarks(): ResponseEntity<BookmarksListDTO> {
+        return restTemplate.getForEntity("/api/bookmarks", BookmarksListDTO::class.java)
     }
 
     private fun getBookmarksByTag(tag: String): ResponseEntity<BookmarkByTagDTO> {

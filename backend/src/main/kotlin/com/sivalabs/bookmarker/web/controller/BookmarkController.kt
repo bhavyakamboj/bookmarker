@@ -1,11 +1,10 @@
 package com.sivalabs.bookmarker.web.controller
 
+import com.sivalabs.bookmarker.domain.exception.BookmarkNotFoundException
+import com.sivalabs.bookmarker.domain.model.BookmarkByTagDTO
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO
 import com.sivalabs.bookmarker.domain.model.BookmarksListDTO
-import com.sivalabs.bookmarker.domain.model.BookmarkByTagDTO
 import com.sivalabs.bookmarker.domain.service.BookmarkService
-import com.sivalabs.bookmarker.domain.exception.BookmarkNotFoundException
-import com.sivalabs.bookmarker.domain.utils.Constants
 import com.sivalabs.bookmarker.web.utils.SecurityUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,14 +27,12 @@ class BookmarkController(
 
     @GetMapping
     fun getAllBookmarks(
-        @RequestParam(name = "userId", required = false) userId: Long?,
-        @RequestParam(name = "page", required = false, defaultValue = "1") page: Int,
-        @RequestParam(name = "size", required = false, defaultValue = "${Constants.DEFAULT_PAGE_SIZE}") size: Int
+        @RequestParam(name = "userId", required = false) userId: Long?
     ): BookmarksListDTO {
         return if (userId == null) {
-            bookmarkService.getAllBookmarks(page, size)
+            bookmarkService.getAllBookmarks()
         } else {
-            bookmarkService.getBookmarksByUser(userId, page, size)
+            bookmarkService.getBookmarksByUser(userId)
         }
     }
 
@@ -47,7 +44,7 @@ class BookmarkController(
     @GetMapping("/{id}")
     fun getBookmarkById(@PathVariable id: Long): ResponseEntity<BookmarkDTO> {
         return bookmarkService.getBookmarkById(id)?.let { ResponseEntity.ok(it) }
-            ?: ResponseEntity.notFound().build()
+                ?: ResponseEntity.notFound().build()
     }
 
     @PostMapping
@@ -63,7 +60,7 @@ class BookmarkController(
     fun deleteBookmark(@PathVariable id: Long) {
         val bookmark = bookmarkService.getBookmarkById(id)
         if (bookmark == null || (bookmark.createdUserId != SecurityUtils.loginUser()?.id &&
-                    !SecurityUtils.isCurrentUserAdmin())
+                        !SecurityUtils.isCurrentUserAdmin())
         ) {
             throw BookmarkNotFoundException("Bookmark not found with id=$id")
         } else {

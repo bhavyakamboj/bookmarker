@@ -14,7 +14,7 @@
         </div>
         <div>
           <v-btn v-for="tag in bookmark.tags" :key="tag"
-                 small color="error"
+                 small color="info"
                  :to="{name: 'BookmarksByTag', params: {tag: tag}}">
             <i class="fa fa-tags" aria-hidden="true"></i>{{'&nbsp;'+ tag}}
           </v-btn>
