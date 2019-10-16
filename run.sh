@@ -1,10 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 declare project_dir=$(dirname $0)
-declare docker_compose_file=${project_dir}/docker-compose.yml
-declare docker_compose_platform_file=${project_dir}/etc/docker-compose-platform.yml
-declare backend="backend"
+declare dc_main=${project_dir}/docker/docker-compose.yml
+declare dc_platform=${project_dir}/docker/docker-compose-platform.yml
+declare dc_elk=${project_dir}/docker/docker-compose-elk.yml
+declare dc_monitoring=${project_dir}/docker/docker-compose-monitoring.yml
+declare bookmark_kotlin_api="bookmark-kotlin"
 declare sonarqube="sonarqube"
+declare elk="elasticsearch logstash kibana"
+declare monitoring="prometheus grafana"
 
 function restart() {
     stop
@@ -12,23 +16,29 @@ function restart() {
 }
 
 function start() {
-    echo 'Starting bookmarker....'
+    echo "Starting ${bookmark_kotlin_api}...."
     build_api
-    docker-compose -f ${docker_compose_file} up --build --force-recreate -d ${backend}
-    docker-compose -f ${docker_compose_file} logs -f
-}
-
-function start_all() {
-    echo 'Starting bookmarker and dependencies....'
-    build_api
-    docker-compose -f ${docker_compose_file} up --build --force-recreate -d
-    docker-compose -f ${docker_compose_file} logs -f
+    docker-compose -f ${dc_main} up --build --force-recreate -d ${bookmark_kotlin_api}
+    docker-compose -f ${dc_main} logs -f
 }
 
 function stop() {
-    echo 'Stopping bookmarker....'
-    docker-compose -f ${docker_compose_file} stop
-    docker-compose -f ${docker_compose_file} rm -f
+    echo "Stopping ${bookmark_kotlin_api}...."
+    docker-compose -f ${dc_main} stop
+    docker-compose -f ${dc_main} rm -f
+}
+
+function start_all() {
+    echo "Starting ${bookmark_kotlin_api} and dependencies...."
+    build_api
+    docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} up --build --force-recreate -d
+    docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} logs -f
+}
+
+function stop_all() {
+    echo 'Stopping all....'
+    docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} stop
+    docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} rm -f
 }
 
 function build_api() {
@@ -37,8 +47,21 @@ function build_api() {
 
 function sonar() {
     echo 'Starting sonarqube....'
-    docker-compose -f ${docker_compose_platform_file} up --build --force-recreate -d ${sonarqube}
-    docker-compose -f ${docker_compose_platform_file} logs -f
+    docker-compose -f ${dc_platform} up --build --force-recreate -d ${sonarqube}
+    docker-compose -f ${dc_platform} logs -f
+}
+
+function elk() {
+    echo 'Starting ELK....'
+    docker-compose -f ${dc_elk} up --build --force-recreate -d ${elk}
+    docker-compose -f ${dc_elk} logs -f
+}
+
+
+function monitoring() {
+    echo 'Starting Prometheus, Grafana....'
+    docker-compose -f ${dc_monitoring} up --build --force-recreate -d ${monitoring}
+    docker-compose -f ${dc_monitoring} logs -f
 }
 
 action="start"

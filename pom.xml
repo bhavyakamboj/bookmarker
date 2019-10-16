@@ -18,8 +18,9 @@
     </properties>
 
     <modules>
-        <module>frontend</module>
-        <module>backend</module>
+        <module>bookmarker-ui-vue</module>
+        <module>bookmarker-kotlin</module>
+        <module>bookmarker-gatling-tests</module>
     </modules>
 
 </project>

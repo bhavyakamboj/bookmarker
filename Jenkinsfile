@@ -1,83 +1,35 @@
-pipeline {
-    agent any
+#!groovy
+@Library('jenkins-java-shared-library')
+import com.sivalabs.JenkinsSharedLib
 
-    triggers {
-            pollSCM('* * * * *')
-    }
+properties([
+    parameters([
+        booleanParam(defaultValue: false, name: 'PUBLISH_TO_DOCKERHUB', description: 'Publish Docker Image to DockerHub?'),
+        booleanParam(defaultValue: false, name: 'DEPLOY_ON_HEROKU', description: 'Should deploy on Heroku?'),
+        booleanParam(defaultValue: false, name: 'RUN_PERF_TESTS', description: 'Should run Performance Tests?')
+    ])
+])
 
-    environment {
-        DOCKER_USERNAME = 'sivaprasadreddy'
-        APPLICATION_NAME = 'bookmarker'
-        BACKEND_MODULE = 'backend'
-    }
+env.DOCKER_USERNAME = 'sivaprasadreddy'
+env.APPLICATION_NAME = 'bookmarker-kotlin'
 
-    parameters {
-        booleanParam(name: 'PUBLISH_TO_DOCKERHUB', defaultValue: false, description: 'Publish Docker Image to DockerHub?')
-    }
+def utils = new JenkinsSharedLib(this, env, params, scm, currentBuild)
 
-    stages {
-        stage('Test') {
-            steps {
-                sh './mvnw clean verify'
-            }
-            post {
-                always {
-                    dir(BACKEND_MODULE) {
-                        junit 'target/surefire-reports/*.xml'
-                        junit 'target/failsafe-reports/*.xml'
+node {
 
-                        publishHTML(target:[
-                             allowMissing: true,
-                             alwaysLinkToLastBuild: true,
-                             keepAll: true,
-                             reportDir: 'target/site/jacoco-aggregate',
-                             reportFiles: 'index.html',
-                             reportName: "Jacoco Report"
-                        ])
-                    }
-                }
-            }
+    try {
+        utils.checkout()
+        dir("bookmarker-kotlin") {
+            utils.runMavenTests()
+            utils.runOWASPChecks()
+            utils.publishDockerImage()
         }
-
-        stage('OWASP Dependency Check') {
-            steps {
-                dir(BACKEND_MODULE) {
-                    sh '../mvnw dependency-check:check'
-                }
-            }
-            post {
-                always {
-                    dir(BACKEND_MODULE) {
-                        publishHTML(target:[
-                             allowMissing: true,
-                             alwaysLinkToLastBuild: true,
-                             keepAll: true,
-                             reportDir: 'target',
-                             reportFiles: 'dependency-check-report.html',
-                             reportName: "OWASP Dependency Check Report"
-                        ])
-                    }
-                }
-            }
+        dir("bookmarker-gatling-tests") {
+            utils.runMavenGatlingTests()
         }
-
-        stage("Publish to DockerHub") {
-            when {
-                expression { params.PUBLISH_TO_DOCKERHUB == true }
-            }
-            steps {
-                dir(BACKEND_MODULE) {
-                      sh "docker build -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER} -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest ."
-
-                      withCredentials([[$class: 'UsernamePasswordMultiBinding',
-                                        credentialsId: 'docker-hub-credentials',
-                                        usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                          sh "docker login --username $USERNAME --password $PASSWORD"
-                      }
-                      sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest"
-                      sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER}"
-                }
-            }
-        }
+    }
+    catch(err) {
+        echo "ERROR: ${err}"
+        currentBuild.result = currentBuild.result ?: "FAILURE"
     }
 }

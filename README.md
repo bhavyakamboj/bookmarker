@@ -109,8 +109,8 @@ To start application and all dependent services like ELK, grafana, prometheus
 * Weekly Email NewsLetter
 * Improve Test coverage
 * Refactor Gatling tests to simulate typical user behaviour
-* Script to automatically create Grafana dashboard
 * Add gradle based build
+* ~~Script to automatically create Grafana dashboard~~ :white_check_mark:
 * ~~Use Mockk instead of Mockito~~ :white_check_mark:
 * ~~Deploy on Heroku~~ :white_check_mark:
 * ~~Use Vuetify for UI~~ :white_check_mark:
@@ -118,7 +118,7 @@ To start application and all dependent services like ELK, grafana, prometheus
 
 ## Contributing
 If you want to contribute to add new feature or improve existing code quality 
-please raise issues and ofcourse, Pull Requests are welcome.
+please raise issues and of course, Pull Requests are welcome.
 
 ## References
 

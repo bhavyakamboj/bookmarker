@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+
+  bookmarker-kotlin:
+    build: ../bookmarker-kotlin
+    container_name: bookmarker-kotlin
+    ports:
+      - "18080:8080"
+      - "18787:8787"
+    restart: always
+    depends_on:
+      - bm-postgresdb
+
+  bm-postgresdb:
+    image: postgres:10.7
+    container_name: bm-postgresdb
+    environment:
+      - POSTGRES_USER=siva
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5432:5432"
