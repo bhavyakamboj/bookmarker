@@ -31,7 +31,7 @@ node {
             utils.runMavenTests("Java Tests")
             utils.runOWASPChecks("Java OWASP")
             utils.publishDockerImage("Java PublishDocker", DOCKER_USERNAME, API_IMAGE_NAME_JAVA)
-            utils.deployOnHeroku("Java Heroku Deployment")
+            // utils.deployOnHeroku("Java Heroku Deployment")
         }
         dir("bookmarker-ui-vue") {
             utils.npmBuild("UI-Vue Build")

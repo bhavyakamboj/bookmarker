@@ -34,7 +34,7 @@
         <testcontainers.version>1.12.2</testcontainers.version>
         <mockk.version>1.9</mockk.version>
         <problem-spring-web.version>0.25.0</problem-spring-web.version>
-
+        <heroku.appName>sivalabs-bookmarker-kotlin</heroku.appName>
         <flyway.url>jdbc:postgresql://localhost:5432/postgres</flyway.url>
         <flyway.user>postgres</flyway.user>
         <flyway.password>secret</flyway.password>
@@ -296,6 +296,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>2.0.11</version>
+                <configuration>
+                    <appName>${heroku.appName}</appName>
+                    <includeTarget>false</includeTarget>
+                    <includes>
+                        <include>target/bookmarker-kotlin-0.0.1-SNAPSHOT.jar</include>
+                    </includes>
+                    <!--
+                    <processTypes>
+                        <web>java -Dserver.port=$PORT -Dspring.profiles.active=heroku $JAVA_OPTS -jar target/bookmarker-kotlin-0.0.1-SNAPSHOT.jar</web>
+                    </processTypes>
+                    -->
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
