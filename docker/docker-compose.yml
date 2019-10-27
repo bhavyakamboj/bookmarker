@@ -30,3 +30,9 @@ services:
       - POSTGRES_DB=appdb
     ports:
       - "5432:5432"
+
+  bookmarker-ui-vue:
+    build: ../bookmarker-ui-vue
+    container_name: bookmarker-ui-vue
+    ports:
+      - "90:80"

@@ -22,24 +22,24 @@ node {
     try {
         utils.checkout()
         dir("bookmarker-kotlin") {
-            utils.runMavenTests("BookMarker-Kotlin Tests")
-            utils.runOWASPChecks("BookMarker-Kotlin OWASP")
-            utils.publishDockerImage("BookMarker-Kotlin PublishDocker", DOCKER_USERNAME, API_IMAGE_NAME_KOTLIN)
-            utils.deployOnHeroku("BookMarker-Kotlin Heroku Deployment")
+            utils.runMavenTests("Kotlin Tests")
+            utils.runOWASPChecks("Kotlin OWASP")
+            utils.publishDockerImage("Kotlin PublishDocker", DOCKER_USERNAME, API_IMAGE_NAME_KOTLIN)
+            utils.deployOnHeroku("Kotlin Heroku Deployment")
         }
         dir("bookmarker-java") {
-            utils.runMavenTests("BookMarker-Java Tests")
-            utils.runOWASPChecks("BookMarker-Java OWASP")
-            utils.publishDockerImage("BookMarker-Java PublishDocker", DOCKER_USERNAME, API_IMAGE_NAME_JAVA)
-            utils.deployOnHeroku("BookMarker-Java Heroku Deployment")
+            utils.runMavenTests("Java Tests")
+            utils.runOWASPChecks("Java OWASP")
+            utils.publishDockerImage("Java PublishDocker", DOCKER_USERNAME, API_IMAGE_NAME_JAVA)
+            utils.deployOnHeroku("Java Heroku Deployment")
         }
         dir("bookmarker-ui-vue") {
-            utils.npmBuild("BookMarker-UI-Vue Build")
-            utils.npmTest("BookMarker-UI-Vue Test")
-            utils.publishDockerImage("BookMarker-UI-Vue PublishDocker", DOCKER_USERNAME, UI_IMAGE_NAME_VUE)
+            utils.npmBuild("UI-Vue Build")
+            utils.npmTest("UI-Vue Test")
+            utils.publishDockerImage("UI-Vue PublishDocker", DOCKER_USERNAME, UI_IMAGE_NAME_VUE)
         }
         dir("bookmarker-gatling-tests") {
-            utils.runMavenGatlingTests("BookMarker Perf Test")
+            utils.runMavenGatlingTests("Perf Test")
         }
     }
     catch(err) {
