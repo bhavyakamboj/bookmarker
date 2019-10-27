@@ -12,7 +12,6 @@ properties([
 
 def DOCKER_USERNAME = 'sivaprasadreddy'
 def API_IMAGE_NAME_KOTLIN = 'bookmarker-kotlin'
-def API_IMAGE_NAME_JAVA = 'bookmarker-java'
 def UI_IMAGE_NAME_VUE = 'bookmarker-ui-vue'
 
 def utils = new JenkinsSharedLib(this, env, params, scm, currentBuild)
@@ -26,12 +25,6 @@ node {
             utils.runOWASPChecks("Kotlin OWASP")
             utils.publishDockerImage("Kotlin PublishDocker", DOCKER_USERNAME, API_IMAGE_NAME_KOTLIN)
             utils.deployOnHeroku("Kotlin Heroku Deployment")
-        }
-        dir("bookmarker-java") {
-            utils.runMavenTests("Java Tests")
-            utils.runOWASPChecks("Java OWASP")
-            utils.publishDockerImage("Java PublishDocker", DOCKER_USERNAME, API_IMAGE_NAME_JAVA)
-            // utils.deployOnHeroku("Java Heroku Deployment")
         }
         dir("bookmarker-ui-vue") {
             utils.npmBuild("UI-Vue Build")

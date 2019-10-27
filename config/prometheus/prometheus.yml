@@ -28,20 +28,6 @@ scrape_configs:
   static_configs:
   - targets: ['localhost:9090']
 
-- job_name: 'bookmarker-java-local'
-
-  metrics_path: '/actuator/prometheus'
-  scrape_interval: 5s
-  static_configs:
-  - targets: ['localhost:18080']
-
-- job_name: 'bookmarker-java-docker'
-
-  metrics_path: '/actuator/prometheus'
-  scrape_interval: 5s
-  static_configs:
-  - targets: ['bookmarker-java:8080']
-
 - job_name: 'bookmarker-kotlin-local'
 
   metrics_path: '/actuator/prometheus'
