@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -31,10 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    private CustomUserDetailsService jwtUserDetailsService;
-
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     TokenHelper tokenHelper;
@@ -50,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal( AuthenticationManagerBuilder auth ) throws Exception {
-        auth.userDetailsService( jwtUserDetailsService )
+        auth.userDetailsService( userDetailsService )
                 .passwordEncoder( passwordEncoder() );
     }
 
@@ -72,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             //.anyRequest().authenticated()
                 .and()
             .addFilterBefore(
-                new TokenAuthenticationFilter(tokenHelper, jwtUserDetailsService),
+                new TokenAuthenticationFilter(tokenHelper, userDetailsService),
                 BasicAuthenticationFilter.class);
 
         http

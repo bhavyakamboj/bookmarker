@@ -5,14 +5,13 @@ sudo: false
 services:
   - docker
 
-cache:
-  directories:
-    - $HOME/.m2
-
 env:
   global:
-  - secure: "R9W2ZrMnhXIv5s74t4PRS3WzVhue3JV7gLjWLNAVyuNpZO/OGgdCj8ZbdXEuTD60qwULkhiUnu4SkpdLCQonghQDz8OJK02RU8D7TjOaNiMIfYMEPznM2xsDt5qrJ8J0xNuVFeG3V+oUbVcAvnBamA7N2KEaDqPCCHFHo59QDB3cLmiLRUKi7L4j3mooZv0h4oQ+KdCuD5oACi6wyWScBHYeuXD2v/AOjRFENc2vw2cD7GMXAXGshuC0c9whJWrrlQVGl+RAa11iCSnUAXxfn9QTvRP2Q99DSo3sgz4wkQzbwsysLqTCTb+reBrT8udeFOY7XPtXfQGdNZdm+GgOg7phZ/ys3DAbFLfpsyF921lPo7vqAeMoCZGO1o9v1J/lj49LGvAJ8hlHxJlsFcQz+cXih+Dvx5AT4irXs9CI8GGIdD6TXBMdtatSU/bUsd2GwJPRJYRv/66943HDLnbc9w44YTmC+5UPA6CCASiN5sPHGsMdN4ytDs8WO6WoIWq0LrtciHLkPuz9HHDVNB1xdETXOtHGLA+2xCKoj5kfd5vgWQLyFZydCsKskKWi09L+AnAES4ltKaY6UIoqPzNoNf3VuVMafyrZBg39sy/Yx3JwvqPb9oiixVq82AJ4DGDaJfei7EV/8PJG+drv2/ELYMLsouQMV0xHlfN+nywDEjM="
-  - secure: "flEIS64MiG0c1ziJ3heyFTL2jzeoIrPRdphRXewJEQyso19jDwktMvLeaZL49dtbKKm9HPzR+58cDXbXfGgNHPnyZdLjHmi7M1LkzhqWMkFSQk8SWFginXbMEMyqBLtpiy5RXybEB8XxEiSEHytrc+i66c242ebf7ZT+Payvr9Nn0cS1I31G00ZsIN85I+eg5+e+vuy2g5WwwYeFhBDmjsFWVg2itCn/5Nj5sg6ujrEcy/SCDn9OtdHhWkO4KJ4bbnwcFBc8B2Pb8XX/n0zxIyPGCqpUczrHbalbvvcYaYwF9fFt/kHHIOjXRNG40809HqShkS8+GTTS+J9muq0B/GUvX6CkUADZ0kcj6/t27o6s297KGEz/F+WeqOZvty2pD91YUW4JkM6JHHCYm7C9nS6NRJTNaLuTt6coV/gAU3xa63T63hTN72v5ZL39rXAFqD0spm7nzvGzSJJhLOCK7OHsioIaQqPfYEc1/SnUo+tbJKEnkFnToTctMG55L+5wJu9XbW8rRijbewxNGm08tDRE/TZxcbNO2ukSK542hzqBlG5RHEtIpa5aVLXVTNBAtzL5Di9Mo1OMWTJA4crS8upTu2GuPHhknT0MhN8oRVQ6yjW6LcU33G10kLhOJblG4kf1eRwrK6B+3tP6ADxs73ZcG9yEpdsc0Gkp3jB6F6Y="
+    - secure: "fEam2MJhQHDiYn7eG30yw9ZHPdceJ8BAl7rGw7Y6nv385NhaxhU7rI0ivH1p9ct/1o3nlWjTKj9A4VuHvaS+uq2eMAtjAbtBeeDIjF0cTz/yIORDffgX/iFNAZUONF21sDLpNHi6FVXJM5mXfb5XHzZGZcGxxMYLJ60BujID6gM0b2DH1YqS3H501Xb6zJ3MwpaeBHKxBNPMsZfGe3YpVUUaSPpeLP/cKCwoxm6W8Y0QrlMrZvmeu60G5Bgmq0sXQL0FHWBcI7F3WpY32Hiqxs0s3Vr3q9oBaIXVqIjwAmvRQBB5SwXSMHHHBTuoYtVm0rdm9aAJrBLd8ucVm3Ul2VXi1OkxKk/+5TdTqPhrKIjDybwejIHoI99LA5cTTkZa8wt0LcAOpWId60sRz87AdGfQPO8fQUWDQjv4npjcy1ODQd9lkR+7ijJs+j4yoayAuTJZMmz2ogjAIQdpy8QBqSPRbnd+k6VWtfzANzr+CkuxFxZPgVdLovZL0hAbnX/GOnc0ZWFd1pitgFgaxPyJyVpkPbpKsqZKbF8Vg+zfRZCgJQR0ZH4vNeJgJCdACyd1kfNgyTKtUPojghtSevtD0lXgeVmoyfaaS2OXF3o1vOSLvuQG8UtTfybl/0fPc5u1q2EwJQIRRFzPulJFGIYerBw9JGtbNzCjIZcmnwTSQLA="
+    - secure: "2elUBuEPOHIQQMCdNRf6Dbrj5sstFSaV/S5/w8rXL1yH08l+0xF0zSRi3GKSMttpZy+cjrsdyJha671IrPBfI/XZW356risNH6NbkbG6fi8sDEJ46m8bjbDM1XkIPByn7T5wA+dnXyVjZtoRgxLSidmc/wyg/ZCl38/DAgm1fOGKeCMhG0oaaiOJHykDG33c67baEy5xbgIccZk45wAGpqrepZEcsfY8kWcP70FY4AdAVO+JTdN9LNCm+SEgxl4QlS7UwYye/A3ldy71OJqJZZ0M3dWoy2qWUrMTuOWpX/4THLT+Uf6rpYUSujYzzTBWQf7atpNPAuCTbh9/E04zKO014+NwBVwImVO1PIVaEbrkp4UecBye1JIsRZpkkLduOkavHH7cYXkB5iscZ2u6c+7TAp7ITgjNcPyzR8fMaj6zSkrRpOcL18bqRuQUkVYEBLjj1WVOIdM0ixzArI1R8IBHecIMYt6GkWcQtp7s1hO+8oGwWl1wE6drz08coKl0Vfgh4uqyWciHSKOHDkYKPoB01aR+s8DRR0eMP4K+QJC4W5HV6dC55uqBKW8lTZ4tM5b6fYy46rlZZ0PA5MAgGN5tCObUkkUDVPpZbJaHKFv7xYhkjXWseNDahwPMWEcO+Ash/IksycOpiCWSi9chjf7ck0W7vxym7bFhsPG1gS0="
+    - secure: "teEd3JGJ+RRfOmLKZAlYeMvbakALSpjgxNQ3H/vARqVEjMb40dZD+khvbFnoHdAATVQV0SugA7mpEhJNNV+jCe7Ldcj+o+RsVys169UcIbn4LobVN5fR28u60Ib1LSbmn0AcMn3M1TuJGFOfjqgM/2o2FcmLv2uhK9jNRb4MimzFyPhtvO73KOyx5Sjh+J7gvo5IfY719P2TD3KfBk7aCj/vVV8h/E4CdxdqQ7zCrqQl+CY4ZLDHBYsRyn/gnPftEtKVPLJ5ufLmYHM/I4WDtpt2eA0xZn7EcZI3pX1GUS+vva49IakdB10f9lf/NDlQO2F8kqzHfxjhdRnxjQJQrzIPW9BQvrKO3zDH+fwqJcEZCzo148BqPj4kdEr4QKhZsTO9qPV4v3u5sGEi1NPB1sfxIy3XOfTHDq4sm1+8EFLTMM3oWKG2+igOhM6EqhrNGTzkuB4gHVnG4vZV6GbAY4hRj1bu2TObf0PZN5YJlXPxnrugJ2qXJ/fobVAOFsAHZXFhmRHDOKKWUZYE1Xzd+gjPHtmTb6cxB46ok/arbCoYVw9422nagKFwSKcmTfbuBBo76FcY2+S1BwkitRCcDFtA3PRymNUNamj4GZvAHxNQ3rR9X+HjuKReFIVsxJZ8PX2eX83COo0lMZnLbJ6wa5rPjkTaEo8ilzL8+thAauM="
+    - secure: "3sfs5K8hI1BpePigQxesVZ+dOeec1n7G/qBWrD+VsQ91TJwDBdic1XWoVre20jQsr/ZU9Pf/6ya4gnIZ9thNObmvxItSAj5Ga0DBRnY7/NIJTEsp50xGkjjSSozjVlZv0K2auwmU/rcFpv068oIi3VRvqBm91vYnbbIBFgkrDimh15X7daOL00qPr4mPqOZkRZUOKbM9TXYTaTaTWsW2Ozsjt/MCjftfR6VNOMB73A1Mj2zjEBTmrMlKP3ZWN88jlTCoE8Fr6Wmy5ulRnys8+PQ077LO+Bh4Q0dZp02HKki/BIjx7axX4ls8z3oqiiX+2tkrJ3oeT3ZHtkQy7zdPpOdZ4K4DbHdZ3yZrlK+1c8ebhGd2K+J79rRRNutIq2rqejWLDQTfT9Mn48m5Wo0+MhPWmGbR2U9X+L1QQJW31L+Qo3u168jA34rlAqpDkJT/GpHEhUm3L7MRo3Bgf7eJeGK8Au/4TXJ/N2wj9yQxL75ZmMCCxQ7PqkDGt4JznyT3oF3riY+SU1fxBpyANmukiKDSQwc/0ZAF7sXdn+rACMry1sYzqrkCr9s2KE+4tR2CUhPmthIKFYcU5mtMmLW0tj/7PcslUtqqpTLg5m/1vITaj116KpWnnxVfK+8FpXV3tIiczKxS09X3OI7qwOszFDGi+a70Ap1qdr8U6VA/V3o="
+    - COMMIT=${TRAVIS_COMMIT::7}
 
 addons:
   sonarcloud:
@@ -21,5 +20,30 @@ addons:
       secure: $SONAR_TOKEN
 
 script:
+  - export SPRING_BOOT_APP_NAME=bookarker-kotlin
+  - cd $SPRING_BOOT_APP_NAME
   - ./mvnw clean install -B
-  - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
+  - ./mvnw sonar:sonar
+  - cd ..
+  - export SPRING_BOOT_APP_NAME=bookarker-java
+  - cd $SPRING_BOOT_APP_NAME
+  - ./mvnw clean install -B
+  - ./mvnw sonar:sonar
+  - cd ..
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
+
+after_success:
+  - export SPRING_BOOT_APP_NAME=bookarker-kotlin
+  - cd $SPRING_BOOT_APP_NAME
+  - ../scripts/travis-publish-docker.sh
+  - ../scripts/deploy-on-heroku.sh
+  - cd ..
+  - export SPRING_BOOT_APP_NAME=bookarker-java
+  - cd $SPRING_BOOT_APP_NAME
+  - ../scripts/travis-publish-docker.sh
+  - ../scripts/deploy-on-heroku.sh
+  - cd ..
