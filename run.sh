@@ -5,7 +5,6 @@ declare dc_main=${project_dir}/docker/docker-compose.yml
 declare dc_platform=${project_dir}/docker/docker-compose-platform.yml
 declare dc_elk=${project_dir}/docker/docker-compose-elk.yml
 declare dc_monitoring=${project_dir}/docker/docker-compose-monitoring.yml
-declare bookmark_java_api="bookmark-java"
 declare bookmark_kotlin_api="bookmark-kotlin"
 declare sonarqube="sonarqube"
 declare elk="elasticsearch logstash kibana"
@@ -17,20 +16,20 @@ function restart() {
 }
 
 function start() {
-    echo "Starting ${bookmark_java_api}...."
+    echo "Starting ${bookmark_kotlin_api}...."
     build_api
-    docker-compose -f ${dc_main} up --build --force-recreate -d ${bookmark_java_api}
+    docker-compose -f ${dc_main} up --build --force-recreate -d ${bookmark_kotlin_api}
     docker-compose -f ${dc_main} logs -f
 }
 
 function stop() {
-    echo "Stopping ${bookmark_java_api}...."
+    echo "Stopping ${bookmark_kotlin_api}...."
     docker-compose -f ${dc_main} stop
     docker-compose -f ${dc_main} rm -f
 }
 
 function start_all() {
-    echo "Starting ${bookmark_java_api} and dependencies...."
+    echo "Starting ${bookmark_kotlin_api} and dependencies...."
     build_api
     docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} up --build --force-recreate -d
     docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} logs -f

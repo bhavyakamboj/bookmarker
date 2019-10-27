@@ -1,21 +1,11 @@
 version: '3.1'
 services:
 
-  bookmarker-java:
-    build: ../bookmarker-java
-    container_name: bookmarker-java
-    ports:
-      - "18080:8080"
-      - "18787:8787"
-    restart: always
-    depends_on:
-      - bm-postgresdb
-
   bookmarker-kotlin:
     build: ../bookmarker-kotlin
     container_name: bookmarker-kotlin
     ports:
-      - "18181:8080"
+      - "18080:8080"
       - "18787:8787"
     restart: always
     depends_on:
