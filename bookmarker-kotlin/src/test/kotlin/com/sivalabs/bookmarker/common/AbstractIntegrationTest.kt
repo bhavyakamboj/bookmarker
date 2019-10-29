@@ -3,7 +3,6 @@ package com.sivalabs.bookmarker.common
 import com.sivalabs.bookmarker.domain.model.AuthenticationRequest
 import com.sivalabs.bookmarker.domain.model.AuthenticationResponse
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -17,11 +16,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.testcontainers.containers.PostgreSQLContainer
 
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ContextConfiguration(initializers = [AbstractIntegrationTest.Initializer::class])
 abstract class AbstractIntegrationTest {

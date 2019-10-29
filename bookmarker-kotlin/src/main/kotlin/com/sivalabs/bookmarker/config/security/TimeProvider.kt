@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.config
+package com.sivalabs.bookmarker.config.security
 
 import org.springframework.stereotype.Component
 

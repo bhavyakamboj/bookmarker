@@ -28,7 +28,7 @@ class BookmarkService(
     private val log = logger()
 
     @Transactional(readOnly = true)
-    @Cacheable("bookmarks")
+    // @Cacheable("bookmarks")
     fun getAllBookmarks(): BookmarksListDTO {
         log.debug("process=get_all_bookmarks")
         val sort = Sort.by(Sort.Direction.DESC, "createdAt")

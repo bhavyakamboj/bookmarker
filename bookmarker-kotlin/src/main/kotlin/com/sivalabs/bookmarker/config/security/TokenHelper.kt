@@ -1,7 +1,6 @@
 package com.sivalabs.bookmarker.config.security
 
-import com.sivalabs.bookmarker.config.BookmarkerProperties
-import com.sivalabs.bookmarker.config.TimeProvider
+import com.sivalabs.bookmarker.config.ApplicationProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletRequest
 class TokenHelper {
 
     @Autowired
-    private lateinit var bookmarkerProperties: BookmarkerProperties
+    private lateinit var applicationProperties: ApplicationProperties
 
     @Autowired
     private lateinit var timeProvider: TimeProvider
@@ -37,30 +36,30 @@ class TokenHelper {
         return Jwts.builder()
             .setClaims(claims)
             .setExpiration(generateExpirationDate())
-            .signWith(signatureAlgorithm, bookmarkerProperties.jwt.secret)
+            .signWith(signatureAlgorithm, applicationProperties.jwt.secret)
             .compact()
     }
 
     fun generateToken(username: String): String {
         return Jwts.builder()
-            .setIssuer(bookmarkerProperties.jwt.issuer)
+            .setIssuer(applicationProperties.jwt.issuer)
             .setSubject(username)
             .setAudience(AUDIENCE_WEB)
             .setIssuedAt(timeProvider.now())
             .setExpiration(generateExpirationDate())
-            .signWith(signatureAlgorithm, bookmarkerProperties.jwt.secret)
+            .signWith(signatureAlgorithm, applicationProperties.jwt.secret)
             .compact()
     }
 
     private fun getAllClaimsFromToken(token: String): Claims {
         return Jwts.parser()
-            .setSigningKey(bookmarkerProperties.jwt.secret)
+            .setSigningKey(applicationProperties.jwt.secret)
             .parseClaimsJws(token)
             .body
     }
 
     private fun generateExpirationDate(): Date {
-        return Date(timeProvider.now().time + bookmarkerProperties.jwt.expiresIn * MILLIS_PER_SECOND)
+        return Date(timeProvider.now().time + applicationProperties.jwt.expiresIn * MILLIS_PER_SECOND)
     }
 
     fun validateToken(token: String, userDetails: UserDetails): Boolean {
@@ -75,6 +74,6 @@ class TokenHelper {
     }
 
     fun getAuthHeaderFromHeader(request: HttpServletRequest): String? {
-        return request.getHeader(bookmarkerProperties.jwt.header)
+        return request.getHeader(applicationProperties.jwt.header)
     }
 }

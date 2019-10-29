@@ -1,6 +1,6 @@
 package com.sivalabs.bookmarker.web.controller
 
-import com.sivalabs.bookmarker.config.BookmarkerProperties
+import com.sivalabs.bookmarker.config.ApplicationProperties
 import com.sivalabs.bookmarker.config.security.CustomUserDetailsService
 import com.sivalabs.bookmarker.config.security.TokenHelper
 import com.sivalabs.bookmarker.domain.model.AuthenticationRequest
@@ -22,15 +22,15 @@ import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-@RequestMapping(value = ["/api"])
+@RequestMapping(value = ["/api/auth"])
 class AuthenticationController(
     private val authenticationManager: AuthenticationManager,
     private val userDetailsService: CustomUserDetailsService,
     private val tokenHelper: TokenHelper,
-    private val bookmarkerProperties: BookmarkerProperties
+    private val applicationProperties: ApplicationProperties
 ) {
 
-    @PostMapping(value = ["/auth/login"])
+    @PostMapping(value = ["/login"])
     fun createAuthenticationToken(@RequestBody credentials: AuthenticationRequest): AuthenticationResponse {
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(credentials.username, credentials.password)
@@ -40,10 +40,10 @@ class AuthenticationController(
 
         val user = authentication.principal as SecurityUser
         val jws = tokenHelper.generateToken(user.username)
-        return AuthenticationResponse(jws, bookmarkerProperties.jwt.expiresIn)
+        return AuthenticationResponse(jws, applicationProperties.jwt.expiresIn)
     }
 
-    @PostMapping(value = ["/auth/refresh"])
+    @PostMapping(value = ["/refresh"])
     @PreAuthorize("hasRole('ROLE_USER')")
     fun refreshAuthenticationToken(request: HttpServletRequest): ResponseEntity<AuthenticationResponse> {
         val authToken = tokenHelper.getToken(request)
@@ -56,14 +56,14 @@ class AuthenticationController(
                 ResponseEntity.ok(
                     AuthenticationResponse(
                         refreshedToken,
-                        bookmarkerProperties.jwt.expiresIn
+                        applicationProperties.jwt.expiresIn
                     )
                 )
             } else {
-                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<AuthenticationResponse>()
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
             }
         } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<AuthenticationResponse>()
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
     }
 

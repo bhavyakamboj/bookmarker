@@ -26,7 +26,7 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
     @Test
     fun `should get logged in user info`() {
         val request = HttpEntity<String>(getAuthHeaders())
-        val responseEntity = restTemplate.exchange("/api/me", GET, request, UserDTO::class.java)
+        val responseEntity = restTemplate.exchange("/api/auth/me", GET, request, UserDTO::class.java)
 
         verifyStatusCode(responseEntity, OK)
         val user = responseEntity.body!!
@@ -35,7 +35,7 @@ class AuthenticationControllerIT : AbstractIntegrationTest() {
 
     @Test
     fun `should return unauthorized for not logged in user when get me`() {
-        val responseEntity = restTemplate.getForEntity("/api/me", String::class.java)
+        val responseEntity = restTemplate.getForEntity("/api/auth/me", String::class.java)
         verifyStatusCode(responseEntity, FORBIDDEN)
     }
 

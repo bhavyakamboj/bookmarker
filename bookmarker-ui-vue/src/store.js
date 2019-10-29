@@ -75,7 +75,7 @@ const actions = {
   },
 
   async fetchCurrentUser ({ commit }) {
-    let currentUser = (await axios.get('me')).data
+    let currentUser = (await axios.get('auth/me')).data
     commit('setCurrentUser', currentUser)
   },
 

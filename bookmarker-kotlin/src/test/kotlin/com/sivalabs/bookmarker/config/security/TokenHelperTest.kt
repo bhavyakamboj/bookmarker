@@ -1,7 +1,6 @@
 package com.sivalabs.bookmarker.config.security
 
-import com.sivalabs.bookmarker.config.BookmarkerProperties
-import com.sivalabs.bookmarker.config.TimeProvider
+import com.sivalabs.bookmarker.config.ApplicationProperties
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -9,16 +8,16 @@ import org.junit.jupiter.api.Test
 import org.springframework.test.util.ReflectionTestUtils
 
 class TokenHelperTest {
-    lateinit var tokenHelper: TokenHelper
+    private lateinit var tokenHelper: TokenHelper
 
     @BeforeEach
     fun setUp() {
         tokenHelper = TokenHelper()
-        val bookmarkerProperties = BookmarkerProperties()
-        bookmarkerProperties.jwt.secret = "secret"
-        bookmarkerProperties.jwt.expiresIn = 604800
-        bookmarkerProperties.jwt.header = "Authorization"
-        ReflectionTestUtils.setField(tokenHelper, "bookmarkerProperties", bookmarkerProperties)
+        val applicationProperties = ApplicationProperties()
+        applicationProperties.jwt.secret = "secret"
+        applicationProperties.jwt.expiresIn = 604800
+        applicationProperties.jwt.header = "Authorization"
+        ReflectionTestUtils.setField(tokenHelper, "applicationProperties", applicationProperties)
         ReflectionTestUtils.setField(tokenHelper, "timeProvider", TimeProvider())
     }
 

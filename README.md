@@ -73,7 +73,7 @@ To start application and all dependent services like ELK, grafana, prometheus
 
 ### Run Performance Tests
 
-`performance-tests> ./gradlew gatlingRun`
+`bookmarker-gatling-tests> ./mvnw gatling:test`
 
 ### Run SonarQube analysis
 
