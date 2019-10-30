@@ -20,7 +20,7 @@ addons:
       secure: $SONAR_TOKEN
 
 script:
-  - export SPRING_BOOT_APP_NAME=bookarker-kotlin
+  - export SPRING_BOOT_APP_NAME=bookmarker-kotlin
   - cd $SPRING_BOOT_APP_NAME
   - ./mvnw clean verify
   - cd ..
@@ -31,7 +31,7 @@ cache:
     - '$HOME/.sonar/cache'
 
 after_success:
-  - export SPRING_BOOT_APP_NAME=bookarker-kotlin
+  - export SPRING_BOOT_APP_NAME=bookmarker-kotlin
   - cd $SPRING_BOOT_APP_NAME
   - ../scripts/travis-publish-docker.sh
   - ../scripts/deploy-on-heroku.sh
