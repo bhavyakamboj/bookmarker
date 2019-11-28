@@ -19,6 +19,7 @@
 
     <modules>
         <module>bookmarker-ui-vue</module>
+        <module>bookmarker-ui-react</module>
         <module>bookmarker-kotlin</module>
         <module>bookmarker-java</module>
         <module>bookmarker-gatling-tests</module>
