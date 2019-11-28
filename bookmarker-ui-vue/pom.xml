@@ -20,32 +20,33 @@
                 <executions>
                     <!-- Install our node and npm version to run npm/node scripts-->
                     <execution>
-                        <id>install node and npm</id>
+                        <id>install node and yarn</id>
                         <goals>
-                            <goal>install-node-and-npm</goal>
+                            <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v8.9.0</nodeVersion>
+                            <nodeVersion>v8.12.0</nodeVersion>
+                            <yarnVersion>v1.19.2</yarnVersion>
                         </configuration>
                     </execution>
                     <!-- Install all project dependencies -->
                     <execution>
-                        <id>npm install</id>
+                        <id>yarn install</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <!-- optional: default phase is "generate-resources" -->
                         <phase>generate-resources</phase>
-                        <!-- Optional configuration which provides for running any npm command -->
+                        <!-- Optional configuration which provides for running any npm/yarn command -->
                         <configuration>
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
                     <!-- Build and minify static files -->
                     <execution>
-                        <id>npm run build</id>
+                        <id>yarn run build</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <configuration>
                             <arguments>run build</arguments>

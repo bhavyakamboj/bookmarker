@@ -35,6 +35,7 @@
 		<testcontainers.version>1.12.2</testcontainers.version>
 		<heroku.appName>sivalabs-bookmarker-java</heroku.appName>
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
+		<jacoc.min.coverage>0.10</jacoc.min.coverage>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.organization>sivaprasadreddy-github</sonar.organization>
 		<sonar.exclusions>
@@ -281,7 +282,7 @@
 								<limit implementation="org.jacoco.report.check.Limit">
 									<counter>COMPLEXITY</counter>
 									<value>COVEREDRATIO</value>
-									<minimum>0.10</minimum>
+									<minimum>${jacoc.min.coverage}</minimum>
 								</limit>
 							</limits>
 						</rule>
@@ -373,40 +374,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>3.3.2</version>
-				<configuration>
-					<failOnError>false</failOnError>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>deploy</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.ning.maven.plugins</groupId>
-				<artifactId>maven-dependency-versions-check-plugin</artifactId>
-				<version>2.0.4</version>
-				<configuration>
-					<skip>false</skip>
-					<failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
-					<warnIfMajorVersionIsHigher>true</warnIfMajorVersionIsHigher>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-maven-plugin</artifactId>
 				<configuration>
@@ -453,9 +420,43 @@
 
 	<profiles>
 		<profile>
-			<id>sonar</id>
+			<id>ci</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.owasp</groupId>
+						<artifactId>dependency-check-maven</artifactId>
+						<version>3.3.2</version>
+						<configuration>
+							<failOnError>false</failOnError>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>deploy</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.ning.maven.plugins</groupId>
+						<artifactId>maven-dependency-versions-check-plugin</artifactId>
+						<version>2.0.4</version>
+						<configuration>
+							<skip>false</skip>
+							<failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
+							<warnIfMajorVersionIsHigher>true</warnIfMajorVersionIsHigher>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.sonarsource.scanner.maven</groupId>
 						<artifactId>sonar-maven-plugin</artifactId>

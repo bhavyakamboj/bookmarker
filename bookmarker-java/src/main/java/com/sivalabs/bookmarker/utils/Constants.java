@@ -8,5 +8,6 @@ public final class Constants {
     public static final String PROFILE_HEROKU = "heroku";
     public static final String PROFILE_NOT_HEROKU = "!"+PROFILE_HEROKU;
     public static final String PROFILE_TEST = "test";
+    public static final String PROFILE_IT = "integration-test";
 
 }

@@ -41,6 +41,7 @@
         <flyway.user>postgres</flyway.user>
         <flyway.password>secret</flyway.password>
         <jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
+        <jacoc.min.coverage>0.60</jacoc.min.coverage>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.organization>sivaprasadreddy-github</sonar.organization>
         <sonar.exclusions>
@@ -242,8 +243,8 @@
     </dependencyManagement>
 
     <build>
-        <sourceDirectory>src/main/kotlin</sourceDirectory>
-        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -328,7 +329,7 @@
                                 <limit implementation="org.jacoco.report.check.Limit">
                                     <counter>COMPLEXITY</counter>
                                     <value>COVEREDRATIO</value>
-                                    <minimum>0.70</minimum>
+                                    <minimum>${jacoc.min.coverage}</minimum>
                                 </limit>
                             </limits>
                         </rule>
@@ -419,40 +420,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                    <failOnError>false</failOnError>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.ning.maven.plugins</groupId>
-                <artifactId>maven-dependency-versions-check-plugin</artifactId>
-                <version>2.0.4</version>
-                <configuration>
-                    <skip>false</skip>
-                    <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
-                    <warnIfMajorVersionIsHigher>true</warnIfMajorVersionIsHigher>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
@@ -558,6 +526,47 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>ci</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>3.3.2</version>
+                        <configuration>
+                            <failOnError>false</failOnError>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.ning.maven.plugins</groupId>
+                        <artifactId>maven-dependency-versions-check-plugin</artifactId>
+                        <version>2.0.4</version>
+                        <configuration>
+                            <skip>false</skip>
+                            <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
+                            <warnIfMajorVersionIsHigher>true</warnIfMajorVersionIsHigher>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>sonar</id>
             <build>
