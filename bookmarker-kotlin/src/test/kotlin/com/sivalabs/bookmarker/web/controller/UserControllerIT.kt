@@ -8,7 +8,6 @@ import com.sivalabs.bookmarker.domain.service.UserService
 import com.sivalabs.bookmarker.domain.utils.TestHelper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
@@ -25,10 +24,6 @@ class UserControllerIT : AbstractIntegrationTest() {
 
     @Autowired
     lateinit var userService: UserService
-
-    @BeforeEach
-    fun setUp() {
-    }
 
     @AfterEach
     fun tearDown() {

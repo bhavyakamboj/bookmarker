@@ -28,7 +28,7 @@ class BookmarkService(
     private val log = logger()
 
     @Transactional(readOnly = true)
-    // @Cacheable("bookmarks")
+    @Cacheable("bookmarks")
     fun getAllBookmarks(): BookmarksListDTO {
         log.debug("process=get_all_bookmarks")
         val sort = Sort.by(Sort.Direction.DESC, "createdAt")
@@ -68,13 +68,13 @@ class BookmarkService(
             .orElse(null)
     }
 
-    @CacheEvict("bookmarks", "bookmarks-by-tag", "bookmarks-by-user")
+    @CacheEvict(value = ["bookmarks", "bookmarks-by-tag", "bookmarks-by-user"], allEntries = true)
     fun createBookmark(bookmark: BookmarkDTO): BookmarkDTO {
         log.debug("process=create_bookmark, url=${bookmark.url}")
         return BookmarkDTO.fromEntity(saveBookmark(bookmark))
     }
 
-    @CacheEvict("bookmarks", "bookmark-by-id", "bookmarks-by-tag", "bookmarks-by-user")
+    @CacheEvict(value = ["bookmarks", "bookmark-by-id", "bookmarks-by-tag", "bookmarks-by-user"], allEntries = true)
     fun deleteBookmark(id: Long) {
         log.debug("process=delete_bookmark_by_id, id=$id")
         bookmarkRepository.deleteById(id)

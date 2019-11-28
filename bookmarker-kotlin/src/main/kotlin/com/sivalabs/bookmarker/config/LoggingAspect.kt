@@ -12,7 +12,8 @@ class LoggingAspect {
 
     private val log = logger()
 
-    @Around("@within(com.sivalabs.bookmarker.domain.annotation.Loggable) || @annotation(com.sivalabs.bookmarker.domain.annotation.Loggable)")
+    @Around("@within(com.sivalabs.bookmarker.domain.annotation.Loggable) || " +
+            " @annotation(com.sivalabs.bookmarker.domain.annotation.Loggable)")
     @Throws(Throwable::class)
     fun logMethodEntryExit(pjp: ProceedingJoinPoint): Any? {
 

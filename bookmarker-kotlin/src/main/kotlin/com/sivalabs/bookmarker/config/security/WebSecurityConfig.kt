@@ -23,8 +23,12 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Import(SecurityProblemSupport::class)
-@Order(1000)
+@Order(WebSecurityConfig.WebSecurityConfig.WEB_SECURITY_ORDER)
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+
+    object WebSecurityConfig {
+        const val WEB_SECURITY_ORDER = 1000
+    }
 
     @Autowired
     private lateinit var jwtUserDetailsService: CustomUserDetailsService
