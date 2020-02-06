@@ -11,6 +11,11 @@
     <name>bookmarker-ui-react</name>
     <description>Bookmarker ReactJS Frontend</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -70,7 +75,7 @@
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/dist</directory>
+                                    <directory>${project.basedir}/build</directory>
                                     <includes>
                                         <include>static/</include>
                                         <include>index.html</include>
