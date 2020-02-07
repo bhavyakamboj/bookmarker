@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllBookmarks } from "../../store/actions/actionCreators";
 import BookmarksList from "../Widgets/BookmarksList";
-import AddBookmark from "../common/AddBookmark";
 import TagNavContainer from "../common/TagNavContainer";
 
 const Home = () => {
@@ -18,9 +17,6 @@ const Home = () => {
         <div className="container">
             <div className="row">
                 <div className="col-12">
-                    <div>
-                        <AddBookmark />
-                    </div>
                     <div className="mt-3">
                         <div className="row">
                             <div className="col-9">

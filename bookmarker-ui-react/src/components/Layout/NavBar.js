@@ -17,9 +17,14 @@ const NavBar = () => {
         authenticatedLinks = (
             <ul className="navbar-nav">
                 <li className="nav-item">
-                    <button className="btn btn-outline-success my-2 my-sm-0" onClick={logoutHandler}>
+                    <NavLink className="nav-link" to="/add-bookmark">
+                        Add Bookmark
+                    </NavLink>
+                </li>
+                <li className="nav-item">
+                    <NavLink className="nav-link" to="/login" onClick={logoutHandler}>
                         Logout
-                    </button>
+                    </NavLink>
                 </li>
             </ul>
         );
