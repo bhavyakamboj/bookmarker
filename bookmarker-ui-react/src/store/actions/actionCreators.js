@@ -35,6 +35,32 @@ export function fetchAllBookmarks() {
     };
 }
 
+export function fetchBookmarksByTag(tag) {
+    return dispatch => {
+        return axios("/api/bookmarks/tagged/"+tag)
+            .then(response => {
+                return dispatch({
+                    type: actionTypes.RECEIVE_SELECTED_TAG,
+                    payload: response.data
+                });
+            })
+            .catch(e => console.log("error", e));
+    };
+}
+
+export function fetchAllTags() {
+    return dispatch => {
+        return axios("/api/tags")
+            .then(response => {
+                return dispatch({
+                    type: actionTypes.RECEIVE_ALL_TAGS,
+                    payload: response.data
+                });
+            })
+            .catch(e => console.log("error", e));
+    };
+}
+
 export function searchBookmarks(query) {
     return dispatch => {
         return axios("/api/bookmarks/search?query=" + query)

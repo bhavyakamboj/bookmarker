@@ -1,5 +1,6 @@
 package com.sivalabs.bookmarker.config.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,15 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private TokenHelper tokenHelper;
-    private UserDetailsService userDetailsService;
-
-    public TokenAuthenticationFilter(TokenHelper tokenHelper, UserDetailsService userDetailsService) {
-        this.tokenHelper = tokenHelper;
-        this.userDetailsService = userDetailsService;
-    }
+    private final TokenHelper tokenHelper;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public void doFilterInternal(

@@ -4,23 +4,23 @@ create sequence bm_id_seq start with 1 increment by 1;
 create sequence tag_id_seq start with 1 increment by 1;
 
 create table users (
-    id bigint default user_id_seq.nextval,
+    id bigint DEFAULT nextval('user_id_seq') not null,
     email varchar(255) not null,
     password varchar(255) not null,
     name varchar(255) not null,
     created_at timestamp,
     updated_at timestamp,
     primary key (id),
-    UNIQUE KEY user_email_unique (email)
+    CONSTRAINT user_email_unique UNIQUE(email)
 );
 
 create table roles (
-    id bigint default role_id_seq.nextval,
+    id bigint DEFAULT nextval('role_id_seq') not null,
     name varchar(255) not null,
     created_at timestamp,
     updated_at timestamp,
     primary key (id),
-    UNIQUE KEY role_name_unique (name)
+    CONSTRAINT role_name_unique UNIQUE(name)
 );
 
 create table user_role (
@@ -29,23 +29,23 @@ create table user_role (
 );
 
 create table bookmarks (
-    id bigint default bm_id_seq.nextval,
+    id bigint DEFAULT nextval('bm_id_seq') not null,
     url varchar(1024) not null,
     title varchar(1024),
     created_by bigint not null,
     created_at timestamp,
     updated_at timestamp,
     primary key (id),
-    foreign key (created_by) references users(id)
+    foreign key (created_by) REFERENCES users(id)
 );
 
 create table tags (
-    id bigint default tag_id_seq.nextval,
+    id bigint DEFAULT nextval('tag_id_seq') not null,
     name varchar(100) not null,
     created_at timestamp,
     updated_at timestamp,
     primary key (id),
-    UNIQUE KEY tag_name_unique (name)
+    CONSTRAINT tag_name_unique UNIQUE(name)
 );
 
 create table bookmark_tag (

@@ -9,6 +9,7 @@ import com.sivalabs.bookmarker.domain.model.BookmarksListDTO;
 import com.sivalabs.bookmarker.domain.repository.BookmarkRepository;
 import com.sivalabs.bookmarker.domain.repository.TagRepository;
 import com.sivalabs.bookmarker.domain.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,6 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,16 +29,11 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @Slf4j
+@RequiredArgsConstructor
 public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
-
-    public BookmarkService(BookmarkRepository bookmarkRepository, TagRepository tagRepository, UserRepository userRepository) {
-        this.bookmarkRepository = bookmarkRepository;
-        this.tagRepository = tagRepository;
-        this.userRepository = userRepository;
-    }
 
     @Transactional(readOnly = true)
     @Cacheable("bookmarks")
@@ -98,12 +95,7 @@ public class BookmarkService {
     private Bookmark saveBookmark(BookmarkDTO bookmarkDTO) throws IOException {
         Bookmark bookmark = new Bookmark();
         bookmark.setUrl(bookmarkDTO.getUrl());
-        bookmark.setTitle(bookmarkDTO.getTitle());
-
-        if (bookmark.getTitle().isEmpty()) {
-            Document doc = Jsoup.connect(bookmark.getUrl()).get();
-            bookmark.setTitle(doc.title());
-        }
+        bookmark.setTitle(getTitle(bookmarkDTO));
         bookmark.setCreatedBy(userRepository.getOne(bookmarkDTO.getCreatedUserId()));
         List<Tag> tagsList = new ArrayList<>();
         bookmarkDTO.getTags().forEach(tagName -> {
@@ -114,6 +106,18 @@ public class BookmarkService {
         });
         bookmark.setTags(tagsList);
         return bookmarkRepository.save(bookmark);
+    }
+
+    private String getTitle(BookmarkDTO bookmark) {
+        try {
+            if (StringUtils.isEmpty(bookmark.getTitle())) {
+                Document doc = Jsoup.connect(bookmark.getUrl()).get();
+                return doc.title();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bookmark.getUrl();
     }
 
     private Tag createTagIfNotExist(String tagName) {

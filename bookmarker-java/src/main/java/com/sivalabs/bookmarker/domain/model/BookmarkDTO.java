@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,13 @@ public class BookmarkDTO {
 
     private List<String> tags;
 
+    public List<String> getTags() {
+        if(this.tags == null) {
+            this.tags = new ArrayList<>();
+        }
+        return this.tags;
+    }
+
     public static BookmarkDTO fromEntity(Bookmark bookmark) {
         BookmarkDTO dto = new BookmarkDTO();
         dto.setId(bookmark.getId());
@@ -42,7 +50,9 @@ public class BookmarkDTO {
         dto.setCreatedUserName(bookmark.getCreatedBy().getName());
         dto.setCreatedAt(bookmark.getCreatedAt());
         dto.setUpdatedAt(bookmark.getUpdatedAt());
-        dto.setTags(bookmark.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
+        if(bookmark.getTags() != null) {
+            dto.setTags(bookmark.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
+        }
         return dto;
     }
 }

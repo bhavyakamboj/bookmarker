@@ -15,30 +15,29 @@ const NavBar = () => {
 
     if (user.access_token) {
         authenticatedLinks = (
-            <div className="collapse navbar-collapse" id="navbarCollapse">
-                <ul className="navbar-nav mr-auto">
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to="/">
-                            Home <span className="sr-only">(current)</span>
-                        </NavLink>
-                    </li>
-                </ul>
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <button className="btn btn-outline-success my-2 my-sm-0" onClick={logoutHandler}>
-                            Logout
-                        </button>
-                    </li>
-                </ul>
-            </div>
+            <ul className="navbar-nav">
+                <li className="nav-item">
+                    <button className="btn btn-outline-success my-2 my-sm-0" onClick={logoutHandler}>
+                        Logout
+                    </button>
+                </li>
+            </ul>
         );
     } else {
-        authenticatedLinks = "";
+        authenticatedLinks = (
+            <ul className="navbar-nav">
+                <li className="nav-item">
+                    <NavLink className="nav-link" to="/login">
+                        Login
+                    </NavLink>
+                </li>
+            </ul>
+        );
     }
     return (
         <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <NavLink className="navbar-brand" to="/">
-                ExpenseTracker
+                Bookmarker
             </NavLink>
             <button
                 className="navbar-toggler"
@@ -51,7 +50,18 @@ const NavBar = () => {
             >
                 <span className="navbar-toggler-icon"></span>
             </button>
-            {authenticatedLinks}
+            <div className="collapse navbar-collapse" id="navbarCollapse">
+                <ul className="navbar-nav mr-auto">
+                    {/*
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/">
+                            Home <span className="sr-only">(current)</span>
+                        </NavLink>
+                    </li>*/}
+                </ul>
+                {authenticatedLinks}
+            </div>
+
         </nav>
     );
 };

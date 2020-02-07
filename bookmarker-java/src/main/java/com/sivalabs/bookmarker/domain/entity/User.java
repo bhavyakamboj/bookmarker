@@ -40,7 +40,7 @@ public class User extends BaseEntity implements Serializable
 	private String password;
 
 	@JsonIgnore
-	@ManyToMany(cascade=CascadeType.MERGE)
+	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
 	@JoinTable(
 	      name="user_role",
 	      joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},

@@ -4,7 +4,7 @@ import BookmarkGridItem from "./BookmarkGridItem";
 import BookmarkListItem from "./BookmarkListItem";
 
 const BookmarksList = ({ bookmarks }) => {
-  const [layout, setLayout] = useState("grid");
+  const [layout, setLayout] = useState("list");
 
   const renderListItem = bookmark => {
     return (

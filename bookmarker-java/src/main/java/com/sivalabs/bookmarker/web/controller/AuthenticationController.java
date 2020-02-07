@@ -9,6 +9,7 @@ import com.sivalabs.bookmarker.domain.model.AuthenticationRequest;
 import com.sivalabs.bookmarker.domain.model.AuthenticationResponse;
 import com.sivalabs.bookmarker.domain.model.UserDTO;
 import com.sivalabs.bookmarker.web.utils.SecurityUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,18 +24,12 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final TokenHelper tokenHelper;
     private final BookmarkerProperties bookmarkerProperties;
-
-    public AuthenticationController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, TokenHelper tokenHelper, BookmarkerProperties bookmarkerProperties) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.tokenHelper = tokenHelper;
-        this.bookmarkerProperties = bookmarkerProperties;
-    }
 
     @PostMapping(value = "/auth/login")
     public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest credentials) {

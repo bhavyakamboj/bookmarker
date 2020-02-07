@@ -1,14 +1,15 @@
 import React from "react";
 import { Button } from "primereact/button";
+import {NavLink} from "react-router-dom";
 
 const BookmarkOptions = ({ bookmark }) => {
   return (
     <div>
-      <Button icon="pi pi-share-alt" className="m-1" />
-      <Button icon="pi pi-heart" className="m-1" />
-      <Button icon="pi pi-tags" className="m-1" />
-      <Button icon="pi pi-inbox" className="m-1" />
-      <Button icon="pi pi-trash" className="m-1" />
+      {bookmark.tags.map(tag =>
+          <NavLink key={tag} to={"/tags/"+tag}>
+            <Button key={tag} label={tag} icon="pi pi-tags" className="m-1" />
+          </NavLink>
+          )}
     </div>
   );
 };

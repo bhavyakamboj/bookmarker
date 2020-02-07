@@ -6,7 +6,6 @@ import { Growl } from "primereact/growl";
 const AddBookmark = () => {
   let growl = useRef(null);
   const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
 
   const dispatch = useDispatch();
 

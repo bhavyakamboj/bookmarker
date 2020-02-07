@@ -6,6 +6,7 @@ import com.sivalabs.bookmarker.domain.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,16 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class TokenHelper {
 
-    @Autowired
-    private BookmarkerProperties bookmarkerProperties;
+    private final BookmarkerProperties bookmarkerProperties;
+    private final TimeProvider timeProvider;
 
-    @Autowired
-    TimeProvider timeProvider;
-
-    static final String AUDIENCE_WEB = "web";
-
+    private static final String AUDIENCE_WEB = "web";
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
     public String getUsernameFromToken(String token) {
@@ -38,7 +36,7 @@ public class TokenHelper {
         return username;
     }
 
-    public Date getIssuedAtDateFromToken(String token) {
+    private Date getIssuedAtDateFromToken(String token) {
         Date issueAt;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
@@ -47,17 +45,6 @@ public class TokenHelper {
             issueAt = null;
         }
         return issueAt;
-    }
-
-    public String getAudienceFromToken(String token) {
-        String audience;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            audience = claims.getAudience();
-        } catch (Exception e) {
-            audience = null;
-        }
-        return audience;
     }
 
     public String refreshToken(String token) {
@@ -78,11 +65,10 @@ public class TokenHelper {
     }
 
     public String generateToken(String username) {
-        String audience = AUDIENCE_WEB;
         return Jwts.builder()
                 .setIssuer( bookmarkerProperties.getJwt().getIssuer() )
                 .setSubject(username)
-                .setAudience(audience)
+                .setAudience(AUDIENCE_WEB)
                 .setIssuedAt(timeProvider.now())
                 .setExpiration(generateExpirationDate())
                 .signWith( SIGNATURE_ALGORITHM, bookmarkerProperties.getJwt().getSecret() )
@@ -106,18 +92,11 @@ public class TokenHelper {
         return new Date(timeProvider.now().getTime() + bookmarkerProperties.getJwt().getExpiresIn() * 1000);
     }
 
-    public long getExpiredIn() {
-        return bookmarkerProperties.getJwt().getExpiresIn();
-    }
-
     public Boolean validateToken(String token, UserDetails userDetails) {
-        User user = (User) userDetails;
         final String username = getUsernameFromToken(token);
-        final Date created = getIssuedAtDateFromToken(token);
-        return (
-                username != null &&
-                        username.equals(userDetails.getUsername())
-        );
+        // User user = (User) userDetails;
+        // final Date created = getIssuedAtDateFromToken(token);
+        return (username != null && username.equals(userDetails.getUsername()));
     }
 
     public String getToken( HttpServletRequest request ) {
@@ -133,7 +112,7 @@ public class TokenHelper {
         return null;
     }
 
-    public String getAuthHeaderFromHeader( HttpServletRequest request ) {
+    private String getAuthHeaderFromHeader(HttpServletRequest request) {
         return request.getHeader(bookmarkerProperties.getJwt().getHeader());
     }
 

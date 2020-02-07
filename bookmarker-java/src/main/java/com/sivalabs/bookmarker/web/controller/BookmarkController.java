@@ -1,12 +1,12 @@
 package com.sivalabs.bookmarker.web.controller;
 
-
 import com.sivalabs.bookmarker.domain.exception.BookmarkNotFoundException;
 import com.sivalabs.bookmarker.domain.model.BookmarkByTagDTO;
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO;
 import com.sivalabs.bookmarker.domain.model.BookmarksListDTO;
 import com.sivalabs.bookmarker.domain.service.BookmarkService;
 import com.sivalabs.bookmarker.web.utils.SecurityUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,12 +16,9 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/bookmarks")
+@RequiredArgsConstructor
 public class BookmarkController {
     private final BookmarkService bookmarkService;
-
-    public BookmarkController(BookmarkService bookmarkService) {
-        this.bookmarkService = bookmarkService;
-    }
 
     @GetMapping
     public BookmarksListDTO getAllBookmarks(@RequestParam(name = "userId", required = false) Long userId) {
