@@ -42,14 +42,14 @@ public class UserService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userEntity = user.toEntity();
-        Optional<Role> role_user = roleRepository.findByName("ROLE_USER");
-        userEntity.setRoles(Collections.singleton(role_user.orElse(null)));
+        Optional<Role> roleUser = roleRepository.findByName("ROLE_USER");
+        userEntity.setRoles(Collections.singleton(roleUser.orElse(null)));
         return UserDTO.fromEntity(userRepository.save(userEntity));
     }
 
     public UserDTO updateUser(UserDTO user) {
         Optional<User> byId = userRepository.findById(user.getId());
-        if(!byId.isPresent()) {
+        if(byId.isEmpty()) {
             throw new ResourceNotFoundException("User with id ${user.id} not found");
         }
         User userEntity = user.toEntity();
@@ -66,7 +66,7 @@ public class UserService {
 
     public void changePassword(String email, ChangePasswordRequest changePasswordRequest) {
         Optional<User> userByEmail = this.getUserByEmail(email);
-        if(!userByEmail.isPresent()) {
+        if(userByEmail.isEmpty()) {
             throw new ResourceNotFoundException("User with email $email not found");
         }
         User user = userByEmail.get();

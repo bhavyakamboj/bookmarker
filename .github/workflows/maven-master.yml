@@ -19,7 +19,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean install
       - name: SonarCloud Scan
-        run: mvn -B sonar:sonar -Psonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: mvn -B sonar:sonar -Pci -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         working-directory: ./bookmarker-java
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

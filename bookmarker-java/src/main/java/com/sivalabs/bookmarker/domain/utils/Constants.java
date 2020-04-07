@@ -1,5 +1,7 @@
 package com.sivalabs.bookmarker.domain.utils;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Constants {
-    public static final Long DEFAULT_JWT_TOKEN_EXPIRES = 604800L;
 }

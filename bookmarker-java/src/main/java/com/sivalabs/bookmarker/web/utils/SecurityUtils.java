@@ -2,9 +2,11 @@ package com.sivalabs.bookmarker.web.utils;
 
 import com.sivalabs.bookmarker.config.security.SecurityUser;
 import com.sivalabs.bookmarker.domain.entity.User;
+import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+@UtilityClass
 public class SecurityUtils {
 
     public static User loginUser() {

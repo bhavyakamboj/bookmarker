@@ -291,13 +291,8 @@
 					<appName>${heroku.appName}</appName>
 					<includeTarget>false</includeTarget>
 					<includes>
-						<include>target/bookmarker-java-0.0.1-SNAPSHOT.jar</include>
+						<include>${project.build.directory}/${build.finalName}.jar</include>
 					</includes>
-					<!--
-					<processTypes>
-						<web>java -Dserver.port=$PORT -Dspring.profiles.active=heroku $JAVA_OPTS -jar target/bookmarker-java-0.0.1-SNAPSHOT.jar</web>
-					</processTypes>
-					-->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -430,7 +425,7 @@
 					<plugin>
 						<groupId>org.sonarsource.scanner.maven</groupId>
 						<artifactId>sonar-maven-plugin</artifactId>
-						<version>3.5.0.1254</version>
+						<version>3.7.0.1746</version>
 					</plugin>
 				</plugins>
 			</build>
