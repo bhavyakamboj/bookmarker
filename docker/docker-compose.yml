@@ -1,13 +1,20 @@
 version: '3.1'
 services:
 
-  bookmarker-kotlin:
-    build: ../bookmarker-kotlin
-    container_name: bookmarker-kotlin
+  bookmarker-java:
+    build: ../bookmarker-java
+    container_name: bookmarker-java
     ports:
       - "18080:8080"
       - "18787:8787"
     restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bm-postgresdb:5432/appdb
+      SPRING_DATASOURCE_USERNAME: siva
+      SPRING_DATASOURCE_PASSWORD: secret
+      APPLICATION_LOGSTASH_HOST: logstash
     depends_on:
       - bm-postgresdb
 
@@ -20,9 +27,3 @@ services:
       - POSTGRES_DB=appdb
     ports:
       - "5432:5432"
-
-  bookmarker-ui-vue:
-    build: ../bookmarker-ui-vue
-    container_name: bookmarker-ui-vue
-    ports:
-      - "90:80"

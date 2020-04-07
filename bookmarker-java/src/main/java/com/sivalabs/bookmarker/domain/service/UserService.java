@@ -3,7 +3,7 @@ package com.sivalabs.bookmarker.domain.service;
 import com.sivalabs.bookmarker.domain.entity.Role;
 import com.sivalabs.bookmarker.domain.entity.User;
 import com.sivalabs.bookmarker.domain.exception.BookmarkerException;
-import com.sivalabs.bookmarker.domain.exception.UserNotFoundException;
+import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException;
 import com.sivalabs.bookmarker.domain.model.ChangePasswordRequest;
 import com.sivalabs.bookmarker.domain.model.UserDTO;
 import com.sivalabs.bookmarker.domain.repository.RoleRepository;
@@ -43,14 +43,14 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userEntity = user.toEntity();
         Optional<Role> role_user = roleRepository.findByName("ROLE_USER");
-        userEntity.setRoles(Collections.singletonList(role_user.orElse(null)));
+        userEntity.setRoles(Collections.singleton(role_user.orElse(null)));
         return UserDTO.fromEntity(userRepository.save(userEntity));
     }
 
     public UserDTO updateUser(UserDTO user) {
         Optional<User> byId = userRepository.findById(user.getId());
         if(!byId.isPresent()) {
-            throw new UserNotFoundException("User with id ${user.id} not found");
+            throw new ResourceNotFoundException("User with id ${user.id} not found");
         }
         User userEntity = user.toEntity();
         userEntity.setPassword(byId.get().getPassword());
@@ -67,7 +67,7 @@ public class UserService {
     public void changePassword(String email, ChangePasswordRequest changePasswordRequest) {
         Optional<User> userByEmail = this.getUserByEmail(email);
         if(!userByEmail.isPresent()) {
-            throw new UserNotFoundException("User with email $email not found");
+            throw new ResourceNotFoundException("User with email $email not found");
         }
         User user = userByEmail.get();
         if (passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {

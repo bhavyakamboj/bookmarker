@@ -2,8 +2,7 @@ package com.sivalabs.bookmarker.domain.service;
 
 import com.sivalabs.bookmarker.domain.entity.Bookmark;
 import com.sivalabs.bookmarker.domain.entity.Tag;
-import com.sivalabs.bookmarker.domain.exception.TagNotFoundException;
-import com.sivalabs.bookmarker.domain.model.BookmarkByTagDTO;
+import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException;
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO;
 import com.sivalabs.bookmarker.domain.model.BookmarksListDTO;
 import com.sivalabs.bookmarker.domain.repository.BookmarkRepository;
@@ -11,93 +10,101 @@ import com.sivalabs.bookmarker.domain.repository.TagRepository;
 import com.sivalabs.bookmarker.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    @Cacheable("bookmarks")
-    public BookmarksListDTO getAllBookmarks()  {
-        log.debug("process=get_all_bookmarks");
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        return buildBookmarksResult(bookmarkRepository.findAll(sort));
+    public List<BookmarkDTO> getAllBookmarks()  {
+        return bookmarkRepository.findAll()
+                .stream().map(BookmarkDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    @Cacheable("bookmarks-by-user")
-    public BookmarksListDTO getBookmarksByUser(Long userId) {
-        log.debug("process=get_bookmarks_by_user_id, user_id=$userId");
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        return buildBookmarksResult(bookmarkRepository.findByCreatedById(userId, sort));
+    public BookmarksListDTO getAllBookmarks(Pageable pageable)  {
+        return buildBookmarksResult(bookmarkRepository.findAll(pageable));
     }
 
     @Transactional(readOnly = true)
-    @Cacheable("bookmarks-by-tag")
-    public BookmarkByTagDTO getBookmarksByTag(String tag)  {
+    public BookmarksListDTO searchBookmarks(String query, Pageable pageable) {
+        return buildBookmarksResult(bookmarkRepository.findByTitleContainingIgnoreCase(query, pageable));
+    }
+
+    @Transactional(readOnly = true)
+    public BookmarksListDTO getBookmarksByTag(String tag, Pageable pageable)  {
         Optional<Tag> tagOptional = tagRepository.findByName(tag);
         if(!tagOptional.isPresent()) {
-            throw new TagNotFoundException("Tag $tag not found");
+            throw new ResourceNotFoundException("Tag "+ tag + " not found");
         }
-
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        List<Bookmark> bookmarks = bookmarkRepository.findByTag(tag, sort);
-        BookmarksListDTO bookmarksResult = buildBookmarksResult(bookmarks);
-        return new BookmarkByTagDTO(
-                tagOptional.get().getId(),
-                tagOptional.get().getName(),
-                bookmarksResult.getData()
-        );
+        return buildBookmarksResult(bookmarkRepository.findByTag(tag, pageable));
     }
 
     @Transactional(readOnly = true)
-    @Cacheable("bookmark-by-id")
     public Optional<BookmarkDTO> getBookmarkById(Long id) {
-        log.debug("process=get_bookmark_by_id, id=$id");
+        log.debug("process=get_bookmark_by_id, id={}", id);
         return bookmarkRepository.findById(id).map(BookmarkDTO::fromEntity);
     }
 
-    @CacheEvict(value = {"bookmarks", "bookmarks-by-tag", "bookmarks-by-user"}, allEntries = true)
-    public BookmarkDTO createBookmark(BookmarkDTO bookmark) throws IOException {
-        log.debug("process=create_bookmark, url=${bookmark.url}");
+    public BookmarkDTO createBookmark(BookmarkDTO bookmark) {
+        bookmark.setId(null);
+        log.debug("process=create_bookmark, url={}", bookmark.getUrl());
         return BookmarkDTO.fromEntity(saveBookmark(bookmark));
     }
 
-    @CacheEvict(value = {"bookmarks", "bookmark-by-id", "bookmarks-by-tag", "bookmarks-by-user"}, allEntries = true)
+    public BookmarkDTO updateBookmark(BookmarkDTO bookmark) {
+        log.debug("process=update_bookmark, url={}", bookmark.getUrl());
+        return BookmarkDTO.fromEntity(saveBookmark(bookmark));
+    }
+
     public void deleteBookmark(Long id) {
-        log.debug("process=delete_bookmark_by_id, id=$id");
+        log.debug("process=delete_bookmark_by_id, id={}", id);
         bookmarkRepository.deleteById(id);
     }
 
-    private BookmarksListDTO buildBookmarksResult(List<Bookmark> bookmarks)  {
-        return new BookmarksListDTO(bookmarks.stream().map(BookmarkDTO::fromEntity).collect(Collectors.toList()));
+    @Transactional(readOnly = true)
+    public List<Tag> findAllTags() {
+        Sort sort = Sort.by("name");
+        return tagRepository.findAll(sort);
     }
 
-    private Bookmark saveBookmark(BookmarkDTO bookmarkDTO) throws IOException {
+    private BookmarksListDTO buildBookmarksResult(Page<Bookmark> bookmarks)  {
+        log.trace("Found {} bookmarks in page", bookmarks.getNumberOfElements());
+        return new BookmarksListDTO(bookmarks.map(BookmarkDTO::fromEntity));
+    }
+
+    private Bookmark saveBookmark(BookmarkDTO bookmarkDTO) {
         Bookmark bookmark = new Bookmark();
+        if(bookmarkDTO.getId() != null) {
+            bookmark = bookmarkRepository.findById(bookmarkDTO.getId()).orElse(new Bookmark());
+        }
         bookmark.setUrl(bookmarkDTO.getUrl());
         bookmark.setTitle(getTitle(bookmarkDTO));
         bookmark.setCreatedBy(userRepository.getOne(bookmarkDTO.getCreatedUserId()));
-        List<Tag> tagsList = new ArrayList<>();
+        bookmark.setCreatedAt(LocalDateTime.now());
+        Set<Tag> tagsList = new HashSet<>();
         bookmarkDTO.getTags().forEach(tagName -> {
             if (!tagName.trim().isEmpty()) {
                 Tag tag = createTagIfNotExist(tagName.trim());
@@ -109,13 +116,14 @@ public class BookmarkService {
     }
 
     private String getTitle(BookmarkDTO bookmark) {
+        if (StringUtils.isNotEmpty(bookmark.getTitle())) {
+            return bookmark.getTitle();
+        }
         try {
-            if (StringUtils.isEmpty(bookmark.getTitle())) {
-                Document doc = Jsoup.connect(bookmark.getUrl()).get();
-                return doc.title();
-            }
+            Document doc = Jsoup.connect(bookmark.getUrl()).get();
+            return doc.title();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return bookmark.getUrl();
     }
@@ -129,4 +137,5 @@ public class BookmarkService {
         tag.setName(tagName);
         return tagRepository.save(tag);
     }
+
 }

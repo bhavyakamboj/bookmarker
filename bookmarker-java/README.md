@@ -1,3 +1,1 @@
-# todolist
-
-https://sivalabs-todolist.herokuapp.com
+# bookmarker-java

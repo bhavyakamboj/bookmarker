@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "bookmarks")
@@ -32,7 +32,7 @@ public class Bookmark extends BaseEntity implements Serializable {
         joinColumns = {@JoinColumn(name = "bookmark_id", referencedColumnName = "ID")},
         inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "ID")}
     )
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)

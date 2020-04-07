@@ -41,6 +41,10 @@ public class BookmarkDTO {
         return this.tags;
     }
 
+    public String getTagsAsString() {
+        return String.join(",", getTags());
+    }
+
     public static BookmarkDTO fromEntity(Bookmark bookmark) {
         BookmarkDTO dto = new BookmarkDTO();
         dto.setId(bookmark.getId());

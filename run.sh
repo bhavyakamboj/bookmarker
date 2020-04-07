@@ -5,7 +5,7 @@ declare dc_main=${project_dir}/docker/docker-compose.yml
 declare dc_platform=${project_dir}/docker/docker-compose-platform.yml
 declare dc_elk=${project_dir}/docker/docker-compose-elk.yml
 declare dc_monitoring=${project_dir}/docker/docker-compose-monitoring.yml
-declare bookmark_kotlin_api="bookmark-kotlin"
+declare bookmarker_app="bookmarker-java"
 declare sonarqube="sonarqube"
 declare elk="elasticsearch logstash kibana"
 declare monitoring="prometheus grafana"
@@ -16,20 +16,20 @@ function restart() {
 }
 
 function start() {
-    echo "Starting ${bookmark_kotlin_api}...."
+    echo "Starting ${bookmarker_app}...."
     build_api
-    docker-compose -f ${dc_main} up --build --force-recreate -d ${bookmark_kotlin_api}
+    docker-compose -f ${dc_main} up --build --force-recreate -d ${bookmarker_app}
     docker-compose -f ${dc_main} logs -f
 }
 
 function stop() {
-    echo "Stopping ${bookmark_kotlin_api}...."
+    echo "Stopping ${bookmarker_app}...."
     docker-compose -f ${dc_main} stop
     docker-compose -f ${dc_main} rm -f
 }
 
 function start_all() {
-    echo "Starting ${bookmark_kotlin_api} and dependencies...."
+    echo "Starting ${bookmarker_app} and dependencies...."
     build_api
     docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} up --build --force-recreate -d
     docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} logs -f
@@ -56,7 +56,6 @@ function elk() {
     docker-compose -f ${dc_elk} up --build --force-recreate -d ${elk}
     docker-compose -f ${dc_elk} logs -f
 }
-
 
 function monitoring() {
     echo 'Starting Prometheus, Grafana....'

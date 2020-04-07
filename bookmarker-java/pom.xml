@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.sivalabs</groupId>
@@ -10,12 +11,12 @@
 	<packaging>jar</packaging>
 
 	<name>bookmarker-java</name>
-	<description>Bookmarker REST API using Java</description>
+	<description>Bookmarker using SpringBoot</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.4.RELEASE</version>
+		<version>2.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -23,18 +24,20 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<java.version>1.8</java.version>
-		<spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+		<java.version>11</java.version>
+		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
 		<problem-spring-web.version>0.25.0</problem-spring-web.version>
 		<logstash-logback.version>4.9</logstash-logback.version>
 		<jjwt.version>0.6.0</jjwt.version>
 		<jasypt.version>2.1.1</jasypt.version>
 		<swagger2.version>2.9.2</swagger2.version>
-		<rest-assured.version>3.1.1</rest-assured.version>
-
+		<jsoup.version>1.11.3</jsoup.version>
+		<opencsv.version>5.0</opencsv.version>
+		<commons-lang3.version>3.9</commons-lang3.version>
+		<p6spy.version>1.6.1</p6spy.version>
 		<testcontainers.version>1.12.2</testcontainers.version>
 		<playtika.testcontainers.version>1.39</playtika.testcontainers.version>
-		<heroku.appName>sivalabs-bookmarker-java</heroku.appName>
+		<heroku.appName>sivalabs-bookmarker</heroku.appName>
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
 		<jacoc.min.coverage>0.10</jacoc.min.coverage>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -45,11 +48,6 @@
 			src/main/java/**/*Application.*
 		</sonar.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-
-		<flyway.url>jdbc:postgresql://localhost:5432/postgres</flyway.url>
-		<flyway.user>postgres</flyway.user>
-		<flyway.password>secret</flyway.password>
-
 	</properties>
 
 	<dependencies>
@@ -65,6 +63,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.gavlyukovskiy</groupId>
+			<artifactId>p6spy-spring-boot-starter</artifactId>
+			<version>${p6spy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -86,8 +89,21 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>nz.net.ultraq.thymeleaf</groupId>
+			<artifactId>thymeleaf-layout-dialect</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
@@ -99,6 +115,7 @@
 			<version>${problem-spring-web.version}</version>
 			<type>pom</type>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
@@ -149,14 +166,40 @@
 			<version>${swagger2.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${opencsv.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.11.3</version>
+			<version>${jsoup.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
 			<artifactId>jasypt-spring-boot-starter</artifactId>
 			<version>${jasypt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+		</dependency>
+		<!-- UI dependencies -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>4.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>5.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>vue</artifactId>
+			<version>2.5.16</version>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -352,54 +395,11 @@
 							<outputDirectory>${project.reporting.outputDirectory}/jacoco-aggregate</outputDirectory>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>check</id>
 						<goals>
 							<goal>check</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<configuration>
-					<driver>org.postgresql.Driver</driver>
-					<url>${flyway.url}</url>
-					<user>${flyway.user}</user>
-					<password>${flyway.password}</password>
-					<schemas>
-						<schema>public</schema>
-					</schemas>
-					<locations>
-						<location>classpath:/db/migration/postgresql</location>
-					</locations>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy frontend content</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/classes/static</outputDirectory>
-							<overwrite>true</overwrite>
-							<resources>
-								<resource>
-									<directory>${project.basedir}/../bookmarker-ui-vue/dist</directory>
-									<includes>
-										<include>static/</include>
-										<include>index.html</include>
-										<include>favicon.ico</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -421,24 +421,6 @@
 						<executions>
 							<execution>
 								<phase>deploy</phase>
-								<goals>
-									<goal>check</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>com.ning.maven.plugins</groupId>
-						<artifactId>maven-dependency-versions-check-plugin</artifactId>
-						<version>2.0.4</version>
-						<configuration>
-							<skip>false</skip>
-							<failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
-							<warnIfMajorVersionIsHigher>true</warnIfMajorVersionIsHigher>
-						</configuration>
-						<executions>
-							<execution>
-								<phase>verify</phase>
 								<goals>
 									<goal>check</goal>
 								</goals>

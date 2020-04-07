@@ -9,8 +9,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BookmarkControllerIT extends AbstractIntegrationTest {
 
     @Test
-    void shouldFetchAllBookmarks() throws Exception {
-        this.mockMvc.perform(get("/api/bookmarks"))
+    void shouldFetchBookmarksFirstPage() throws Exception {
+        this.mockMvc.perform(get("/bookmarks"))
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @Test
+    void shouldFetchBookmarksSecondPage() throws Exception {
+        this.mockMvc.perform(get("/bookmarks?page=2"))
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @Test
+    void shouldFetchBookmarksByTag() throws Exception {
+        this.mockMvc.perform(get("/bookmarks?tag=spring-boot"))
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @Test
+    void shouldSearchBookmarks() throws Exception {
+        this.mockMvc.perform(get("/bookmarks?query=spring"))
                 .andExpect(status().isOk())
         ;
     }

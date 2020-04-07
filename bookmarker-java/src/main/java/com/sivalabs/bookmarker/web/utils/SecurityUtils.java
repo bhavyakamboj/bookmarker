@@ -16,7 +16,15 @@ public class SecurityUtils {
         return null;
     }
 
-    public static Boolean isCurrentUserAdmin() {
+    public static Long loginUserId() {
+        User loginUser = loginUser();
+        if(loginUser != null) {
+            return loginUser.getId();
+        }
+        return null;
+    }
+
+    public static boolean isCurrentUserAdmin() {
         User loginUser = loginUser();
         if(loginUser != null) {
             return loginUser.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));

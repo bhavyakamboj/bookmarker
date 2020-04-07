@@ -1,11 +1,10 @@
 package com.sivalabs.bookmarker.web.controller;
 
-import com.sivalabs.bookmarker.domain.exception.UserNotFoundException;
+import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException;
 import com.sivalabs.bookmarker.domain.model.ChangePasswordRequest;
 import com.sivalabs.bookmarker.domain.model.CreateUserRequest;
 import com.sivalabs.bookmarker.domain.model.UserDTO;
 import com.sivalabs.bookmarker.domain.service.UserService;
-import com.sivalabs.bookmarker.web.exception.BadRequestException;
 import com.sivalabs.bookmarker.web.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
-        log.info("process=get_user, user_id=$id");
+        log.info("process=get_user, user_id="+id);
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -37,7 +36,7 @@ public class UserController {
     @PostMapping("")
     @ResponseStatus(CREATED)
     public UserDTO createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        log.info("process=create_user, user_email=${createUserRequest.email}");
+        log.info("process=create_user, user_email="+createUserRequest.getEmail());
         UserDTO userDTO = new UserDTO(
                 null,
                 createUserRequest.getName(),
@@ -51,9 +50,9 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO user) {
-        log.info("process=update_user, user_id=$id");
-        if (SecurityUtils.loginUser() == null || (!id.equals(SecurityUtils.loginUser().getId()) && !SecurityUtils.isCurrentUserAdmin())) {
-            throw new BadRequestException("You can't mess with other user details");
+        log.info("process=update_user, user_id="+id);
+        if (!id.equals(SecurityUtils.loginUserId())) {
+            throw new ResourceNotFoundException("User not found with id="+id);
         } else {
             user.setId(id);
             return userService.updateUser(user);
@@ -63,10 +62,10 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
-        log.info("process=delete_user, user_id=$id");
+        log.info("process=delete_user, user_id="+id);
         userService.getUserById(id).map ( u -> {
-            if (SecurityUtils.loginUser() == null || (!id.equals(SecurityUtils.loginUser().getId()) && !SecurityUtils.isCurrentUserAdmin())) {
-                throw new UserNotFoundException("User not found with id=$id");
+            if (!id.equals(SecurityUtils.loginUserId()) && !SecurityUtils.isCurrentUserAdmin()) {
+                throw new ResourceNotFoundException("User not found with id="+id);
             } else {
                 userService.deleteUser(id);
             }
@@ -79,7 +78,7 @@ public class UserController {
     public void changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         String email = currentUser.getName();
-        log.info("process=change_password, email=$email");
+        log.info("process=change_password, email="+email);
         userService.changePassword(email, changePasswordRequest);
     }
 }

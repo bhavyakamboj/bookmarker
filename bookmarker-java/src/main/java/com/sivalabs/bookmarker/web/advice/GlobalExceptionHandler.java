@@ -1,33 +1,29 @@
 package com.sivalabs.bookmarker.web.advice;
 
-import com.sivalabs.bookmarker.domain.exception.BookmarkerException;
-import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
-import org.zalando.problem.spring.web.advice.ProblemHandling;
-import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestControllerAdvice
+@ControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler implements ProblemHandling, SecurityAdviceTrait {
+public class GlobalExceptionHandler  {
 
-    @ExceptionHandler(value = ResourceNotFoundException.class)
-    ResponseEntity<Problem> handleResourceNotFoundException(
-            ResourceNotFoundException exception,
-            NativeWebRequest request
-    ) {
-        log.error(exception.getLocalizedMessage(), exception);
-        return create(Status.NOT_FOUND, exception, request);
+    @ExceptionHandler(AccessDeniedException.class)
+    public String handleAccessDeniedException(AccessDeniedException e) {
+        log.error(e.getMessage(), e);
+        return "403";
     }
 
-    @ExceptionHandler(value = BookmarkerException.class)
-    ResponseEntity<Problem> handleBookmarkerException(BookmarkerException exception, NativeWebRequest request) {
-        log.error(exception.getLocalizedMessage(), exception);
-        return create(Status.BAD_REQUEST, exception, request);
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleException(Exception e) {
+        log.error(e.getMessage(), e);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("exception", e);
+        mav.addObject("message", e.getMessage());
+        mav.setViewName("error");
+
+        return mav;
     }
 }
