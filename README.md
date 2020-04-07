@@ -14,8 +14,8 @@ So, in those situations having a simple but not as simple as Hello World app com
 Hence this **Bookmarker** application :-)
 
 
-[![Build Status](https://travis-ci.org/sivaprasadreddy/bookmarker.svg?branch=master)](https://travis-ci.org/sivaprasadreddy/bookmarker)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.sivalabs%3Abookmarker&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.sivalabs%3Abookmarker)
+![Bookmarker Master CI](https://github.com/sivaprasadreddy/bookmarker/workflows/Bookmarker%20Master%20CI/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.sivalabs%3Abookmarker-java&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.sivalabs%3Abookmarker-java)
 
 #### Live Demo 
 https://sivalabs-bookmarker.herokuapp.com/

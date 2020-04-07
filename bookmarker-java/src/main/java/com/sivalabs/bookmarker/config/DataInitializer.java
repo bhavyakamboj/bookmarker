@@ -4,7 +4,6 @@ import com.opencsv.CSVIterator;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO;
-import com.sivalabs.bookmarker.domain.repository.BookmarkRepository;
 import com.sivalabs.bookmarker.domain.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,14 +25,13 @@ import java.util.Arrays;
 public class DataInitializer implements CommandLineRunner {
     private final BookmarkerProperties bookmarksProperties;
     private final BookmarkService bookmarkService;
-    private final BookmarkRepository bookmarkRepository;
 
     private static final Long SYSTEM_USER_ID = 1L;
 
     @Override
     public void run(String... args) throws Exception {
         if(bookmarksProperties.isImportDataEnabled()) {
-            bookmarkRepository.deleteAll();
+            bookmarkService.deleteAllBookmarks();
             importBookmarks();
         } else {
             log.info("Data importing is disabled");

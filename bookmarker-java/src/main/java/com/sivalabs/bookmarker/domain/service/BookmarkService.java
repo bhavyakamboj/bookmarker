@@ -56,7 +56,7 @@ public class BookmarkService {
     @Transactional(readOnly = true)
     public BookmarksListDTO getBookmarksByTag(String tag, Pageable pageable)  {
         Optional<Tag> tagOptional = tagRepository.findByName(tag);
-        if(!tagOptional.isPresent()) {
+        if(tagOptional.isEmpty()) {
             throw new ResourceNotFoundException("Tag "+ tag + " not found");
         }
         return buildBookmarksResult(bookmarkRepository.findByTag(tag, pageable));
@@ -82,6 +82,11 @@ public class BookmarkService {
     public void deleteBookmark(Long id) {
         log.debug("process=delete_bookmark_by_id, id={}", id);
         bookmarkRepository.deleteById(id);
+    }
+
+    public void deleteAllBookmarks() {
+        log.debug("process=delete_all_bookmarks");
+        bookmarkRepository.deleteAll();
     }
 
     @Transactional(readOnly = true)

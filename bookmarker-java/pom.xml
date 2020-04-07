@@ -37,6 +37,7 @@
 		<p6spy.version>1.6.1</p6spy.version>
 		<testcontainers.version>1.12.2</testcontainers.version>
 		<playtika.testcontainers.version>1.39</playtika.testcontainers.version>
+		<archunit.version>0.13.1</archunit.version>
 		<heroku.appName>sivalabs-bookmarker</heroku.appName>
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
 		<jacoc.min.coverage>0.10</jacoc.min.coverage>
@@ -240,6 +241,12 @@
 			<version>${playtika.testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit5</artifactId>
+			<version>${archunit.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -291,7 +298,7 @@
 					<appName>${heroku.appName}</appName>
 					<includeTarget>false</includeTarget>
 					<includes>
-						<include>${project.build.directory}/${build.finalName}.jar</include>
+						<include>${project.build.directory}/${project.build.finalName}.jar</include>
 					</includes>
 				</configuration>
 			</plugin>
