@@ -1,4 +1,4 @@
-package com.sivalabs.bookmarker.web.mappers;
+package com.sivalabs.bookmarker.domain.mappers;
 
 import com.sivalabs.bookmarker.domain.entity.Bookmark;
 import com.sivalabs.bookmarker.domain.entity.Tag;

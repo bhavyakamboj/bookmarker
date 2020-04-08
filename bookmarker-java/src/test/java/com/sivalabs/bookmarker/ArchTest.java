@@ -35,11 +35,12 @@ class ArchTest {
         layeredArchitecture()
                 .layer("Config").definedBy("..config..")
                 .layer("Web").definedBy("..web..")
+                .layer("Mappers").definedBy("..mappers..")
                 .layer("Service").definedBy("..service..")
                 .layer("Persistence").definedBy("..repository..")
 
                 .whereLayer("Web").mayNotBeAccessedByAnyLayer()
-                .whereLayer("Service").mayOnlyBeAccessedByLayers("Config", "Web")
+                .whereLayer("Service").mayOnlyBeAccessedByLayers("Config", "Mappers", "Web")
                 .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service")
 
                 .check(importedClasses);
