@@ -3,6 +3,7 @@ package com.sivalabs.bookmarker.domain.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sivalabs.bookmarker.domain.entity.Role;
 import com.sivalabs.bookmarker.domain.entity.User;
+import com.sivalabs.bookmarker.domain.entity.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,10 @@ public class UserDTO {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    private String imageUrl;
+
+    private UserType userType;
+
     private List<String> roles;
 
     public User toEntity() {
@@ -37,6 +42,8 @@ public class UserDTO {
         user.setName(this.name);
         user.setEmail(this.email);
         user.setPassword(this.password);
+        user.setImageUrl(this.imageUrl);
+        user.setUserType(this.userType);
         return user;
     }
 
@@ -46,6 +53,8 @@ public class UserDTO {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setPassword(user.getPassword());
+        dto.setImageUrl(user.getImageUrl());
+        dto.setUserType(user.getUserType());
         dto.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
         return dto;
     }

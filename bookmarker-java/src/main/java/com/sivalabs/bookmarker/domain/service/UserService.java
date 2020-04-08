@@ -36,6 +36,11 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional(readOnly = true)
+    public boolean isUserExistsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     public UserDTO createUser(UserDTO user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BookmarkerException("Email ${user.email} is already in use");

@@ -37,6 +37,13 @@ public class User extends BaseEntity implements Serializable
 	@Size(min=4)
 	private String password;
 
+	@Column
+	private String imageUrl;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private UserType userType;
+
 	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.MERGE)
 	@JoinTable(
 	      name="user_role",

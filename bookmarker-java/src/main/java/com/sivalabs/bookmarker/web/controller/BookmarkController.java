@@ -5,7 +5,7 @@ import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException;
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO;
 import com.sivalabs.bookmarker.domain.model.BookmarksListDTO;
 import com.sivalabs.bookmarker.domain.service.BookmarkService;
-import com.sivalabs.bookmarker.web.utils.SecurityUtils;
+import com.sivalabs.bookmarker.domain.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +36,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Slf4j
 public class BookmarkController {
     private final BookmarkService bookmarkService;
+    private final SecurityService securityService;
 
     private static final String PAGINATION_PREFIX = "paginationPrefix";
 
@@ -85,7 +86,7 @@ public class BookmarkController {
         if (bindingResult.hasErrors()) {
             return "add-bookmark";
         }
-        bookmark.setCreatedUserId(SecurityUtils.loginUserId());
+        bookmark.setCreatedUserId(securityService.loginUserId());
         bookmarkService.createBookmark(bookmark);
         return "redirect:/bookmarks";
     }
@@ -95,8 +96,8 @@ public class BookmarkController {
     public String editBookmarkForm(@PathVariable Long id, Model model) {
         BookmarkDTO bookmark = bookmarkService.getBookmarkById(id).orElse(null);
         if (bookmark == null ||
-                !(bookmark.getCreatedUserId().equals(SecurityUtils.loginUserId())
-                || SecurityUtils.isCurrentUserAdmin())) {
+                !(bookmark.getCreatedUserId().equals(securityService.loginUserId())
+                || securityService.isCurrentUserAdmin())) {
             throw new ResourceNotFoundException("Bookmark not found with id="+id);
         } else {
             model.addAttribute("bookmark", bookmark);
@@ -113,7 +114,7 @@ public class BookmarkController {
             return "edit-bookmark";
         }
         bookmark.setId(id);
-        bookmark.setCreatedUserId(SecurityUtils.loginUserId());
+        bookmark.setCreatedUserId(securityService.loginUserId());
         bookmarkService.updateBookmark(bookmark);
         return "redirect:/bookmarks";
     }
@@ -124,8 +125,8 @@ public class BookmarkController {
     public ResponseEntity<Void> deleteBookmark(@PathVariable Long id) {
         BookmarkDTO bookmark = bookmarkService.getBookmarkById(id).orElse(null);
         if (bookmark == null ||
-                !(bookmark.getCreatedUserId().equals(SecurityUtils.loginUserId())
-                || SecurityUtils.isCurrentUserAdmin())) {
+                !(bookmark.getCreatedUserId().equals(securityService.loginUserId())
+                || securityService.isCurrentUserAdmin())) {
             throw new ResourceNotFoundException("Bookmark not found with id="+id);
         } else {
             bookmarkService.deleteBookmark(id);

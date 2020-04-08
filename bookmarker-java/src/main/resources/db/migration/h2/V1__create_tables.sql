@@ -8,6 +8,8 @@ create table users (
     email varchar(255) not null,
     password varchar(255) not null,
     name varchar(255) not null,
+    image_url varchar(255),
+    user_type varchar(50),
     created_at timestamp,
     updated_at timestamp,
     primary key (id),

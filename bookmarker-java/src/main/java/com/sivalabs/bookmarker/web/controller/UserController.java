@@ -1,11 +1,12 @@
 package com.sivalabs.bookmarker.web.controller;
 
+import com.sivalabs.bookmarker.domain.entity.UserType;
 import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException;
 import com.sivalabs.bookmarker.domain.model.ChangePasswordRequest;
 import com.sivalabs.bookmarker.domain.model.CreateUserRequest;
 import com.sivalabs.bookmarker.domain.model.UserDTO;
+import com.sivalabs.bookmarker.domain.service.SecurityService;
 import com.sivalabs.bookmarker.domain.service.UserService;
-import com.sivalabs.bookmarker.web.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final SecurityService securityService;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
@@ -42,6 +44,8 @@ public class UserController {
                 createUserRequest.getName(),
                 createUserRequest.getEmail(),
                 createUserRequest.getPassword(),
+                null,
+                UserType.LOCAL,
                 null
         );
         return userService.createUser(userDTO);
@@ -51,7 +55,7 @@ public class UserController {
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO user) {
         log.info("process=update_user, user_id="+id);
-        if (!id.equals(SecurityUtils.loginUserId())) {
+        if (!id.equals(securityService.loginUserId())) {
             throw new ResourceNotFoundException("User not found with id="+id);
         } else {
             user.setId(id);
@@ -64,7 +68,7 @@ public class UserController {
     public void deleteUser(@PathVariable Long id) {
         log.info("process=delete_user, user_id="+id);
         userService.getUserById(id).map ( u -> {
-            if (!id.equals(SecurityUtils.loginUserId()) && !SecurityUtils.isCurrentUserAdmin()) {
+            if (!id.equals(securityService.loginUserId()) && !securityService.isCurrentUserAdmin()) {
                 throw new ResourceNotFoundException("User not found with id="+id);
             } else {
                 userService.deleteUser(id);

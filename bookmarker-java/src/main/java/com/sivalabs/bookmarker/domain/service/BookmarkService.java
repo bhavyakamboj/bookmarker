@@ -8,6 +8,7 @@ import com.sivalabs.bookmarker.domain.model.BookmarksListDTO;
 import com.sivalabs.bookmarker.domain.repository.BookmarkRepository;
 import com.sivalabs.bookmarker.domain.repository.TagRepository;
 import com.sivalabs.bookmarker.domain.repository.UserRepository;
+import com.sivalabs.bookmarker.web.mappers.BookmarkMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,11 +36,12 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
+    private final BookmarkMapper bookmarkMapper;
 
     @Transactional(readOnly = true)
     public List<BookmarkDTO> getAllBookmarks()  {
         return bookmarkRepository.findAll()
-                .stream().map(BookmarkDTO::fromEntity)
+                .stream().map(bookmarkMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -65,18 +67,18 @@ public class BookmarkService {
     @Transactional(readOnly = true)
     public Optional<BookmarkDTO> getBookmarkById(Long id) {
         log.debug("process=get_bookmark_by_id, id={}", id);
-        return bookmarkRepository.findById(id).map(BookmarkDTO::fromEntity);
+        return bookmarkRepository.findById(id).map(bookmarkMapper::toDTO);
     }
 
     public BookmarkDTO createBookmark(BookmarkDTO bookmark) {
         bookmark.setId(null);
         log.debug("process=create_bookmark, url={}", bookmark.getUrl());
-        return BookmarkDTO.fromEntity(saveBookmark(bookmark));
+        return bookmarkMapper.toDTO(saveBookmark(bookmark));
     }
 
     public BookmarkDTO updateBookmark(BookmarkDTO bookmark) {
         log.debug("process=update_bookmark, url={}", bookmark.getUrl());
-        return BookmarkDTO.fromEntity(saveBookmark(bookmark));
+        return bookmarkMapper.toDTO(saveBookmark(bookmark));
     }
 
     public void deleteBookmark(Long id) {
@@ -97,13 +99,13 @@ public class BookmarkService {
 
     private BookmarksListDTO buildBookmarksResult(Page<Bookmark> bookmarks)  {
         log.trace("Found {} bookmarks in page", bookmarks.getNumberOfElements());
-        return new BookmarksListDTO(bookmarks.map(BookmarkDTO::fromEntity));
+        return new BookmarksListDTO(bookmarks.map(bookmarkMapper::toDTO));
     }
 
     private Bookmark saveBookmark(BookmarkDTO bookmarkDTO) {
         Bookmark bookmark = new Bookmark();
         if(bookmarkDTO.getId() != null) {
-            bookmark = bookmarkRepository.findById(bookmarkDTO.getId()).orElse(new Bookmark());
+            bookmark = bookmarkRepository.findById(bookmarkDTO.getId()).orElse(bookmark);
         }
         bookmark.setUrl(bookmarkDTO.getUrl());
         bookmark.setTitle(getTitle(bookmarkDTO));

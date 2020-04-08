@@ -44,7 +44,8 @@
                     &nbsp;
                 </p>
 
-                <p sec:authorize="isAuthenticated()" class="mt-1 mb-0">
+                <p sec:authorize="isAuthenticated()" class="mt-1 mb-0"
+                    th:if="${bookmark.editable}">
                     <a class="button" href="#" th:href="${'/bookmarks/edit/'+bookmark.id}">
                         <i class="fas fa-edit" ></i>
                     </a>
