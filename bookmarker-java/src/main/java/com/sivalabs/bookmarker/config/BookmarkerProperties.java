@@ -8,5 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class BookmarkerProperties {
     private boolean importDataEnabled = true;
     private String importFilePath;
+    private String adminEmail;
     private String logstashHost;
 }

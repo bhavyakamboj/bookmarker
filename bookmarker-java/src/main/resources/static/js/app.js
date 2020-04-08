@@ -14,6 +14,18 @@ function deleteBookmark(id)
 
 }
 
+function emailBookmarks()
+{
+    $.ajax ({
+        url: '/bookmarks/email',
+        type: "GET",
+        success: function(responseData, status){
+            //window.location = '/'
+            console.log('Successfully emailed bookmarks')
+        }
+    });
+}
+
 function getPageMetadata(formId)
 {
     let url = $("#"+formId+" input[name=url]").val();

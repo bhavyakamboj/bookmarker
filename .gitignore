@@ -6,6 +6,7 @@
 bin/
 
 application-prod.properties
+secure.properties
 
 ### STS ###
 .apt_generated

@@ -45,8 +45,14 @@
                     <i class="fas fa-user" ></i> <span sec:authentication="principal.name">User</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#" th:href="@{/bookmarks/download}">
-                        <i class="fas fa-download" ></i> Download
+                    <a class="dropdown-item" href="#" th:href="@{/bookmarks/download}"
+                        sec:authorize="hasRole('ROLE_ADMIN')">
+                        <i class="fas fa-download" ></i> Download Bookmarks
+                    </a>
+                    <a class="dropdown-item" href="#"
+                       th:onclick="'javascript:emailBookmarks();'"
+                       sec:authorize="hasRole('ROLE_ADMIN')">
+                        <i class="fas fa-download" ></i> Email Bookmarks
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" th:href="@{/logout}">

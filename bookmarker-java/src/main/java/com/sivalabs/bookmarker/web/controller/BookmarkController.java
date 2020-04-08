@@ -9,12 +9,9 @@ import com.sivalabs.bookmarker.domain.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,12 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
@@ -132,39 +125,6 @@ public class BookmarkController {
             bookmarkService.deleteBookmark(id);
         }
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/bookmarks/download")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public void downloadBookmarks(HttpServletResponse response) throws IOException {
-        String filename = "bookmarks.csv";
-
-        response.setContentType("text/csv");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + filename + "\"");
-
-        StringBuilder sb = new StringBuilder();
-        List<BookmarkDTO> allBookmarks = bookmarkService.getAllBookmarks();
-        for (BookmarkDTO bookmark : allBookmarks) {
-            sb.append(bookmark.getUrl()+",")
-                    .append("\""+bookmark.getTitle()+"\""+",")
-                    .append(String.join("|", bookmark.getTags()))
-                    .append(System.lineSeparator());
-        }
-        response.getWriter().write(sb.toString());
-    }
-
-    @GetMapping("/page-metadata")
-    @ResponseStatus
-    public ResponseEntity<Map<String, String>> getPageMetadata(@RequestParam String url) {
-        Map<String, String> metadata = new HashMap<>();
-        try {
-            Document doc = Jsoup.connect(url).get();
-            metadata.put("title", doc.title());
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-        return ResponseEntity.ok(metadata);
     }
 
 }

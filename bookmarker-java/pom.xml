@@ -29,7 +29,7 @@
 		<problem-spring-web.version>0.25.0</problem-spring-web.version>
 		<logstash-logback.version>4.9</logstash-logback.version>
 		<jjwt.version>0.6.0</jjwt.version>
-		<jasypt.version>2.1.1</jasypt.version>
+		<jasypt.version>3.0.2</jasypt.version>
 		<swagger2.version>2.9.2</swagger2.version>
 		<jsoup.version>1.11.3</jsoup.version>
 		<opencsv.version>5.0</opencsv.version>
@@ -69,6 +69,10 @@
 			<groupId>com.github.gavlyukovskiy</groupId>
 			<artifactId>p6spy-spring-boot-starter</artifactId>
 			<version>${p6spy.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -306,6 +310,11 @@
 						<include>${project.build.directory}/${project.build.finalName}.jar</include>
 					</includes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.ulisesbocchio</groupId>
+				<artifactId>jasypt-maven-plugin</artifactId>
+				<version>${jasypt.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>

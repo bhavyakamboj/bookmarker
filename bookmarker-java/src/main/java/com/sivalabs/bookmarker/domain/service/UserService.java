@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.sivalabs.bookmarker.domain.utils.Constants.ROLE_USER;
+
 @Service
 @Transactional
 @Slf4j
@@ -43,11 +45,11 @@ public class UserService {
 
     public UserDTO createUser(UserDTO user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new BookmarkerException("Email ${user.email} is already in use");
+            throw new BookmarkerException("Email "+user.getEmail()+" is already in use");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userEntity = user.toEntity();
-        Optional<Role> roleUser = roleRepository.findByName("ROLE_USER");
+        Optional<Role> roleUser = roleRepository.findByName(ROLE_USER);
         userEntity.setRoles(Collections.singleton(roleUser.orElse(null)));
         return UserDTO.fromEntity(userRepository.save(userEntity));
     }
@@ -55,7 +57,7 @@ public class UserService {
     public UserDTO updateUser(UserDTO user) {
         Optional<User> byId = userRepository.findById(user.getId());
         if(byId.isEmpty()) {
-            throw new ResourceNotFoundException("User with id ${user.id} not found");
+            throw new ResourceNotFoundException("User with id "+user.getId()+" not found");
         }
         User userEntity = user.toEntity();
         userEntity.setPassword(byId.get().getPassword());
@@ -72,7 +74,7 @@ public class UserService {
     public void changePassword(String email, ChangePasswordRequest changePasswordRequest) {
         Optional<User> userByEmail = this.getUserByEmail(email);
         if(userByEmail.isEmpty()) {
-            throw new ResourceNotFoundException("User with email $email not found");
+            throw new ResourceNotFoundException("User with email "+email+" not found");
         }
         User user = userByEmail.get();
         if (passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
