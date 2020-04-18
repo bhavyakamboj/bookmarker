@@ -1,6 +1,9 @@
 package com.sivalabs.bookmarker.web.controller;
 
+import com.sivalabs.bookmarker.annotations.AnyAuthenticatedUser;
+import com.sivalabs.bookmarker.annotations.CurrentUser;
 import com.sivalabs.bookmarker.domain.entity.Tag;
+import com.sivalabs.bookmarker.domain.entity.User;
 import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException;
 import com.sivalabs.bookmarker.domain.model.BookmarkDTO;
 import com.sivalabs.bookmarker.domain.model.BookmarksListDTO;
@@ -13,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -66,65 +68,67 @@ public class BookmarkController {
     }
 
     @GetMapping("/bookmarks/new")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @AnyAuthenticatedUser
     public String newBookmarkForm(Model model) {
         model.addAttribute("bookmark", new BookmarkDTO());
         return "add-bookmark";
     }
 
     @PostMapping("/bookmarks")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @AnyAuthenticatedUser
     public String createBookmark(@Valid @ModelAttribute("bookmark") BookmarkDTO bookmark,
+                                 @CurrentUser User loginUser,
                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "add-bookmark";
         }
-        bookmark.setCreatedUserId(securityService.loginUserId());
+        bookmark.setCreatedUserId(loginUser.getId());
         bookmarkService.createBookmark(bookmark);
         return "redirect:/bookmarks";
     }
 
     @GetMapping("/bookmarks/edit/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public String editBookmarkForm(@PathVariable Long id, Model model) {
+    @AnyAuthenticatedUser
+    public String editBookmarkForm(@PathVariable Long id,
+                                   @CurrentUser User loginUser,
+                                   Model model) {
         BookmarkDTO bookmark = bookmarkService.getBookmarkById(id).orElse(null);
-        if (bookmark == null ||
-                !(bookmark.getCreatedUserId().equals(securityService.loginUserId())
-                || securityService.isCurrentUserAdmin())) {
-            throw new ResourceNotFoundException("Bookmark not found with id="+id);
-        } else {
-            model.addAttribute("bookmark", bookmark);
-        }
+        this.checkPrivilege(id, bookmark, loginUser);
+        model.addAttribute("bookmark", bookmark);
         return "edit-bookmark";
     }
 
     @PutMapping("/bookmarks/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @AnyAuthenticatedUser
     public String updateBookmark(@PathVariable Long id,
                                  @Valid @ModelAttribute("bookmark") BookmarkDTO bookmark,
+                                 @CurrentUser User loginUser,
                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "edit-bookmark";
         }
+        this.checkPrivilege(id, bookmark, loginUser);
         bookmark.setId(id);
-        bookmark.setCreatedUserId(securityService.loginUserId());
+        bookmark.setCreatedUserId(loginUser.getId());
         bookmarkService.updateBookmark(bookmark);
         return "redirect:/bookmarks";
     }
 
     @DeleteMapping("/bookmarks/{id}")
     @ResponseStatus
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<Void> deleteBookmark(@PathVariable Long id) {
+    @AnyAuthenticatedUser
+    public ResponseEntity<Void> deleteBookmark(@PathVariable Long id, @CurrentUser User loginUser) {
         BookmarkDTO bookmark = bookmarkService.getBookmarkById(id).orElse(null);
-        if (bookmark == null ||
-                !(bookmark.getCreatedUserId().equals(securityService.loginUserId())
-                || securityService.isCurrentUserAdmin())) {
-            throw new ResourceNotFoundException("Bookmark not found with id="+id);
-        } else {
-            bookmarkService.deleteBookmark(id);
-        }
+        this.checkPrivilege(id, bookmark, loginUser);
+        bookmarkService.deleteBookmark(id);
         return ResponseEntity.ok().build();
     }
 
+    private void checkPrivilege(Long bookmarkId, BookmarkDTO bookmark, User loginUser) {
+        if (bookmark == null ||
+                !(bookmark.getCreatedUserId().equals(loginUser.getId())
+                        || securityService.isCurrentUserAdmin())) {
+            throw new ResourceNotFoundException("Bookmark not found with id="+bookmarkId);
+        }
+    }
 }

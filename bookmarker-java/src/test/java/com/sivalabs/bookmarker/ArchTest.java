@@ -4,13 +4,15 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
 class ArchTest {
-
+    private static final Logger logger = LoggerFactory.getLogger(ArchTest.class);
     JavaClasses importedClasses = new ClassFileImporter()
             .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
             .importPackages("com.sivalabs.bookmarker");
@@ -39,7 +41,7 @@ class ArchTest {
                 .layer("Service").definedBy("..service..")
                 .layer("Persistence").definedBy("..repository..")
 
-                .whereLayer("Web").mayNotBeAccessedByAnyLayer()
+                .whereLayer("Web").mayOnlyBeAccessedByLayers("Config")
                 .whereLayer("Service").mayOnlyBeAccessedByLayers("Config", "Mappers", "Web")
                 .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service")
 

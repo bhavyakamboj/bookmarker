@@ -1,5 +1,6 @@
 package com.sivalabs.bookmarker.web.controller;
 
+import com.sivalabs.bookmarker.annotations.AdminOnly;
 import com.sivalabs.bookmarker.config.BookmarkerProperties;
 import com.sivalabs.bookmarker.domain.model.email.Email;
 import com.sivalabs.bookmarker.domain.model.email.EmailAttachment;
@@ -7,7 +8,6 @@ import com.sivalabs.bookmarker.domain.service.BookmarksExportService;
 import com.sivalabs.bookmarker.domain.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,7 +24,7 @@ public class BookmarksEmailingController {
     private final BookmarkerProperties bookmarkerProperties;
 
     @GetMapping("/bookmarks/email")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AdminOnly
     @ResponseStatus
     public void emailBookmarks() {
         String filename = "bookmarks.csv";

@@ -1,5 +1,8 @@
 package com.sivalabs.bookmarker.web.controller;
 
+import com.sivalabs.bookmarker.annotations.AnyAuthenticatedUser;
+import com.sivalabs.bookmarker.annotations.CurrentUser;
+import com.sivalabs.bookmarker.domain.entity.User;
 import com.sivalabs.bookmarker.domain.entity.UserType;
 import com.sivalabs.bookmarker.domain.exception.ResourceNotFoundException;
 import com.sivalabs.bookmarker.domain.model.ChangePasswordRequest;
@@ -51,8 +54,8 @@ public class UserController {
         return userService.createUser(userDTO);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/{id}")
+    @AnyAuthenticatedUser
     public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO user) {
         log.info("process=update_user, user_id="+id);
         if (!id.equals(securityService.loginUserId())) {
@@ -63,8 +66,8 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/{id}")
+    @AnyAuthenticatedUser
     public void deleteUser(@PathVariable Long id) {
         log.info("process=delete_user, user_id="+id);
         userService.getUserById(id).map ( u -> {
@@ -78,10 +81,10 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public void changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        String email = currentUser.getName();
+    @AnyAuthenticatedUser
+    public void changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
+                               @CurrentUser User loginUser) {
+        String email = loginUser.getEmail();
         log.info("process=change_password, email="+email);
         userService.changePassword(email, changePasswordRequest);
     }
