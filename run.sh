@@ -23,7 +23,7 @@ function start() {
 }
 
 function stop() {
-    echo "Stopping ${bookmarker_app}...."
+    echo "Stopping ${bookmarker_app}....."
     docker-compose -f ${dc_main} stop
     docker-compose -f ${dc_main} rm -f
 }
