@@ -1,9 +1,9 @@
 version: '3.1'
 services:
 
-  bookmarker-java:
-    build: ../bookmarker-java
-    container_name: bookmarker-java
+  bookmarker:
+    build: .
+    container_name: bookmarker
     ports:
       - "18080:8080"
       - "18787:8787"

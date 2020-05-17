@@ -19,8 +19,13 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.11
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Package with Maven
         run: mvn -B clean install -DskipTests --file pom.xml
       - name: Deploy To Heroku
         run: mvn heroku:deploy -P ci
-        working-directory: ./bookmarker-java

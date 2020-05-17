@@ -18,12 +18,12 @@ node {
 
     try {
         utils.checkout()
-        dir("bookmarker-java") {
-            utils.runMavenTests("Test")
-            utils.runOWASPChecks("OWASP Checks")
-            utils.publishDockerImage("Publish Docker Image", DOCKER_USERNAME, API_IMAGE_NAME)
-            utils.deployOnHeroku("Heroku Deployment")
-        }
+
+        utils.runMavenTests("Test")
+        utils.runOWASPChecks("OWASP Checks")
+        utils.publishDockerImage("Publish Docker Image", DOCKER_USERNAME, API_IMAGE_NAME)
+        utils.deployOnHeroku("Heroku Deployment")
+
     }
     catch(err) {
         echo "ERROR: ${err}"

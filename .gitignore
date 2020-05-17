@@ -1,9 +1,6 @@
+HELP.md
 /target/
 !.mvn/wrapper/maven-wrapper.jar
-
-.gradle/
-/build/
-bin/
 
 application-prod.properties
 secure.properties
@@ -25,11 +22,11 @@ secure.properties
 
 ### NetBeans ###
 /nbproject/private/
-/build/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
+/build/
 
-.DS_Store
-.vscode
+### VS Code ###
+.vscode/

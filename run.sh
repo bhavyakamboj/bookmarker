@@ -5,7 +5,7 @@ declare dc_main=${project_dir}/docker/docker-compose.yml
 declare dc_platform=${project_dir}/docker/docker-compose-platform.yml
 declare dc_elk=${project_dir}/docker/docker-compose-elk.yml
 declare dc_monitoring=${project_dir}/docker/docker-compose-monitoring.yml
-declare bookmarker_app="bookmarker-java"
+declare bookmarker="bookmarker"
 declare sonarqube="sonarqube"
 declare elk="elasticsearch logstash kibana"
 declare monitoring="prometheus grafana"
@@ -16,20 +16,20 @@ function restart() {
 }
 
 function start() {
-    echo "Starting ${bookmarker_app}...."
+    echo "Starting ${bookmarker}...."
     build_api
-    docker-compose -f ${dc_main} up --build --force-recreate -d ${bookmarker_app}
+    docker-compose -f ${dc_main} up --build --force-recreate -d ${bookmarker}
     docker-compose -f ${dc_main} logs -f
 }
 
 function stop() {
-    echo "Stopping ${bookmarker_app}...."
+    echo "Stopping ${bookmarker}...."
     docker-compose -f ${dc_main} stop
     docker-compose -f ${dc_main} rm -f
 }
 
 function start_all() {
-    echo "Starting ${bookmarker_app} and dependencies...."
+    echo "Starting ${bookmarker} and dependencies...."
     build_api
     docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} up --build --force-recreate -d
     docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} logs -f

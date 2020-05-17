@@ -42,7 +42,7 @@ https://sivalabs-bookmarker.herokuapp.com/
 
 ### Run application locally
 
-`bookmarker> ./mvnw clean package & java -jar bookmarker-java/target/bookmarker-0.0.1-SNAPSHOT.jar`
+`bookmarker> ./mvnw clean package & java -jar target/bookmarker-0.0.1-SNAPSHOT.jar`
 
 ### Running using Docker
 
@@ -60,15 +60,22 @@ To start application and all dependent services like ELK, grafana, prometheus
 * Grafana: http://localhost:3000/ (admin/admin)
 * Kibana: http://localhost:5601/ 
 
+### Encrypt or decrypt secrets
+
+Encrypt properties: `./mvnw jasypt:encrypt-value -Djasypt.encryptor.password="pwd" -Djasypt.plugin.value="plain-text"`
+
+Decrypt properties: `./mvnw jasypt:decrypt-value -Djasypt.encryptor.password="pwd" -Djasypt.plugin.value="encrypted-text"`
+
+
 ### Run Performance Tests
 
-`bookmarker/bookmarker-gatling-tests> ./mvnw gatling:test`
+`bookmarker> ./mvnw gatling:test`
 
 ### Run SonarQube analysis
 
 ```
 bookmarker> ./run.sh sonar
-bookmarker/bookmarker-java> ./mvnw clean verify -P sonar -Dsonar.login=$SONAR_LOGIN_TOKEN
+bookmarker> ./mvnw clean verify -P sonar -Dsonar.login=$SONAR_LOGIN_TOKEN
 ```
 
 ## TODO
